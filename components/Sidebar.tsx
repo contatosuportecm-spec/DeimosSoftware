@@ -1,0 +1,196 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import {
+  Home, Eye, Sparkles, BarChart2,
+  Zap, Settings, type LucideIcon,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+
+type NavItem = {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  path: string;
+  badge?: boolean;
+  beta?: boolean;
+  disabled?: boolean;
+};
+
+const PRINCIPAL: NavItem[] = [
+  { id: "dashboard", label: "Home",      icon: Home,       path: "/dashboard" },
+  { id: "spy",       label: "Spy",       icon: Eye,        path: "/spy",       badge: true },
+  { id: "creatives", label: "Criativos", icon: Sparkles,   path: "/creatives" },
+  { id: "analytics", label: "Analytics", icon: BarChart2,  path: "/analytics", disabled: true },
+  { id: "nova",      label: "NOVA",      icon: Zap,        path: "/nova",      beta: true, disabled: true },
+];
+
+const ESPACOS = [
+  { id: "phoenix",  label: "Phoenix",  color: "#E07B30" },
+  { id: "oraculo",  label: "Oráculo",  color: "#818CF8" },
+  { id: "halcyon",  label: "Halcyon",  color: "#34D399" },
+];
+
+/* ── Eclipse logo mark ── */
+function EclipseMark() {
+  return (
+    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
+      <defs>
+        <radialGradient id="light" cx="72%" cy="22%" r="45%">
+          <stop offset="0%"   stopColor="#D6C2A1" stopOpacity="1" />
+          <stop offset="55%"  stopColor="#D6C2A1" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#D6C2A1" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+
+      {/* Outer circle */}
+      <circle cx="14" cy="14" r="12.5" stroke="rgba(214,194,161,0.25)" strokeWidth="0.7" />
+
+      {/* Inner dark circle (eclipse body) */}
+      <circle cx="14" cy="14" r="11" fill="rgba(0,0,0,0.55)" />
+
+      {/* Glow arc — top right */}
+      <path
+        d="M19.5 4.2 C24 6.8 26.5 11 26 15.5 C25.5 20 22.5 23.5 18.5 25"
+        stroke="url(#light)"
+        strokeWidth="1.4"
+        strokeLinecap="round"
+        fill="none"
+      />
+
+      {/* Bright flare point */}
+      <circle cx="19.8" cy="4.5" r="1.4" fill="#D6C2A1" opacity="0.9" />
+      <circle cx="19.8" cy="4.5" r="2.8" fill="#D6C2A1" opacity="0.15" />
+    </svg>
+  );
+}
+
+export default function Sidebar() {
+  const pathname = usePathname();
+
+  return (
+    <aside className="w-44 flex-shrink-0 h-screen flex flex-col border-r border-white/[0.07] bg-black/40 backdrop-blur-xl">
+      {/* Logo */}
+      <div className="px-4 pt-5 pb-4 border-b border-white/[0.06]">
+        <div className="flex items-center gap-2.5">
+          <EclipseMark />
+          <div>
+            <span className="font-sans font-semibold text-[11px] tracking-[0.28em] text-gold uppercase leading-none block">
+              DEIMOS
+            </span>
+            <span className="text-[8px] tracking-[0.22em] text-text-muted uppercase leading-none block mt-0.5">
+              Intelligence
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 overflow-y-auto px-2 pt-3 pb-2 space-y-px">
+        <SectionLabel>Principal</SectionLabel>
+
+        {PRINCIPAL.map((item) => {
+          const isActive = pathname.startsWith(item.path);
+          const Icon = item.icon;
+
+          if (item.disabled) {
+            return (
+              <div
+                key={item.id}
+                className="flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] text-text-muted opacity-25 cursor-not-allowed select-none"
+              >
+                <Icon size={13} strokeWidth={1.5} />
+                <span className="flex-1">{item.label}</span>
+                {item.beta && (
+                  <span className="text-[8px] bg-nova/20 text-nova px-1.5 py-px rounded-md tracking-wider font-medium">
+                    BETA
+                  </span>
+                )}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={item.id}
+              href={item.path}
+              className={cn(
+                "flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] transition-all duration-150",
+                isActive
+                  ? "text-text-primary bg-white/[0.07] shadow-sm"
+                  : "text-text-muted hover:text-text-secondary hover:bg-white/[0.04]"
+              )}
+            >
+              <Icon
+                size={13}
+                strokeWidth={1.5}
+                className={cn(isActive && "text-nova")}
+              />
+              <span className="flex-1 font-medium">{item.label}</span>
+              {item.badge && isActive && (
+                <span className="w-1.5 h-1.5 rounded-full bg-nova" />
+              )}
+            </Link>
+          );
+        })}
+
+        <div className="pt-3">
+          <SectionLabel>Espaços</SectionLabel>
+        </div>
+
+        {ESPACOS.map((space) => (
+          <div
+            key={space.id}
+            className="flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] text-text-muted hover:text-text-secondary hover:bg-white/[0.04] cursor-pointer transition-all duration-150"
+          >
+            <span
+              className="w-2 h-2 rounded-full flex-shrink-0 shadow-sm"
+              style={{ backgroundColor: space.color, boxShadow: `0 0 6px ${space.color}55` }}
+            />
+            <span className="font-medium">{space.label}</span>
+          </div>
+        ))}
+      </nav>
+
+      {/* Settings */}
+      <div className="px-2 py-2 border-t border-white/[0.06]">
+        <Link
+          href="/settings"
+          className={cn(
+            "flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] transition-all duration-150",
+            pathname === "/settings"
+              ? "text-text-primary bg-white/[0.07]"
+              : "text-text-muted hover:text-text-secondary hover:bg-white/[0.04]"
+          )}
+        >
+          <Settings size={13} strokeWidth={1.5} />
+          <span className="font-medium">Configurações</span>
+        </Link>
+      </div>
+
+      {/* User */}
+      <div className="px-3 py-3 border-t border-white/[0.06] flex items-center gap-2.5">
+        <div className="w-7 h-7 rounded-full bg-nova/15 border border-nova/30 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(224,123,48,0.2)]">
+          <span className="text-[9px] font-semibold text-nova">CA</span>
+        </div>
+        <div className="min-w-0">
+          <p className="text-[11px] text-text-primary truncate font-semibold leading-tight">
+            Caio Andrade
+          </p>
+          <p className="text-[9px] text-text-muted truncate leading-tight mt-0.5">
+            Co-founder · Pro
+          </p>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="px-3 pb-1.5 text-[9px] uppercase tracking-[0.22em] text-text-muted/60">
+      {children}
+    </p>
+  );
+}

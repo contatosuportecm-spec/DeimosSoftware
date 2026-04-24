@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(224,123,48,0.25); }
+
+/* ── Text selection ── */
+::selection { background: rgba(224,123,48,0.18); color: #FFFFFF; }
+
+/* ── Glassmorphism card ── */
+@layer components {
+  .glass {
+    background: rgba(28, 28, 31, 0.55);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.45),
+      0 2px 8px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-hover {
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  }
+
+  .glass-hover:hover {
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.5),
+      0 4px 12px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    transform: translateY(-1px);
+  }
+
+  /* Gold-tinted glass for highlighted cards */
+  .glass-nova {
+    background: rgba(28, 28, 31, 0.5);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(224, 123, 48, 0.18);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(224, 123, 48, 0.05),
+      inset 0 1px 0 rgba(224, 123, 48, 0.08);
+  }
+
+  /* Depth background — needed for glass to look right */
+  .depth-bg {
+    background:
+      radial-gradient(ellipse at 15% 15%, rgba(224, 123, 48, 0.07) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(91, 140, 255, 0.04) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 0%, rgba(214, 194, 161, 0.04) 0%, transparent 50%),
+      #000000;
+  }
+}
+
+/* ── Gold text utility ── */
+.text-gold { color: #D6C2A1; }
+.text-nova { color: #E07B30; }
+
+/* ── Tracking brand ── */
+.tracking-brand { letter-spacing: 0.2em; }

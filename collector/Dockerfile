@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/playwright/python:v1.48.0-noble
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Instala browsers do Playwright
+RUN playwright install chromium
+
+CMD ["python", "collector.py", "--headless"]

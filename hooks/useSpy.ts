@@ -1,0 +1,100 @@
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
+import { Country, OfferWithSnapshots } from "@/types";
+
+export function useSpy() {
+  const [offers, setOffers]     = useState<OfferWithSnapshots[]>([]);
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState<string | null>(null);
+  const [scrapingId, setScrapingId] = useState<string | null>(null);
+
+  const fetchOffers = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await fetch("/api/spy/offers");
+      if (!res.ok) throw new Error("Erro ao buscar ofertas");
+      const data = await res.json() as OfferWithSnapshots[];
+      setOffers(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchOffers();
+  }, [fetchOffers]);
+
+  const addOffer = useCallback(async (
+    name: string,
+    libraryUrl: string,
+    country: Country
+  ): Promise<void> => {
+    const res = await fetch("/api/spy/offers", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, library_url: libraryUrl, country }),
+    });
+
+    if (!res.ok) {
+      const body = await res.json() as { error?: string };
+      throw new Error(body.error ?? "Erro ao adicionar oferta");
+    }
+
+    const newOffer = await res.json() as OfferWithSnapshots;
+    setOffers((prev) => [newOffer, ...prev]);
+  }, []);
+
+  const scrapeNow = useCallback(async (offerId: string): Promise<void> => {
+    setScrapingId(offerId);
+    try {
+      const res = await fetch("/api/spy/scrape", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ offer_id: offerId }),
+      });
+      if (!res.ok) {
+        const body = await res.json() as { error?: string };
+        throw new Error(body.error ?? "Erro ao atualizar");
+      }
+      // Refetch para pegar o novo snapshot e status atualizado
+      await fetchOffers();
+    } finally {
+      setScrapingId(null);
+    }
+  }, [fetchOffers]);
+
+  const archiveOffer = useCallback(async (offerId: string): Promise<void> => {
+    const res = await fetch(`/api/spy/offers/${offerId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status: "archived" }),
+    });
+    if (!res.ok) throw new Error("Erro ao arquivar");
+    setOffers((prev) =>
+      prev.map((o) => (o.id === offerId ? { ...o, status: "archived" } : o))
+    );
+  }, []);
+
+  // Stats resumidas
+  const stats = {
+    total:    offers.filter((o) => o.status !== "archived").length,
+    scaling:  offers.filter((o) => o.status === "scaling").length,
+    dying:    offers.filter((o) => o.status === "dying").length,
+    new:      offers.filter((o) => o.status === "new").length,
+  };
+
+  return {
+    offers,
+    loading,
+    error,
+    scrapingId,
+    stats,
+    addOffer,
+    scrapeNow,
+    archiveOffer,
+    refetch: fetchOffers,
+  };
+}
