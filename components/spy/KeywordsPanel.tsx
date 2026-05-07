@@ -11,7 +11,7 @@ import { formatRelativeDate } from "@/lib/utils";
 // ═══ Categorias ═══
 
 const CATEGORIES: Record<string, { label: string; color: string }> = {
-  gatilho_metodo:   { label: "Método",    color: "#D6C2A1" },
+  gatilho_metodo:   { label: "Método",    color: "#F4C430" },
   causa_problema:   { label: "Causa",     color: "#5B8CFF" },
   prova_social:     { label: "Prova",     color: "#34D399" },
   urgencia_censura: { label: "Urgência",  color: "#F87171" },

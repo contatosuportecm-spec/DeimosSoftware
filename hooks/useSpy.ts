@@ -30,12 +30,13 @@ export function useSpy() {
   const addOffer = useCallback(async (
     name: string,
     libraryUrl: string,
-    country: Country
+    country: Country,
+    niche: string,
   ): Promise<void> => {
     const res = await fetch("/api/spy/offers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, library_url: libraryUrl, country }),
+      body: JSON.stringify({ name, library_url: libraryUrl, country, niche }),
     });
 
     if (!res.ok) {

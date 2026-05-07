@@ -19,13 +19,19 @@ const config: Config = {
           4: "#2A2A2E",       // bordas / divisores
           5: "#35353A",       // hover sutil
         },
-        // Gold System
+        // Amber System (renomeado de "gold" — mantém classe gold-* p/ compat)
         gold: {
-          DEFAULT: "#D6C2A1", // champagne gold — ações primárias
-          hover:   "#BFA888", // hover
-          dark:    "#8F7A5C", // detalhes
-          muted:   "rgba(214,194,161,0.10)",
-          border:  "rgba(214,194,161,0.18)",
+          DEFAULT: "#F4C430", // amber — accent primário (autoridade)
+          hover:   "#E0B020",
+          dark:    "#B8901E",
+          muted:   "rgba(244,196,48,0.10)",
+          border:  "rgba(244,196,48,0.22)",
+        },
+        amber: {
+          DEFAULT: "#F4C430",
+          hover:   "#E0B020",
+          dark:    "#B8901E",
+          glow:    "rgba(244,196,48,0.18)",
         },
         // Text
         text: {
@@ -33,12 +39,17 @@ const config: Config = {
           secondary: "#A1A1AA",
           muted:     "#6B6B73",
         },
-        // Nova (primary action — orange/amber)
+        // Ember (laranja brilhante — antes "nova")
         nova: {
-          DEFAULT: "#E07B30",
-          hover:   "#C86820",
-          muted:   "rgba(224,123,48,0.10)",
-          border:  "rgba(224,123,48,0.20)",
+          DEFAULT: "#FF8A1F", // ember
+          hover:   "#E5740F",
+          muted:   "rgba(255,138,31,0.10)",
+          border:  "rgba(255,138,31,0.22)",
+        },
+        ember: {
+          DEFAULT: "#FF8A1F",
+          hover:   "#E5740F",
+          deep:    "#C2410C",
         },
         // AI Accent (usar com parcimônia — max 5%)
         ai: {
@@ -54,7 +65,7 @@ const config: Config = {
           subtle:  "rgba(255,255,255,0.04)",
           DEFAULT: "rgba(255,255,255,0.07)",
           strong:  "rgba(255,255,255,0.12)",
-          gold:    "rgba(214,194,161,0.18)",
+          gold:    "rgba(244,196,48,0.22)",
         },
       },
       borderRadius: {

@@ -4,13 +4,14 @@ Plataforma privada de automação de direct response. Next.js 14 + Supabase + Cl
 
 ## Identidade Visual (SEMPRE SEGUIR)
 - **Nome do produto:** DEIMOS / Deimos Tech
-- **Paleta:** preto absoluto (#000) base, gold (#D6C2A1) como accent primário
+- **Paleta:** preto absoluto (#000) base, **amber (#F4C430)** como accent primário e **ember (#FF8A1F)** como ação/laranja
 - **Fontes:** Inter (UI), Playfair Display (branding/headlines), DM Mono (dados numéricos)
 - **Dark mode ONLY** — sem modo claro, jamais
-- **Estética:** minimal, premium, silencioso — parece sistema proprietário privado
-- **Gold = ação/autoridade | AI Blue (#5B8CFF) = inteligência (usar <5%) | White = clareza**
-- Sem gradientes, sem glow excessivo, sem ruído visual
+- **Estética:** futurística, minimal, premium, silenciosa — parece sistema proprietário privado
+- **Amber = autoridade/dado | Ember = ação/CTA | AI Blue (#5B8CFF) = inteligência (uso <5%) | White = clareza**
+- Sem gradientes berrantes, sem glow excessivo, sem ruído visual
 - Ícones outline (strokeWidth 1.5), cantos pequenos-médios, bordas finas
+- **Compatibilidade:** classes Tailwind `gold-*` continuam válidas, mas hoje renderizam amber (#F4C430). `nova-*` renderiza ember (#FF8A1F).
 
 ## Estrutura
 - `/app/` = páginas e API routes
@@ -29,11 +30,20 @@ bg-1 = #0B0B0C  (principal)
 bg-2 = #121214  (sidebar/header)
 bg-3 = #1C1C1F  (cards)
 bg-4 = #2A2A2E  (bordas)
-gold = #D6C2A1  (accent primário)
-gold-hover = #BFA888
-text-primary = #FFFFFF
-text-secondary = #A1A1AA
-text-muted = #6B6B73
+
+amber / gold        = #F4C430  (accent primário · autoridade)
+amber-hover         = #E0B020
+amber-glow          = rgba(244,196,48,0.18)
+
+ember / nova        = #FF8A1F  (ação · CTA · laranja)
+ember-hover         = #E5740F
+ember-deep          = #C2410C
+
+ai-blue             = #5B8CFF  (inteligência · uso <5%)
+
+text-primary        = #FFFFFF
+text-secondary      = #A1A1AA
+text-muted          = #6B6B73
 ```
 
 ## Regras de Código

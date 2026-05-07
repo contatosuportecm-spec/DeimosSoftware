@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       keyword: string;
       category?: string;
       language?: string;
+      niche_id?: string | null;
     };
 
     if (!body.keyword?.trim()) {
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
         keyword: body.keyword.trim().toLowerCase(),
         category: body.category ?? "geral",
         language: body.language ?? "pt",
+        niche_id: body.niche_id ?? null,
       })
       .select()
       .single();

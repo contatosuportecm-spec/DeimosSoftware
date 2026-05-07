@@ -82,6 +82,58 @@ export interface ChatMessage {
   created_at: string;
 }
 
+// ═══ Product types ═══
+
+export type ProductFormat = "ebook" | "webapp" | "curso" | "servico";
+export type ProductPlatform = "perfectpay" | "kirvano";
+export type ProductStatus = "draft" | "creating" | "active" | "failed";
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string | null;
+  format: ProductFormat;
+  category?: string | null;
+  price: number;
+  installment_price?: number | null;
+  max_installments?: number | null;
+  guarantee_days: number;
+  image_url?: string | null;
+  pixel_id?: string | null;
+  platform: ProductPlatform;
+  bump_name?: string | null;
+  bump_price?: number | null;
+  upsell_name?: string | null;
+  upsell_price?: number | null;
+  status: ProductStatus;
+  checkout_url?: string | null;
+  platform_product_id?: string | null;
+  error_message?: string | null;
+  automation_log: Record<string, unknown>[];
+  offer_id?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateProductInput {
+  name: string;
+  description?: string;
+  format: ProductFormat;
+  category?: string;
+  price: number;
+  installment_price?: number;
+  max_installments?: number;
+  guarantee_days?: number;
+  image_url?: string;
+  pixel_id?: string;
+  platform: ProductPlatform;
+  bump_name?: string;
+  bump_price?: number;
+  upsell_name?: string;
+  upsell_price?: number;
+  offer_id?: string;
+}
+
 // ═══ Module registry ═══
 
 export interface Module {

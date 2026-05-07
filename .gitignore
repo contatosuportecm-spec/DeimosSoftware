@@ -13,6 +13,9 @@ out/
 # build
 tsconfig.tsbuildinfo
 
+# automation (cookies, screenshots)
+.automation/
+
 # misc
 .DS_Store
 *.pem
