@@ -7,7 +7,7 @@ export const MODULES: Module[] = [
   { id: "products", name: "Produtos", icon: "Package", path: "/products", status: "active" },
   { id: "compass", name: "Compass", icon: "Chart", path: "/compass", status: "coming" },
   { id: "vault", name: "Vault", icon: "Wallet", path: "/vault", status: "coming" },
-  { id: "forge", name: "Forge", icon: "Zap", path: "/forge", status: "future" },
+  { id: "forge", name: "Forge", icon: "Zap", path: "/forge", status: "active" },
   { id: "factory", name: "Factory", icon: "Layers", path: "/factory", status: "future" },
   { id: "builder", name: "Builder", icon: "Layout", path: "/builder", status: "future" },
   { id: "pilot", name: "Pilot", icon: "Send", path: "/pilot", status: "future" },

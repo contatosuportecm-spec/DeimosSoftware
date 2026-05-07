@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Eye, Sparkles, Package, type LucideIcon,
+  Home, Eye, Sparkles, Package, Zap, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +20,7 @@ const PRINCIPAL: NavItem[] = [
   { id: "spy",       label: "Spy",       icon: Eye,      path: "/spy",       badge: true },
   { id: "creatives", label: "Criativos", icon: Sparkles, path: "/creatives" },
   { id: "products",  label: "Produtos",  icon: Package,  path: "/products" },
+  { id: "forge",     label: "Forge",     icon: Zap,      path: "/forge" },
 ];
 
 /* ── Eclipse logo mark ── */

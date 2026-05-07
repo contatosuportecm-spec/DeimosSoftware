@@ -6,6 +6,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", "Poppins", "sans-serif"],
+        display: ["var(--font-display)", "Playfair Display", "serif"],
         mono: ["var(--font-sans)", "Poppins", "sans-serif"],
       },
       colors: {
