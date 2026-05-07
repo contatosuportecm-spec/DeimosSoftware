@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Eye, Sparkles, BarChart2,
-  Zap, Settings, type LucideIcon,
+  Home, Eye, Sparkles, Package, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -14,22 +13,13 @@ type NavItem = {
   icon: LucideIcon;
   path: string;
   badge?: boolean;
-  beta?: boolean;
-  disabled?: boolean;
 };
 
 const PRINCIPAL: NavItem[] = [
-  { id: "dashboard", label: "Home",      icon: Home,       path: "/dashboard" },
-  { id: "spy",       label: "Spy",       icon: Eye,        path: "/spy",       badge: true },
-  { id: "creatives", label: "Criativos", icon: Sparkles,   path: "/creatives" },
-  { id: "analytics", label: "Analytics", icon: BarChart2,  path: "/analytics", disabled: true },
-  { id: "nova",      label: "NOVA",      icon: Zap,        path: "/nova",      beta: true, disabled: true },
-];
-
-const ESPACOS = [
-  { id: "phoenix",  label: "Phoenix",  color: "#E07B30" },
-  { id: "oraculo",  label: "Oráculo",  color: "#818CF8" },
-  { id: "halcyon",  label: "Halcyon",  color: "#34D399" },
+  { id: "dashboard", label: "Home",      icon: Home,     path: "/dashboard" },
+  { id: "spy",       label: "Spy",       icon: Eye,      path: "/spy",       badge: true },
+  { id: "creatives", label: "Criativos", icon: Sparkles, path: "/creatives" },
+  { id: "products",  label: "Produtos",  icon: Package,  path: "/products" },
 ];
 
 /* ── Eclipse logo mark ── */
@@ -38,14 +28,14 @@ function EclipseMark() {
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden>
       <defs>
         <radialGradient id="light" cx="72%" cy="22%" r="45%">
-          <stop offset="0%"   stopColor="#D6C2A1" stopOpacity="1" />
-          <stop offset="55%"  stopColor="#D6C2A1" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#D6C2A1" stopOpacity="0" />
+          <stop offset="0%"   stopColor="#F4C430" stopOpacity="1" />
+          <stop offset="55%"  stopColor="#F4C430" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#F4C430" stopOpacity="0" />
         </radialGradient>
       </defs>
 
       {/* Outer circle */}
-      <circle cx="14" cy="14" r="12.5" stroke="rgba(214,194,161,0.25)" strokeWidth="0.7" />
+      <circle cx="14" cy="14" r="12.5" stroke="rgba(244,196,48,0.25)" strokeWidth="0.7" />
 
       {/* Inner dark circle (eclipse body) */}
       <circle cx="14" cy="14" r="11" fill="rgba(0,0,0,0.55)" />
@@ -60,8 +50,8 @@ function EclipseMark() {
       />
 
       {/* Bright flare point */}
-      <circle cx="19.8" cy="4.5" r="1.4" fill="#D6C2A1" opacity="0.9" />
-      <circle cx="19.8" cy="4.5" r="2.8" fill="#D6C2A1" opacity="0.15" />
+      <circle cx="19.8" cy="4.5" r="1.4" fill="#F4C430" opacity="0.9" />
+      <circle cx="19.8" cy="4.5" r="2.8" fill="#F4C430" opacity="0.15" />
     </svg>
   );
 }
@@ -94,23 +84,6 @@ export default function Sidebar() {
           const isActive = pathname.startsWith(item.path);
           const Icon = item.icon;
 
-          if (item.disabled) {
-            return (
-              <div
-                key={item.id}
-                className="flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] text-text-muted opacity-25 cursor-not-allowed select-none"
-              >
-                <Icon size={13} strokeWidth={1.5} />
-                <span className="flex-1">{item.label}</span>
-                {item.beta && (
-                  <span className="text-[8px] bg-nova/20 text-nova px-1.5 py-px rounded-md tracking-wider font-medium">
-                    BETA
-                  </span>
-                )}
-              </div>
-            );
-          }
-
           return (
             <Link
               key={item.id}
@@ -135,43 +108,11 @@ export default function Sidebar() {
           );
         })}
 
-        <div className="pt-3">
-          <SectionLabel>Espaços</SectionLabel>
-        </div>
-
-        {ESPACOS.map((space) => (
-          <div
-            key={space.id}
-            className="flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] text-text-muted hover:text-text-secondary hover:bg-white/[0.04] cursor-pointer transition-all duration-150"
-          >
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0 shadow-sm"
-              style={{ backgroundColor: space.color, boxShadow: `0 0 6px ${space.color}55` }}
-            />
-            <span className="font-medium">{space.label}</span>
-          </div>
-        ))}
       </nav>
-
-      {/* Settings */}
-      <div className="px-2 py-2 border-t border-white/[0.06]">
-        <Link
-          href="/settings"
-          className={cn(
-            "flex items-center gap-2.5 px-3 py-[7px] rounded-lg text-[11px] transition-all duration-150",
-            pathname === "/settings"
-              ? "text-text-primary bg-white/[0.07]"
-              : "text-text-muted hover:text-text-secondary hover:bg-white/[0.04]"
-          )}
-        >
-          <Settings size={13} strokeWidth={1.5} />
-          <span className="font-medium">Configurações</span>
-        </Link>
-      </div>
 
       {/* User */}
       <div className="px-3 py-3 border-t border-white/[0.06] flex items-center gap-2.5">
-        <div className="w-7 h-7 rounded-full bg-nova/15 border border-nova/30 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(224,123,48,0.2)]">
+        <div className="w-7 h-7 rounded-full bg-nova/15 border border-nova/30 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(255,138,31,0.25)]">
           <span className="text-[9px] font-semibold text-nova">CA</span>
         </div>
         <div className="min-w-0">

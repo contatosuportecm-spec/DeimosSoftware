@@ -6,13 +6,13 @@ import Badge from "@/components/ui/Badge";
 import Sparkline from "./Sparkline";
 import { OfferWithSnapshots } from "@/types";
 import { COUNTRY_LABELS } from "@/types";
-import { calcDeltaPct } from "@/lib/meta";
+import { calcDeltaPct } from "@/lib/spy-utils";
 import { formatNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 function strengthColor(score: number): string {
   if (score >= 70) return "#34D399";
-  if (score >= 45) return "#D6C2A1";
+  if (score >= 45) return "#F4C430";
   if (score >= 20) return "#A1A1AA";
   return "#6B6B73";
 }

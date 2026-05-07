@@ -155,10 +155,58 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER tr_msg_inserted AFTER INSERT ON chat_messages
 FOR EACH ROW EXECUTE FUNCTION update_session_last_msg();
 
+-- ═══ Produtos (automação de cadastro) ═══
+
+CREATE TYPE product_format AS ENUM ('ebook', 'webapp', 'curso', 'servico');
+CREATE TYPE product_platform AS ENUM ('perfectpay', 'kirvano');
+CREATE TYPE product_status AS ENUM ('draft', 'creating', 'active', 'failed');
+
+CREATE TABLE products (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  description TEXT,
+  format product_format NOT NULL,
+  category TEXT,
+  price NUMERIC(10,2) NOT NULL,
+  installment_price NUMERIC(10,2),
+  max_installments INTEGER,
+  guarantee_days INTEGER DEFAULT 7,
+  image_url TEXT,
+  pixel_id TEXT,
+  platform product_platform NOT NULL,
+
+  -- Order bump (opcional)
+  bump_name TEXT,
+  bump_price NUMERIC(10,2),
+
+  -- Upsell (opcional)
+  upsell_name TEXT,
+  upsell_price NUMERIC(10,2),
+
+  -- Resultado da automação
+  status product_status DEFAULT 'draft',
+  checkout_url TEXT,
+  platform_product_id TEXT,
+  error_message TEXT,
+  automation_log JSONB DEFAULT '[]'::jsonb,
+
+  -- Relacionamento com oferta (opcional)
+  offer_id UUID REFERENCES offers(id) ON DELETE SET NULL,
+
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_products_status ON products(status);
+CREATE INDEX idx_products_platform ON products(platform);
+
+CREATE TRIGGER tr_products_updated BEFORE UPDATE ON products
+FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
 -- Seed nichos iniciais
 INSERT INTO niches (id, name, description, emoji, color) VALUES
   ('emagrecimento', 'Emagrecimento', 'Perda de peso, GLP-1, receitas, suplementos', '🔥', '#E94560'),
   ('saude-masculina', 'Saúde Masculina', 'Libido, testosterona, performance', '💪', '#3B82F6'),
-  ('financas', 'Finanças', 'Renda extra, investimentos, liberdade financeira', '💰', '#10B981'),
+  ('renda-extra', 'Renda Extra', 'Renda extra, investimentos, liberdade financeira', '💰', '#10B981'),
   ('beleza', 'Beleza & Estética', 'Skincare, anti-aging, procedimentos', '✨', '#8B5CF6'),
   ('relacionamento', 'Relacionamento', 'Reconquista, sedução, casamento', '❤️', '#EC4899');

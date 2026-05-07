@@ -7,6 +7,7 @@ export interface SpyKeyword {
   keyword: string;
   category: string;
   language: string;
+  niche_id: string | null;
   is_active: boolean;
   total_found: number;
   last_scanned_at: string | null;
@@ -65,12 +66,13 @@ export function useKeywords() {
   const addKeyword = useCallback(async (
     keyword: string,
     category: string = "geral",
-    language: string = "pt"
+    language: string = "pt",
+    niche_id: string | null = null,
   ): Promise<void> => {
     const res = await fetch("/api/spy/keywords", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ keyword, category, language }),
+      body: JSON.stringify({ keyword, category, language, niche_id }),
     });
     if (!res.ok) {
       const body = await res.json() as { error?: string };

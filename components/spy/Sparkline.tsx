@@ -28,7 +28,7 @@ export default function Sparkline({
 
   const trend = data[data.length - 1] - data[0];
   const lineColor =
-    color ?? (trend > 0 ? "#34D399" : trend < 0 ? "#F87171" : "#D6C2A1");
+    color ?? (trend > 0 ? "#34D399" : trend < 0 ? "#F87171" : "#F4C430");
 
   const W = fullWidth ? INTERNAL_WIDTH : width;
 

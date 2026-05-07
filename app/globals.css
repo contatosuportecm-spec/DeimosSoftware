@@ -26,15 +26,15 @@ body {
 ::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.06); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(224,123,48,0.25); }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,138,31,0.30); }
 
 /* ── Text selection ── */
-::selection { background: rgba(224,123,48,0.18); color: #FFFFFF; }
+::selection { background: rgba(244,196,48,0.22); color: #FFFFFF; }
 
 /* ── Glassmorphism card ── */
 @layer components {
   .glass {
-    background: rgba(28, 28, 31, 0.55);
+    background: rgba(22, 22, 27, 0.55);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.07);
@@ -57,31 +57,45 @@ body {
     transform: translateY(-1px);
   }
 
-  /* Gold-tinted glass for highlighted cards */
+  /* Ember-tinted glass para cards de destaque */
   .glass-nova {
-    background: rgba(28, 28, 31, 0.5);
+    background: rgba(22, 22, 27, 0.5);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(224, 123, 48, 0.18);
+    border: 1px solid rgba(255, 138, 31, 0.20);
     box-shadow:
       0 8px 32px rgba(0, 0, 0, 0.4),
-      0 0 0 1px rgba(224, 123, 48, 0.05),
-      inset 0 1px 0 rgba(224, 123, 48, 0.08);
+      0 0 0 1px rgba(255, 138, 31, 0.06),
+      inset 0 1px 0 rgba(255, 138, 31, 0.10);
   }
 
-  /* Depth background — needed for glass to look right */
+  /* Amber-tinted glass para autoridade calma */
+  .glass-amber {
+    background: rgba(22, 22, 27, 0.5);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(244, 196, 48, 0.22);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      0 0 0 1px rgba(244, 196, 48, 0.06),
+      inset 0 1px 0 rgba(244, 196, 48, 0.10);
+  }
+
+  /* Depth background — paleta amber/ember/black */
   .depth-bg {
     background:
-      radial-gradient(ellipse at 15% 15%, rgba(224, 123, 48, 0.07) 0%, transparent 55%),
-      radial-gradient(ellipse at 85% 85%, rgba(91, 140, 255, 0.04) 0%, transparent 55%),
-      radial-gradient(ellipse at 50% 0%, rgba(214, 194, 161, 0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 15% 15%, rgba(255, 138, 31, 0.08) 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 85%, rgba(244, 196, 48, 0.05) 0%, transparent 55%),
+      radial-gradient(ellipse at 50% 0%, rgba(255, 138, 31, 0.04) 0%, transparent 50%),
       #000000;
   }
 }
 
-/* ── Gold text utility ── */
-.text-gold { color: #D6C2A1; }
-.text-nova { color: #E07B30; }
+/* ── Utilities de cor ── */
+.text-gold { color: #F4C430; }
+.text-nova { color: #FF8A1F; }
+.text-amber { color: #F4C430; }
+.text-ember { color: #FF8A1F; }
 
 /* ── Tracking brand ── */
 .tracking-brand { letter-spacing: 0.2em; }

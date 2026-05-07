@@ -2,8 +2,8 @@
 
 import { ExternalLink, RefreshCw, Archive, TrendingUp, TrendingDown, Minus, Activity } from "lucide-react";
 import Sparkline from "./Sparkline";
-import { OfferWithSnapshots } from "@/types";
-import { calcDeltaPct } from "@/lib/meta";
+import { OfferWithSnapshots, Niche } from "@/types";
+import { calcDeltaPct } from "@/lib/spy-utils";
 import { formatNumber } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { SCALING_PATTERN_LABELS } from "@/lib/constants";
@@ -28,9 +28,9 @@ const STATUS_CONFIG: Record<
   },
   stable: {
     label: "Lateral",
-    color: "#D6C2A1",
-    bg: "rgba(214,194,161,0.05)",
-    borderLeft: "#D6C2A1",
+    color: "#F4C430",
+    bg: "rgba(244,196,48,0.06)",
+    borderLeft: "#F4C430",
   },
   monitoring: {
     label: "Observando",
@@ -64,7 +64,7 @@ const DAY_LABELS = ["D-4", "D-3", "D-2", "D-1", "Hoje"];
 
 function strengthColor(score: number): string {
   if (score >= 70) return "#34D399";
-  if (score >= 45) return "#D6C2A1";
+  if (score >= 45) return "#F4C430";
   if (score >= 20) return "#A1A1AA";
   return "#6B6B73";
 }
@@ -80,6 +80,7 @@ function strengthLabel(score: number): string {
 
 interface OfferCardProps {
   offer: OfferWithSnapshots;
+  niche?: Niche;
   onScrapeNow: (id: string) => void;
   onArchive: (id: string) => void;
   scraping?: boolean;
@@ -87,11 +88,15 @@ interface OfferCardProps {
 
 export default function OfferCard({
   offer,
+  niche,
   onScrapeNow,
   onArchive,
   scraping,
 }: OfferCardProps) {
   const cfg = STATUS_CONFIG[offer.status] ?? STATUS_CONFIG.new;
+  // Status urgente domina (scaling/dying); status calmo deixa o nicho colorir a borda lateral.
+  const showNicheBorder = niche && (offer.status === "new" || offer.status === "monitoring" || offer.status === "stable");
+  const borderLeftColor = showNicheBorder ? niche!.color : cfg.borderLeft;
   const snaps = offer.snapshots;
   const counts = snaps.map((s) => s.active_ads_count);
   const isArchived = offer.status === "archived";
@@ -119,7 +124,7 @@ export default function OfferCard({
       )}
       style={{
         backgroundColor: cfg.bg,
-        borderLeftColor: cfg.borderLeft,
+        borderLeftColor: borderLeftColor,
         borderLeftWidth: "3px",
       }}
     >
@@ -133,7 +138,21 @@ export default function OfferCard({
             <p className="text-sm font-medium text-text-primary leading-snug truncate">
               {offer.name}
             </p>
-            <div className="flex items-center gap-2 mt-0.5">
+            <div className="flex items-center gap-2 mt-1 flex-wrap">
+              {niche && (
+                <span
+                  className="inline-flex items-center gap-1 text-[9px] uppercase tracking-[0.12em] px-1.5 py-0.5 rounded font-medium"
+                  style={{
+                    color: niche.color,
+                    backgroundColor: `${niche.color}14`,
+                    border: `1px solid ${niche.color}33`,
+                  }}
+                  title={`Nicho: ${niche.name}`}
+                >
+                  <span className="text-[10px] leading-none">{niche.emoji}</span>
+                  <span className="capitalize">{niche.name}</span>
+                </span>
+              )}
               {offer.library_url && (
                 <a
                   href={offer.library_url}

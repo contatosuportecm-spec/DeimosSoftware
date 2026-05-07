@@ -1,6 +1,7 @@
 import { Country, COUNTRY_CODES, OfferStatus, OfferSnapshot } from "@/types";
 import { createServerClient } from "@/lib/supabase";
 import { calculateMarketStrength } from "@/lib/scoring";
+import { scrapeActiveAdsCount } from "@/lib/automation/adLibraryScraper";
 
 // ═══ URL parsing ═══
 
@@ -21,60 +22,19 @@ export function extractPageId(libraryUrl: string): string | null {
   }
 }
 
-// ═══ Meta API ═══
-
-interface MetaAdsPage {
-  data: Array<{ id: string }>;
-  paging?: {
-    cursors: { after: string };
-    next?: string;
-  };
-  error?: {
-    message: string;
-    code: number;
-  };
-}
+// ═══ Contagem de Ads (Playwright) ═══
 
 /**
  * Conta o total de anúncios ativos para um page_id.
- * Pagina automaticamente até esgotar os resultados.
+ * Usa Playwright para scrape da Ad Library (a API REST só retorna ads políticos).
  */
 export async function countActiveAds(
   pageId: string,
   countryCodes: string[]
 ): Promise<number> {
-  const token = process.env.META_ACCESS_TOKEN;
-  if (!token) throw new Error("META_ACCESS_TOKEN não configurado");
-
-  const BASE = "https://graph.facebook.com/v19.0/ads_archive";
-  let total = 0;
-  let after: string | undefined = undefined;
-
-  do {
-    const params = new URLSearchParams({
-      access_token: token,
-      search_page_ids: pageId,
-      ad_active_status: "ACTIVE",
-      ad_reached_countries: JSON.stringify(countryCodes),
-      fields: "id",
-      limit: "500",
-    });
-    if (after) params.set("after", after);
-
-    const res = await fetch(`${BASE}?${params.toString()}`);
-    const page = await res.json() as MetaAdsPage;
-
-    if (page.error) {
-      throw new Error(`Meta API: ${page.error.message} (code ${page.error.code})`);
-    }
-
-    total += page.data.length;
-
-    // paging.next é o indicador confiável de próxima página
-    after = page.paging?.next ? page.paging.cursors.after : undefined;
-  } while (after !== undefined);
-
-  return total;
+  // Usa o primeiro country code (a Ad Library aceita um país por vez)
+  const country = countryCodes[0] ?? "BR";
+  return scrapeActiveAdsCount(pageId, country);
 }
 
 // ═══ Helpers matemáticos ═══
@@ -253,12 +213,5 @@ export async function scrapeAndSaveSnapshot(
 }
 
 // ═══ Delta calculation (UI helper) ═══
-
-export function calcDeltaPct(snapshots: Pick<OfferSnapshot, "active_ads_count">[]): string {
-  if (snapshots.length < 2) return "—";
-  const first = snapshots[0].active_ads_count;
-  const last  = snapshots[snapshots.length - 1].active_ads_count;
-  if (first === 0) return last > 0 ? "+∞%" : "—";
-  const pct = ((last - first) / first) * 100;
-  return (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
-}
+// Re-export do arquivo separado para não quebrar imports existentes
+export { calcDeltaPct } from "@/lib/spy-utils";
