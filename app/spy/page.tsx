@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { Suspense, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Plus, RefreshCw, Eye } from "lucide-react";
 import LayoutApp from "@/app/layout-app";
@@ -17,6 +17,14 @@ function isValidTab(v: string | null): v is SpyTab {
 }
 
 export default function SpyPage() {
+  return (
+    <Suspense fallback={null}>
+      <SpyPageContent />
+    </Suspense>
+  );
+}
+
+function SpyPageContent() {
   const router        = useRouter();
   const searchParams  = useSearchParams();
   const tabParam      = searchParams.get("tab");
