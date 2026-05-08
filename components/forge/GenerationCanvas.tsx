@@ -1,23 +1,133 @@
 "use client";
 
+import { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ForgeGeneration } from "@/types/forge";
-import { Loader2, AlertCircle, Download, ImagePlus, Sparkles } from "lucide-react";
+import { Loader2, AlertCircle, Download, ImagePlus, Sparkles, ArrowUpRight, X } from "lucide-react";
+
+async function forceDownload(url: string, category: string) {
+  const res = await fetch(url);
+  const blob = await res.blob();
+  const ext = category === "image" ? "png" : "mp4";
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `forge-${Date.now()}.${ext}`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function Lightbox({
+  url,
+  isVideo,
+  prompt,
+  category,
+  supportsImageRef,
+  onUseAsReference,
+  onClose,
+}: {
+  url: string;
+  isVideo: boolean;
+  prompt?: string | null;
+  category: string;
+  supportsImageRef?: boolean;
+  onUseAsReference?: (url: string) => void;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onClose]);
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+      style={{ animation: "fadeIn 200ms ease-out" }}
+      onClick={onClose}
+    >
+      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
+
+      <button
+        onClick={onClose}
+        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+      >
+        <X size={18} strokeWidth={1.5} className="text-white" />
+      </button>
+
+      <div
+        className="max-w-[90vw] max-h-[90vh] flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {isVideo ? (
+          <video
+            src={url}
+            controls
+            autoPlay
+            loop
+            className="max-w-full max-h-[90vh] rounded-lg"
+          />
+        ) : (
+          <img
+            src={url}
+            alt={prompt || "Generated"}
+            className="max-w-full max-h-[90vh] rounded-lg object-contain"
+          />
+        )}
+      </div>
+
+      <div
+        className="absolute bottom-6 flex items-center gap-3"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {supportsImageRef && onUseAsReference && category === "image" && (
+          <button
+            type="button"
+            onClick={() => { onUseAsReference(url); onClose(); }}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-gold/20 hover:bg-gold/30 text-gold text-[11px] uppercase tracking-[0.12em] transition-colors border border-gold/30 backdrop-blur-sm"
+          >
+            <ArrowUpRight size={12} strokeWidth={1.5} />
+            Referência
+          </button>
+        )}
+        <button
+          type="button"
+          onClick={() => forceDownload(url, category)}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] uppercase tracking-[0.12em] transition-colors border border-white/10 backdrop-blur-sm"
+        >
+          <Download size={12} strokeWidth={1.5} />
+          Download
+        </button>
+      </div>
+    </div>,
+    document.body,
+  );
+}
 
 interface GenerationCanvasProps {
   generation: ForgeGeneration | null;
   isLoading: boolean;
   error: string | null;
   category: "image" | "video" | "lipsync";
+  supportsImageRef?: boolean;
+  onUseAsReference?: (url: string) => void;
 }
 
-export default function GenerationCanvas({ generation, isLoading, error, category }: GenerationCanvasProps) {
+export default function GenerationCanvas({ generation, isLoading, error, category, supportsImageRef, onUseAsReference }: GenerationCanvasProps) {
+  const [lightbox, setLightbox] = useState(false);
+  const closeLightbox = useCallback(() => setLightbox(false), []);
+
   // Result
   if (generation?.status === "completed" && generation.result_url) {
     const isVideo = category === "video" || category === "lipsync";
 
     return (
       <div className="flex-1 flex flex-col rounded-xl border border-border bg-bg-2 overflow-hidden min-h-0">
-        <div className="flex-1 flex items-center justify-center p-6 bg-black/40 min-h-0">
+        <div
+          className="flex-1 flex items-center justify-center p-6 bg-black/40 min-h-0 cursor-pointer"
+          onClick={() => setLightbox(true)}
+        >
           {isVideo ? (
             <video
               src={generation.result_url}
@@ -25,12 +135,13 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
               autoPlay
               loop
               className="max-w-full max-h-full rounded-lg"
+              onClick={(e) => e.stopPropagation()}
             />
           ) : (
             <img
               src={generation.result_url}
               alt={generation.prompt || "Generated"}
-              className="max-w-full max-h-full rounded-lg object-contain"
+              className="max-w-full max-h-full rounded-lg object-contain hover:opacity-90 transition-opacity"
             />
           )}
         </div>
@@ -45,17 +156,40 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
               </span>
             )}
           </div>
-          <a
-            href={generation.result_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            download
-            className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-bg-3 hover:bg-bg-4 text-text-secondary hover:text-text-primary text-[10px] uppercase tracking-[0.12em] transition-colors border border-border"
-          >
-            <Download size={11} strokeWidth={1.5} />
-            Download
-          </a>
+          <div className="flex items-center gap-2">
+            {supportsImageRef && onUseAsReference && generation.category === "image" && (
+              <button
+                type="button"
+                onClick={() => onUseAsReference(generation.result_url!)}
+                className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-gold/10 hover:bg-gold/20 text-gold hover:text-gold-hover text-[10px] uppercase tracking-[0.12em] transition-colors border border-gold/20"
+                title="Usar como referência no prompt"
+              >
+                <ArrowUpRight size={11} strokeWidth={1.5} />
+                Referência
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => forceDownload(generation.result_url!, category)}
+              className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-bg-3 hover:bg-bg-4 text-text-secondary hover:text-text-primary text-[10px] uppercase tracking-[0.12em] transition-colors border border-border"
+            >
+              <Download size={11} strokeWidth={1.5} />
+              Download
+            </button>
+          </div>
         </div>
+
+        {lightbox && (
+          <Lightbox
+            url={generation.result_url}
+            isVideo={isVideo}
+            prompt={generation.prompt}
+            category={category}
+            supportsImageRef={supportsImageRef}
+            onUseAsReference={onUseAsReference}
+            onClose={closeLightbox}
+          />
+        )}
       </div>
     );
   }
@@ -92,7 +226,7 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
     );
   }
 
-  // Empty state — estilo Krea/Higgsfield
+  // Empty state
   return (
     <div className="flex-1 flex flex-col items-center justify-center gap-4 rounded-xl border border-border bg-bg-2 min-h-0 relative overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(244,196,48,0.04),transparent_60%)]" />

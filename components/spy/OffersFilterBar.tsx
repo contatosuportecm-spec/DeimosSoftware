@@ -131,7 +131,7 @@ export default function OffersFilterBar({
                 ? "text-text-primary"
                 : nicheOpen
                 ? "border-border-strong bg-bg-3 text-text-primary"
-                : "border-border/60 bg-bg-3/40 text-text-muted hover:border-border-strong hover:text-text-secondary"
+                : "border-border bg-bg-3 text-text-secondary hover:border-border-strong hover:text-text-primary"
             )}
             style={activeNiche && activeNicheObj ? {
               backgroundColor: `${activeNicheObj.color}1C`,
@@ -247,7 +247,7 @@ export default function OffersFilterBar({
             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all border",
             adsActive
               ? "border-nova/50 bg-nova/10 text-nova"
-              : "border-border/60 bg-bg-3/40 text-text-muted hover:border-border-strong hover:text-text-secondary"
+              : "border-border bg-bg-3 text-text-secondary hover:border-border-strong hover:text-text-primary"
           )}
         >
           <TrendingUp size={12} strokeWidth={1.5} />
@@ -262,7 +262,7 @@ export default function OffersFilterBar({
             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all border",
             timeActive
               ? "border-amber/50 bg-amber/10 text-amber"
-              : "border-border/60 bg-bg-3/40 text-text-muted hover:border-border-strong hover:text-text-secondary"
+              : "border-border bg-bg-3 text-text-secondary hover:border-border-strong hover:text-text-primary"
           )}
         >
           <Clock size={12} strokeWidth={1.5} />
@@ -277,7 +277,7 @@ export default function OffersFilterBar({
             "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all border",
             deltaActive
               ? "border-[#34D399]/50 bg-[#34D399]/10 text-[#34D399]"
-              : "border-border/60 bg-bg-3/40 text-text-muted hover:border-border-strong hover:text-text-secondary"
+              : "border-border bg-bg-3 text-text-secondary hover:border-border-strong hover:text-text-primary"
           )}
         >
           <Flame size={12} strokeWidth={1.5} />

@@ -44,5 +44,10 @@ export function useForgeUpload() {
     setError(null);
   }, []);
 
-  return { upload, uploading, uploadedUrl, error, clear };
+  const setUrl = useCallback((url: string) => {
+    setUploadedUrl(url);
+    setError(null);
+  }, []);
+
+  return { upload, uploading, uploadedUrl, error, clear, setUrl };
 }

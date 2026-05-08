@@ -34,26 +34,25 @@ body {
 /* ── Glassmorphism card ── */
 @layer components {
   .glass {
-    background: rgba(22, 22, 27, 0.55);
+    background: linear-gradient(135deg, rgba(18, 18, 22, 0.95) 0%, rgba(14, 14, 18, 0.98) 100%);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(244, 196, 48, 0.06);
     box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.45),
-      0 2px 8px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      0 4px 24px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.03);
   }
 
   .glass-hover {
-    transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
   }
 
   .glass-hover:hover {
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(244, 196, 48, 0.15);
     box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.5),
-      0 4px 12px rgba(0, 0, 0, 0.35),
-      inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      0 8px 32px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(244, 196, 48, 0.05),
+      inset 0 1px 0 rgba(244, 196, 48, 0.04);
     transform: translateY(-1px);
   }
 

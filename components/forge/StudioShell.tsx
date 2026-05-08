@@ -12,7 +12,7 @@ import GenerationCanvas from "./GenerationCanvas";
 import HistoryStrip from "./HistoryStrip";
 import UploadZone from "./UploadZone";
 import ApiKeyGate from "./ApiKeyGate";
-import { Sparkles, Maximize2, History, Loader2 } from "lucide-react";
+import { Sparkles, Loader2, ArrowUp, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StudioShellProps {
@@ -81,6 +81,14 @@ export default function StudioShell({ category, models, title }: StudioShellProp
     // TODO: hidratar canvas com a generation selecionada
   };
 
+  const handleUseAsReference = (url: string) => {
+    if (inputs?.supports_image_upload) {
+      imageUpload.setUrl(url);
+    }
+  };
+
+  const supportsImageRef = !!inputs?.supports_image_upload;
+
   const triggerSubmit = () => {
     formRef.current?.requestSubmit();
   };
@@ -112,7 +120,14 @@ export default function StudioShell({ category, models, title }: StudioShellProp
       <div className="flex flex-col h-full">
         {/* TOPBAR */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-border flex-shrink-0">
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <a
+              href="/forge"
+              className="flex items-center justify-center w-7 h-7 rounded-lg border border-border hover:border-border-strong hover:bg-bg-3 text-text-muted hover:text-text-primary transition-colors"
+              title="Voltar ao AI Studio"
+            >
+              <ChevronLeft size={14} strokeWidth={1.5} />
+            </a>
             <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-text-primary">
               {title}
             </h2>
@@ -120,13 +135,6 @@ export default function StudioShell({ category, models, title }: StudioShellProp
           </div>
 
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-text-muted hover:text-text-secondary hover:bg-bg-3 text-[11px] uppercase tracking-[0.12em] transition-colors"
-            >
-              <History size={12} strokeWidth={1.5} />
-              Histórico
-            </button>
             <button
               type="button"
               onClick={triggerSubmit}
@@ -176,6 +184,12 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                   <textarea
                     value={prompt}
                     onChange={(e) => setPrompt(e.target.value.slice(0, promptMax))}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        if (canSubmit) triggerSubmit();
+                      }
+                    }}
                     placeholder={
                       category === "lipsync"
                         ? "Descrição da cena (opcional)..."
@@ -183,14 +197,25 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     }
                     disabled={isLoading}
                     rows={6}
-                    className="w-full bg-bg-3 border border-border rounded-lg px-3.5 py-3 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/15 transition-colors disabled:opacity-40 resize-none"
+                    className="w-full bg-bg-3 border border-border rounded-lg px-3.5 py-3 pr-10 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/15 transition-colors disabled:opacity-40 resize-none"
                   />
                   <button
                     type="button"
-                    className="absolute bottom-2 right-2 p-1 rounded text-text-muted/50 hover:text-text-muted transition-colors"
-                    title="Expandir"
+                    onClick={triggerSubmit}
+                    disabled={!canSubmit}
+                    className={cn(
+                      "absolute bottom-2.5 right-2.5 w-7 h-7 rounded-lg flex items-center justify-center transition-all",
+                      canSubmit
+                        ? "bg-gold text-black hover:bg-gold-hover shadow-[0_0_10px_rgba(244,196,48,0.25)]"
+                        : "bg-bg-4 text-text-muted/30 cursor-not-allowed",
+                    )}
+                    title="Gerar (Enter)"
                   >
-                    <Maximize2 size={11} strokeWidth={1.5} />
+                    {isLoading ? (
+                      <Loader2 size={12} strokeWidth={2} className="animate-spin" />
+                    ) : (
+                      <ArrowUp size={13} strokeWidth={2} />
+                    )}
                   </button>
                 </div>
               </section>
@@ -310,6 +335,8 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                 isLoading={isLoading}
                 error={error}
                 category={category}
+                supportsImageRef={supportsImageRef}
+                onUseAsReference={handleUseAsReference}
               />
             </div>
 
@@ -317,7 +344,20 @@ export default function StudioShell({ category, models, title }: StudioShellProp
               category={category}
               onSelect={handleSelectHistory}
               activeId={generation?.id}
+              supportsImageRef={supportsImageRef}
+              onUseAsReference={handleUseAsReference}
             />
+
+            {/* Imagens geradas — disponível em studios de vídeo/lipsync que aceitam imagem */}
+            {category !== "image" && supportsImageRef && (
+              <HistoryStrip
+                category="image"
+                onSelect={handleSelectHistory}
+                label="Suas Imagens"
+                supportsImageRef
+                onUseAsReference={handleUseAsReference}
+              />
+            )}
           </div>
         </div>
       </div>

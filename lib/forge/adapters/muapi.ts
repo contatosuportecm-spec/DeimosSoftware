@@ -98,6 +98,7 @@ export async function muapiSubmit(
       "x-api-key": apiKey,
     },
     body: JSON.stringify(payload),
+    cache: "no-store",
   });
 
   const rawText = await response.text();
@@ -142,6 +143,7 @@ export async function muapiPoll(requestId: string, apiKey: string): Promise<Poll
       "Content-Type": "application/json",
       "x-api-key": apiKey,
     },
+    cache: "no-store",
   });
 
   const rawText = await response.text();
