@@ -24,7 +24,7 @@ const AR_SHAPES: Record<string, { w: number; h: number }> = {
 
 export default function AspectRatioPicker({ options, selected, onSelect }: AspectRatioPickerProps) {
   return (
-    <div className="flex items-center gap-1.5 flex-wrap">
+    <div className="flex items-center gap-1 md:gap-1.5 flex-wrap">
       {options.map((ar) => {
         const shape = AR_SHAPES[ar] || { w: 16, h: 16 };
         const isActive = ar === selected;
@@ -35,7 +35,7 @@ export default function AspectRatioPicker({ options, selected, onSelect }: Aspec
             key={ar}
             onClick={() => onSelect(ar)}
             className={cn(
-              "flex flex-col items-center gap-1 px-2 py-1.5 rounded-md transition-all",
+              "flex flex-col items-center gap-1 px-2.5 py-2 md:px-2 md:py-1.5 rounded-md transition-all min-w-[40px]",
               isActive
                 ? "bg-gold/15 border border-gold/30"
                 : "bg-bg-3 border border-transparent hover:border-border"
@@ -49,7 +49,7 @@ export default function AspectRatioPicker({ options, selected, onSelect }: Aspec
               style={{ width: shape.w, height: shape.h }}
             />
             <span className={cn(
-              "text-[9px] font-mono",
+              "text-[10px] md:text-[9px] font-mono",
               isActive ? "text-gold" : "text-text-muted"
             )}>
               {ar}

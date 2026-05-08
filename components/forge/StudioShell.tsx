@@ -163,29 +163,29 @@ export default function StudioShell({ category, models, title }: StudioShellProp
     <ApiKeyGate providerId={providerId} providerName="Muapi">
       <div className="flex flex-col h-full">
         {/* TOPBAR */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-border flex-shrink-0">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between px-3 md:px-6 py-2.5 md:py-3 border-b border-border flex-shrink-0 gap-2">
+          <div className="flex items-center gap-2 md:gap-3 min-w-0">
             <a
               href="/forge"
-              className="flex items-center justify-center w-7 h-7 rounded-lg border border-border hover:border-border-strong hover:bg-bg-3 text-text-muted hover:text-text-primary transition-colors"
+              className="flex items-center justify-center w-9 h-9 md:w-7 md:h-7 rounded-lg border border-border hover:border-border-strong hover:bg-bg-3 text-text-muted hover:text-text-primary transition-colors flex-shrink-0"
               title="Voltar ao AI Studio"
             >
               <ChevronLeft size={14} strokeWidth={1.5} />
             </a>
-            <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-text-primary">
+            <h2 className="text-xs font-semibold tracking-[0.18em] uppercase text-text-primary hidden sm:block">
               {title}
             </h2>
             <ModelPicker models={models} selected={selectedModelId} onSelect={handleModelChange} />
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button
               type="button"
               onClick={triggerSubmit}
               disabled={!canSubmit}
               title={missing.length > 0 ? `Faltando: ${missing.join(", ")}` : undefined}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-[0.12em] transition-all",
+                "flex items-center gap-2 px-4 py-2.5 md:py-2 rounded-lg text-xs font-semibold uppercase tracking-[0.12em] transition-all",
                 "bg-gold text-black hover:bg-gold-hover disabled:opacity-30 disabled:cursor-not-allowed",
                 canSubmit && "shadow-[0_0_18px_rgba(244,196,48,0.30)] hover:shadow-[0_0_24px_rgba(244,196,48,0.45)]",
               )}
@@ -200,13 +200,13 @@ export default function StudioShell({ category, models, title }: StudioShellProp
           </div>
         </div>
 
-        {/* CORPO: 2 colunas */}
-        <div className="flex-1 flex min-h-0">
+        {/* CORPO: empilha no mobile, 2 colunas no desktop */}
+        <div className="flex-1 flex flex-col lg:flex-row min-h-0 overflow-y-auto lg:overflow-hidden">
           {/* COLUNA ESQUERDA — Prompt + Configurações */}
           <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="w-[340px] flex-shrink-0 border-r border-border overflow-y-auto px-5 py-5 space-y-5"
+            className="w-full lg:w-[340px] flex-shrink-0 border-b lg:border-b-0 lg:border-r border-border lg:overflow-y-auto px-4 md:px-5 py-4 md:py-5 space-y-4 md:space-y-5"
           >
             {/* PROMPT */}
             {inputs?.has_prompt && (
@@ -243,7 +243,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                         : "Descreva sua imagem com o máximo de detalhes..."
                     }
                     disabled={isLoading}
-                    rows={6}
+                    rows={4}
                     className={cn(
                       "w-full bg-bg-3 border border-border rounded-lg px-3.5 py-3 pr-10 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/15 transition-colors disabled:opacity-40 resize-none",
                       imageUpload.uploading && "border-gold/40 ring-1 ring-gold/15",
@@ -393,7 +393,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
           </form>
 
           {/* COLUNA DIREITA — Canvas + Histórico */}
-          <div className="flex-1 min-w-0 flex flex-col px-6 py-5 gap-4 overflow-hidden">
+          <div className="flex-1 min-w-0 flex flex-col px-3 md:px-6 py-4 md:py-5 gap-3 md:gap-4 overflow-hidden min-h-[300px]">
             <div className="flex-1 flex min-h-0">
               <GenerationCanvas
                 generation={generation}

@@ -56,9 +56,9 @@ export default function ForgePage() {
 
   return (
     <LayoutApp>
-      <div className="p-6 space-y-5">
+      <div className="p-4 md:p-6 space-y-5">
         {/* ── Header ── */}
-        <div className="flex items-start justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
           <div>
             <h1 className="text-[23px] font-light text-text-primary leading-tight tracking-tight">
               AI{" "}
@@ -72,14 +72,14 @@ export default function ForgePage() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => router.push("/forge/library")}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-gold/10 border border-gold/25 hover:bg-gold/20 hover:border-gold/40 text-gold text-[10px] font-medium transition-colors"
+              className="flex items-center gap-1.5 px-3.5 py-2 md:py-1.5 rounded-md bg-gold/10 border border-gold/25 hover:bg-gold/20 hover:border-gold/40 text-gold text-[10px] font-medium transition-colors"
             >
               <Library size={11} strokeWidth={1.5} />
               Biblioteca
             </button>
             <button
               onClick={() => router.push("/forge/settings")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-bg-3 border border-border hover:border-border-strong text-[10px] text-text-muted hover:text-text-secondary transition-colors"
+              className="flex items-center gap-1.5 px-3 py-2 md:py-1.5 rounded-md bg-bg-3 border border-border hover:border-border-strong text-[10px] text-text-muted hover:text-text-secondary transition-colors"
             >
               <KeyRound size={11} strokeWidth={1.5} />
               API Keys
@@ -202,7 +202,7 @@ function GenLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () => vo
       {/* Close */}
       <button
         onClick={onClose}
-        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+        className="absolute top-3 right-3 md:top-5 md:right-5 w-11 h-11 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
       >
         <X size={18} strokeWidth={1.5} className="text-white" />
       </button>
@@ -218,10 +218,10 @@ function GenLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () => vo
 
       {/* Info bar */}
       <div
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-8 pb-6 pt-16"
+        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 md:px-8 pb-4 md:pb-6 pt-12 md:pt-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="max-w-3xl mx-auto flex items-end justify-between gap-6">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-3 md:gap-6">
           <div className="min-w-0 flex-1 space-y-2">
             {gen.prompt && (
               <p className="text-sm text-white/90 leading-relaxed line-clamp-2">{gen.prompt}</p>
@@ -301,11 +301,11 @@ function RecentCarousel({ generations, loading }: { generations: ForgeGeneration
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-3 px-1">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 px-1 gap-2">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <Clock size={12} strokeWidth={1.5} className="text-text-muted/50" />
-            <span className="text-[9px] uppercase tracking-[0.22em] text-text-muted font-semibold">
+            <span className="text-[10px] md:text-[9px] uppercase tracking-[0.22em] text-text-muted font-semibold">
               Últimas Gerações
             </span>
           </div>
@@ -377,7 +377,7 @@ function RecentCarousel({ generations, loading }: { generations: ForgeGeneration
               <button
                 key={gen.id}
                 onClick={() => setLightboxGen(gen)}
-                className="flex-shrink-0 w-[220px] rounded-xl overflow-hidden border border-border bg-bg-2 hover:border-border-strong transition-all group snap-start"
+                className="flex-shrink-0 w-[170px] sm:w-[220px] rounded-xl overflow-hidden border border-border bg-bg-2 hover:border-border-strong transition-all group snap-start"
               >
                 {/* Thumbnail */}
                 <div className="relative aspect-[4/3] bg-black/40 overflow-hidden">

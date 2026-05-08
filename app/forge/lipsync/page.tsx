@@ -9,7 +9,7 @@ const LIPSYNC_MODELS = getForgeModelsByCategory("lipsync");
 export default function LipSyncStudioPage() {
   return (
     <LayoutApp>
-      <div className="h-[calc(100vh-0px)]">
+      <div className="h-[100dvh]">
         <StudioShell
           category="lipsync"
           models={LIPSYNC_MODELS}

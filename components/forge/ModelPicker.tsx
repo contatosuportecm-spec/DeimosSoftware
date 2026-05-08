@@ -36,15 +36,15 @@ export default function ModelPicker({ models, selected, onSelect }: ModelPickerP
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-bg-3 border border-border hover:border-border-strong transition-colors text-xs"
+        className="flex items-center gap-2 px-3 py-2.5 md:py-2 rounded-lg bg-bg-3 border border-border hover:border-border-strong transition-colors text-xs min-w-0"
       >
         <Icon size={13} strokeWidth={1.5} className="text-gold" />
-        <span className="text-text-primary font-medium">{current?.name || "Selecionar modelo"}</span>
+        <span className="text-text-primary font-medium truncate">{current?.name || "Selecionar modelo"}</span>
         <ChevronDown size={12} className={cn("text-text-muted transition-transform", open && "rotate-180")} />
       </button>
 
       {open && (
-        <div className="absolute top-full left-0 mt-1 w-64 z-50 rounded-lg border border-border bg-bg-2 shadow-2xl py-1 max-h-64 overflow-y-auto">
+        <div className="absolute top-full left-0 mt-1 w-[calc(100vw-2rem)] sm:w-64 z-50 rounded-lg border border-border bg-bg-2 shadow-2xl py-1 max-h-64 overflow-y-auto">
           {models.map((model) => (
             <button
               key={model.id}

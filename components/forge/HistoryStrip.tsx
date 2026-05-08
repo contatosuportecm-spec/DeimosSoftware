@@ -60,7 +60,7 @@ function HistoryLightbox({
 
       <button
         onClick={onClose}
-        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+        className="absolute top-3 right-3 md:top-5 md:right-5 w-11 h-11 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
       >
         <X size={18} strokeWidth={1.5} className="text-white" />
       </button>
@@ -75,10 +75,10 @@ function HistoryLightbox({
 
       {/* Bottom info bar */}
       <div
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-8 pb-6 pt-16"
+        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-4 md:px-8 pb-4 md:pb-6 pt-12 md:pt-16"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="max-w-3xl mx-auto flex items-end justify-between gap-6">
+        <div className="max-w-3xl mx-auto flex flex-col sm:flex-row sm:items-end justify-between gap-3 md:gap-6">
           <div className="min-w-0 flex-1 space-y-2">
             {gen.prompt && (
               <p className="text-sm text-white/90 leading-relaxed line-clamp-2">{gen.prompt}</p>
@@ -196,7 +196,7 @@ export default function HistoryStrip({ category, onSelect, activeId, supportsIma
           <Loader2 size={14} className="animate-spin text-text-muted/60" />
         </div>
       ) : generations.length === 0 ? (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2">
           {Array.from({ length: 7 }).map((_, i) => (
             <div
               key={i}
@@ -205,7 +205,7 @@ export default function HistoryStrip({ category, onSelect, activeId, supportsIma
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-7 gap-2">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2">
           {generations.slice(0, 7).map((gen) => (
             <button
               key={gen.id}
@@ -251,7 +251,7 @@ export default function HistoryStrip({ category, onSelect, activeId, supportsIma
                 <span className={cn("w-1.5 h-1.5 rounded-full", STATUS_DOT[gen.status])} />
               </div>
 
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-between p-1.5">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-end justify-between p-1.5">
                 <CategoryIcon size={11} strokeWidth={1.5} className="text-white/80" />
                 {gen.status === "completed" && gen.result_url && (
                   <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>

@@ -9,7 +9,7 @@ const VIDEO_MODELS = getForgeModelsByCategory("video");
 export default function VideoStudioPage() {
   return (
     <LayoutApp>
-      <div className="h-[calc(100vh-0px)]">
+      <div className="h-[100dvh]">
         <StudioShell
           category="video"
           models={VIDEO_MODELS}

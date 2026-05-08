@@ -51,7 +51,7 @@ function Lightbox({
 
       <button
         onClick={onClose}
-        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
+        className="absolute top-3 right-3 md:top-5 md:right-5 w-11 h-11 md:w-10 md:h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
       >
         <X size={18} strokeWidth={1.5} className="text-white" />
       </button>
@@ -145,13 +145,13 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
             />
           )}
 
-          {/* Action icons overlay */}
-          <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
+          {/* Action icons overlay — always visible on mobile (no hover) */}
+          <div className="absolute top-3 right-3 md:top-4 md:right-4 flex items-center gap-2 md:opacity-0 md:group-hover/canvas:opacity-100 transition-opacity">
             {supportsImageRef && onUseAsReference && generation.category === "image" && (
               <button
                 type="button"
                 onClick={(e) => { e.stopPropagation(); onUseAsReference(generation.result_url!); }}
-                className="w-9 h-9 rounded-lg bg-black/60 hover:bg-gold/20 backdrop-blur-sm border border-white/10 hover:border-gold/40 flex items-center justify-center transition-all"
+                className="w-10 h-10 md:w-9 md:h-9 rounded-lg bg-black/60 hover:bg-gold/20 backdrop-blur-sm border border-white/10 hover:border-gold/40 flex items-center justify-center transition-all"
                 title="Usar como referência"
               >
                 <ArrowUpRight size={15} strokeWidth={1.5} className="text-gold" />
@@ -160,7 +160,7 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
             <button
               type="button"
               onClick={(e) => { e.stopPropagation(); forceDownload(generation.result_url!, category); }}
-              className="w-9 h-9 rounded-lg bg-black/60 hover:bg-white/15 backdrop-blur-sm border border-white/10 hover:border-white/25 flex items-center justify-center transition-all"
+              className="w-10 h-10 md:w-9 md:h-9 rounded-lg bg-black/60 hover:bg-white/15 backdrop-blur-sm border border-white/10 hover:border-white/25 flex items-center justify-center transition-all"
               title="Download"
             >
               <Download size={15} strokeWidth={1.5} className="text-white/80" />
@@ -168,7 +168,7 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
           </div>
 
           {/* Model info bottom */}
-          <div className="absolute bottom-3 left-3 flex items-center gap-2 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
+          <div className="absolute bottom-3 left-3 flex items-center gap-2 md:opacity-0 md:group-hover/canvas:opacity-100 transition-opacity">
             <span className="px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-white/10 text-[9px] text-white/60 font-mono uppercase tracking-[0.1em]">
               {generation.model_id}
             </span>

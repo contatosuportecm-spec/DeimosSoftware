@@ -9,7 +9,7 @@ const IMAGE_MODELS = getForgeModelsByCategory("image");
 export default function ImageStudioPage() {
   return (
     <LayoutApp>
-      <div className="h-[calc(100vh-0px)]">
+      <div className="h-[100dvh]">
         <StudioShell
           category="image"
           models={IMAGE_MODELS}
