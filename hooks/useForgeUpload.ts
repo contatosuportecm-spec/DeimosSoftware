@@ -8,35 +8,51 @@ export function useForgeUpload() {
   const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const uploadOne = useCallback(async (file: File, providerId = "muapi"): Promise<string | null> => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("provider_id", providerId);
-
-    const res = await fetch("/api/forge/upload", {
+  const uploadOne = useCallback(async (file: File): Promise<string | null> => {
+    // 1. Get signed upload URL from our API (tiny request, ~200 bytes)
+    const res = await fetch("/api/forge/upload-url", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        filename: file.name || "paste.png",
+        contentType: file.type || "image/png",
+      }),
     });
 
     const text = await res.text();
-
     if (!res.ok) {
-      let msg = "Upload failed";
+      let msg = "Failed to get upload URL";
       try { msg = JSON.parse(text).error || msg; } catch { msg = text.slice(0, 200) || msg; }
       throw new Error(msg);
     }
 
-    let data: { url?: string };
+    let data: { signedUrl: string; token: string; path: string; publicUrl: string; contentType: string };
     try { data = JSON.parse(text); } catch { throw new Error(`Invalid response: ${text.slice(0, 100)}`); }
-    return (data.url as string) || null;
+
+    // 2. Upload directly to Supabase Storage (bypasses Vercel entirely)
+    const uploadRes = await fetch(data.signedUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": data.contentType,
+      },
+      body: file,
+    });
+
+    if (!uploadRes.ok) {
+      const errText = await uploadRes.text().catch(() => "");
+      throw new Error(`Upload failed (${uploadRes.status}): ${errText.slice(0, 200)}`);
+    }
+
+    // 3. Return the public URL
+    return data.publicUrl;
   }, []);
 
-  const upload = useCallback(async (file: File, providerId = "muapi") => {
+  const upload = useCallback(async (file: File, _providerId = "muapi") => {
     setUploading(true);
     setError(null);
 
     try {
-      const url = await uploadOne(file, providerId);
+      const url = await uploadOne(file);
       if (url) {
         setUploadedUrl(url);
         setUploadedUrls((prev) => [...prev, url]);
