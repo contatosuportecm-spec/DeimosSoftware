@@ -52,6 +52,7 @@ export interface ForgeModelInputs {
   supports_image_upload?: boolean;
   supports_audio_upload?: boolean;
   image_required?: boolean;
+  multi_image?: boolean;
   audio_required?: boolean;
   image_field?: string;
   // Prompt
@@ -85,6 +86,7 @@ export interface GenerateRequest {
   quality?: string;
   effect?: string;
   image_url?: string;
+  image_urls?: string[];
   audio_url?: string;
   offer_id?: string;
 }

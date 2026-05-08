@@ -28,6 +28,7 @@ export const FORGE_MODELS: ForgeModel[] = [
       resolutions: ["1k", "2k", "4k"],
       default_resolution: "1k",
       supports_image_upload: true,
+      multi_image: true,
       image_field: "images_list",
       has_prompt: true,
       prompt_required: true,

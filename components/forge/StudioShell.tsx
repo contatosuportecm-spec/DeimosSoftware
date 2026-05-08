@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useRef } from "react";
+import { useState, FormEvent, useRef, ClipboardEvent } from "react";
 import { ForgeModel, ForgeGeneration, ForgeCategory } from "@/types/forge";
 import { useForgeGenerate } from "@/hooks/useForgeGenerate";
 import { useForgeUpload } from "@/hooks/useForgeUpload";
@@ -12,7 +12,7 @@ import GenerationCanvas from "./GenerationCanvas";
 import HistoryStrip from "./HistoryStrip";
 import UploadZone from "./UploadZone";
 import ApiKeyGate from "./ApiKeyGate";
-import { Sparkles, Loader2, ArrowUp, ChevronLeft } from "lucide-react";
+import { Sparkles, Loader2, ArrowUp, ChevronLeft, Plus, X as XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StudioShellProps {
@@ -64,6 +64,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
     e.preventDefault();
     if (!selectedModelId) return;
 
+    const multiImage = inputs?.multi_image && imageUpload.uploadedUrls.length > 0;
     await generate({
       model_id: selectedModelId,
       prompt: prompt || undefined,
@@ -72,7 +73,8 @@ export default function StudioShell({ category, models, title }: StudioShellProp
       duration: duration || undefined,
       quality: quality || undefined,
       effect: effect || undefined,
-      image_url: imageUpload.uploadedUrl || undefined,
+      image_url: !multiImage ? (imageUpload.uploadedUrl || undefined) : undefined,
+      image_urls: multiImage ? imageUpload.uploadedUrls : undefined,
       audio_url: audioUpload.uploadedUrl || undefined,
     });
   };
@@ -93,10 +95,24 @@ export default function StudioShell({ category, models, title }: StudioShellProp
     formRef.current?.requestSubmit();
   };
 
+  const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
+    if (!inputs?.supports_image_upload) return;
+    const items = e.clipboardData?.items;
+    if (!items) return;
+    for (const item of Array.from(items)) {
+      if (item.type.startsWith("image/")) {
+        e.preventDefault();
+        const file = item.getAsFile();
+        if (file) imageUpload.upload(file, providerId);
+        return;
+      }
+    }
+  };
+
   const providerId = model?.provider_id || "muapi";
 
   const promptOk = !inputs?.prompt_required || prompt.trim().length > 0;
-  const imageOk = !inputs?.image_required || !!imageUpload.uploadedUrl;
+  const imageOk = !inputs?.image_required || !!imageUpload.uploadedUrl || imageUpload.uploadedUrls.length > 0;
   const audioOk = !inputs?.audio_required || !!audioUpload.uploadedUrl;
   const canSubmit = !isLoading && !!selectedModelId && promptOk && imageOk && audioOk;
 
@@ -190,9 +206,12 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                         if (canSubmit) triggerSubmit();
                       }
                     }}
+                    onPaste={handlePaste}
                     placeholder={
                       category === "lipsync"
                         ? "Descrição da cena (opcional)..."
+                        : inputs?.supports_image_upload
+                        ? "Descreva com detalhes... (Ctrl+V para colar imagem)"
                         : "Descreva sua imagem com o máximo de detalhes..."
                     }
                     disabled={isLoading}
@@ -240,7 +259,16 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                   )}
                 </div>
                 <div className="flex gap-2">
-                  {inputs?.supports_image_upload && (
+                  {inputs?.supports_image_upload && inputs?.multi_image ? (
+                    <MultiImageUpload
+                      urls={imageUpload.uploadedUrls}
+                      uploading={imageUpload.uploading}
+                      onUpload={imageUpload.upload}
+                      onRemove={imageUpload.removeUrl}
+                      onClear={imageUpload.clear}
+                      required={!!inputs?.image_required}
+                    />
+                  ) : inputs?.supports_image_upload ? (
                     <UploadZone
                       accept="image"
                       label={inputs?.image_required ? "Imagem*" : "Imagem"}
@@ -250,7 +278,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                       uploading={imageUpload.uploading}
                       className="h-24 flex-1"
                     />
-                  )}
+                  ) : null}
                   {inputs?.supports_audio_upload && (
                     <UploadZone
                       accept="audio"
@@ -362,5 +390,88 @@ export default function StudioShell({ category, models, title }: StudioShellProp
         </div>
       </div>
     </ApiKeyGate>
+  );
+}
+
+/* ── Multi-image upload grid ── */
+function MultiImageUpload({
+  urls,
+  uploading,
+  onUpload,
+  onRemove,
+  onClear,
+  required,
+}: {
+  urls: string[];
+  uploading: boolean;
+  onUpload: (file: File) => Promise<string | null>;
+  onRemove: (url: string) => void;
+  onClear: () => void;
+  required: boolean;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFiles = (files: FileList | null) => {
+    if (!files) return;
+    Array.from(files).forEach((f) => {
+      if (f.type.startsWith("image/")) onUpload(f);
+    });
+  };
+
+  return (
+    <div className="flex-1 space-y-2">
+      <div className="flex flex-wrap gap-2">
+        {urls.map((url) => (
+          <div key={url} className="relative w-16 h-16 rounded-lg overflow-hidden border border-border bg-bg-3 group">
+            <img src={url} alt="" className="w-full h-full object-cover" />
+            <button
+              type="button"
+              onClick={() => onRemove(url)}
+              className="absolute top-1 right-1 w-4 h-4 rounded-full bg-black/70 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <XIcon size={8} strokeWidth={2} className="text-white" />
+            </button>
+          </div>
+        ))}
+
+        {/* Add button */}
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          disabled={uploading}
+          className={cn(
+            "w-16 h-16 rounded-lg border-2 border-dashed flex items-center justify-center transition-colors",
+            uploading
+              ? "border-border bg-bg-3/50"
+              : "border-border hover:border-gold/30 hover:bg-bg-3/50 cursor-pointer",
+          )}
+        >
+          {uploading ? (
+            <Loader2 size={14} className="animate-spin text-text-muted" />
+          ) : (
+            <Plus size={16} strokeWidth={1.5} className="text-text-muted/60" />
+          )}
+        </button>
+      </div>
+
+      {urls.length > 0 && (
+        <button
+          type="button"
+          onClick={onClear}
+          className="text-[9px] text-text-muted/50 hover:text-text-muted transition-colors"
+        >
+          Limpar todas
+        </button>
+      )}
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={(e) => { handleFiles(e.target.files); e.target.value = ""; }}
+      />
+    </div>
   );
 }

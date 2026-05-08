@@ -28,7 +28,6 @@ export default function LandingPage() {
           muted
           playsInline
           className="w-full h-full object-cover opacity-60"
-          style={{ playbackRate: 0.5 }}
           ref={(el) => { if (el) el.playbackRate = 0.65; }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/10" />

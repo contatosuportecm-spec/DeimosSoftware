@@ -5,31 +5,39 @@ import { useState, useCallback } from "react";
 export function useForgeUpload() {
   const [uploading, setUploading] = useState(false);
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
+  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+
+  const uploadOne = useCallback(async (file: File, providerId = "muapi"): Promise<string | null> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("provider_id", providerId);
+
+    const res = await fetch("/api/forge/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || "Upload failed");
+    }
+
+    const { url } = await res.json();
+    return url as string;
+  }, []);
 
   const upload = useCallback(async (file: File, providerId = "muapi") => {
     setUploading(true);
     setError(null);
-    setUploadedUrl(null);
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("provider_id", providerId);
-
-      const res = await fetch("/api/forge/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Upload failed");
+      const url = await uploadOne(file, providerId);
+      if (url) {
+        setUploadedUrl(url);
+        setUploadedUrls((prev) => [...prev, url]);
       }
-
-      const { url } = await res.json();
-      setUploadedUrl(url);
-      return url as string;
+      return url;
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Upload error";
       setError(msg);
@@ -37,17 +45,31 @@ export function useForgeUpload() {
     } finally {
       setUploading(false);
     }
-  }, []);
+  }, [uploadOne]);
 
   const clear = useCallback(() => {
     setUploadedUrl(null);
+    setUploadedUrls([]);
     setError(null);
   }, []);
+
+  const removeUrl = useCallback((url: string) => {
+    setUploadedUrls((prev) => {
+      const next = prev.filter((u) => u !== url);
+      if (next.length === 0) {
+        setUploadedUrl(null);
+      } else if (uploadedUrl === url) {
+        setUploadedUrl(next[next.length - 1]);
+      }
+      return next;
+    });
+  }, [uploadedUrl]);
 
   const setUrl = useCallback((url: string) => {
     setUploadedUrl(url);
+    setUploadedUrls((prev) => prev.includes(url) ? prev : [...prev, url]);
     setError(null);
   }, []);
 
-  return { upload, uploading, uploadedUrl, error, clear, setUrl };
+  return { upload, uploading, uploadedUrl, uploadedUrls, error, clear, setUrl, removeUrl };
 }

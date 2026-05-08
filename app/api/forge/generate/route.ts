@@ -84,10 +84,11 @@ function buildPayload(model: ForgeModel, body: GenerateRequest): BuiltPayload {
 
   // Image upload
   if (inputs.supports_image_upload) {
-    if (body.image_url) {
+    const urls = body.image_urls?.length ? body.image_urls : body.image_url ? [body.image_url] : [];
+    if (urls.length > 0) {
       const field = variant?.image_field || inputs.image_field || "image_url";
       const asArray = variant?.image_as_array === true;
-      payload[field] = asArray ? [body.image_url] : body.image_url;
+      payload[field] = asArray ? urls : urls[0];
     } else if (inputs.image_required) {
       errors.push("Imagem é obrigatória para este modelo");
     }
