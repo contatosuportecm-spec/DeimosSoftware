@@ -210,18 +210,24 @@ export default function HistoryStrip({ category, onSelect, activeId, supportsIma
               title={gen.prompt || gen.model_id}
             >
               {gen.status === "completed" && gen.result_url && gen.category === "image" ? (
-                <img
-                  src={gen.result_url}
-                  alt={gen.prompt || ""}
-                  className="w-full h-full object-cover"
-                />
+                <div className="w-full h-full relative bg-bg-3 skeleton-shimmer">
+                  <img
+                    src={gen.result_url}
+                    alt={gen.prompt || ""}
+                    className="w-full h-full object-cover animate-[fadeIn_300ms_ease-out]"
+                    onLoad={(e) => { (e.currentTarget.parentElement as HTMLDivElement).classList.remove("skeleton-shimmer", "bg-bg-3"); }}
+                  />
+                </div>
               ) : gen.status === "completed" && gen.result_url ? (
-                <video
-                  src={gen.result_url}
-                  className="w-full h-full object-cover"
-                  muted
-                  playsInline
-                />
+                <div className="w-full h-full relative bg-bg-3 skeleton-shimmer">
+                  <video
+                    src={gen.result_url}
+                    className="w-full h-full object-cover animate-[fadeIn_300ms_ease-out]"
+                    muted
+                    playsInline
+                    onLoadedData={(e) => { (e.currentTarget.parentElement as HTMLDivElement).classList.remove("skeleton-shimmer", "bg-bg-3"); }}
+                  />
+                </div>
               ) : gen.status === "failed" ? (
                 <div className="w-full h-full flex items-center justify-center bg-danger/5">
                   <AlertCircle size={16} strokeWidth={1.5} className="text-danger/60" />

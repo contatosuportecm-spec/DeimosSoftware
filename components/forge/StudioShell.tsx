@@ -95,21 +95,36 @@ export default function StudioShell({ category, models, title }: StudioShellProp
     formRef.current?.requestSubmit();
   };
 
+  const providerId = model?.provider_id || "muapi";
+
   const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
     if (!inputs?.supports_image_upload) return;
+
+    // Check DataTransferItemList (Chrome/Edge)
     const items = e.clipboardData?.items;
-    if (!items) return;
-    for (const item of Array.from(items)) {
-      if (item.type.startsWith("image/")) {
-        e.preventDefault();
-        const file = item.getAsFile();
-        if (file) imageUpload.upload(file, providerId);
-        return;
+    if (items) {
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith("image/")) {
+          e.preventDefault();
+          const file = item.getAsFile();
+          if (file) imageUpload.upload(file, providerId);
+          return;
+        }
+      }
+    }
+
+    // Fallback: check files (Firefox/Safari)
+    const files = e.clipboardData?.files;
+    if (files && files.length > 0) {
+      for (const file of Array.from(files)) {
+        if (file.type.startsWith("image/")) {
+          e.preventDefault();
+          imageUpload.upload(file, providerId);
+          return;
+        }
       }
     }
   };
-
-  const providerId = model?.provider_id || "muapi";
 
   const promptOk = !inputs?.prompt_required || prompt.trim().length > 0;
   const imageOk = !inputs?.image_required || !!imageUpload.uploadedUrl || imageUpload.uploadedUrls.length > 0;
