@@ -109,6 +109,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
 
   const handlePaste = (e: ClipboardEvent<HTMLTextAreaElement>) => {
     if (!inputs?.supports_image_upload) return;
+    if (isLoading || imageUpload.uploading) return;
 
     // Check DataTransferItemList (Chrome/Edge)
     const items = e.clipboardData?.items;
@@ -243,7 +244,10 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     }
                     disabled={isLoading}
                     rows={6}
-                    className="w-full bg-bg-3 border border-border rounded-lg px-3.5 py-3 pr-10 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/15 transition-colors disabled:opacity-40 resize-none"
+                    className={cn(
+                      "w-full bg-bg-3 border border-border rounded-lg px-3.5 py-3 pr-10 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-gold/40 focus:ring-1 focus:ring-gold/15 transition-colors disabled:opacity-40 resize-none",
+                      imageUpload.uploading && "border-gold/40 ring-1 ring-gold/15",
+                    )}
                   />
                   <button
                     type="button"
@@ -290,7 +294,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     <MultiImageUpload
                       urls={imageUpload.uploadedUrls}
                       uploading={imageUpload.uploading}
-                      onUpload={imageUpload.upload}
+                      onUpload={(file) => imageUpload.upload(file, providerId)}
                       onRemove={imageUpload.removeUrl}
                       onClear={imageUpload.clear}
                       required={!!inputs?.image_required}
@@ -299,7 +303,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     <UploadZone
                       accept="image"
                       label={inputs?.image_required ? "Imagem*" : "Imagem"}
-                      onUpload={imageUpload.upload}
+                      onUpload={(file) => imageUpload.upload(file, providerId)}
                       uploadedUrl={imageUpload.uploadedUrl}
                       onClear={imageUpload.clear}
                       uploading={imageUpload.uploading}
@@ -310,7 +314,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     <UploadZone
                       accept="audio"
                       label={inputs?.audio_required ? "Áudio*" : "Áudio"}
-                      onUpload={audioUpload.upload}
+                      onUpload={(file) => audioUpload.upload(file, providerId)}
                       uploadedUrl={audioUpload.uploadedUrl}
                       onClear={audioUpload.clear}
                       uploading={audioUpload.uploading}
@@ -318,6 +322,12 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     />
                   )}
                 </div>
+                {imageUpload.error && (
+                  <p className="text-[10px] text-ember font-medium px-1">{imageUpload.error}</p>
+                )}
+                {audioUpload.error && (
+                  <p className="text-[10px] text-ember font-medium px-1">{audioUpload.error}</p>
+                )}
               </section>
             )}
 
