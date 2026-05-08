@@ -33,6 +33,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
   const { generation, generate, isLoading, error, reset } = useForgeGenerate();
   const imageUpload = useForgeUpload();
   const audioUpload = useForgeUpload();
+  const videoUpload = useForgeUpload();
   const formRef = useRef<HTMLFormElement>(null);
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
 
@@ -60,6 +61,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
     }
     imageUpload.clear();
     audioUpload.clear();
+    videoUpload.clear();
     reset();
   };
 
@@ -86,6 +88,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
       image_url: !multiImage ? (imageUpload.uploadedUrl || undefined) : undefined,
       image_urls: multiImage ? imageUpload.uploadedUrls : undefined,
       audio_url: audioUpload.uploadedUrl || undefined,
+      video_urls: videoUpload.uploadedUrls.length > 0 ? videoUpload.uploadedUrls : undefined,
     });
   };
 
@@ -140,7 +143,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
   const promptOk = !inputs?.prompt_required || prompt.trim().length > 0;
   const imageOk = !inputs?.image_required || !!imageUpload.uploadedUrl || imageUpload.uploadedUrls.length > 0;
   const audioOk = !inputs?.audio_required || !!audioUpload.uploadedUrl;
-  const canSubmit = !isLoading && !imageUpload.uploading && !audioUpload.uploading && !!selectedModelId && promptOk && imageOk && audioOk;
+  const canSubmit = !isLoading && !imageUpload.uploading && !audioUpload.uploading && !videoUpload.uploading && !!selectedModelId && promptOk && imageOk && audioOk;
 
   const missing: string[] = [];
   if (!promptOk) missing.push("Prompt");
@@ -272,7 +275,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
             )}
 
             {/* UPLOADS */}
-            {(inputs?.supports_image_upload || inputs?.supports_audio_upload) && (
+            {(inputs?.supports_image_upload || inputs?.supports_audio_upload || inputs?.supports_video_upload) && (
               <section className="space-y-2">
                 <div className="flex items-baseline justify-between">
                   <span className="text-[10px] uppercase tracking-[0.18em] text-text-muted font-semibold">
@@ -321,12 +324,26 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                       className="h-24 flex-1"
                     />
                   )}
+                  {inputs?.supports_video_upload && (
+                    <UploadZone
+                      accept="video"
+                      label="Vídeo"
+                      onUpload={(file) => videoUpload.upload(file, providerId)}
+                      uploadedUrl={videoUpload.uploadedUrl}
+                      onClear={videoUpload.clear}
+                      uploading={videoUpload.uploading}
+                      className="h-24 flex-1"
+                    />
+                  )}
                 </div>
                 {imageUpload.error && (
                   <p className="text-[10px] text-ember font-medium px-1">{imageUpload.error}</p>
                 )}
                 {audioUpload.error && (
                   <p className="text-[10px] text-ember font-medium px-1">{audioUpload.error}</p>
+                )}
+                {videoUpload.error && (
+                  <p className="text-[10px] text-ember font-medium px-1">{videoUpload.error}</p>
                 )}
               </section>
             )}

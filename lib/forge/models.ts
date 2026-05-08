@@ -74,6 +74,32 @@ export const FORGE_MODELS: ForgeModel[] = [
   },
 
   {
+    id: "seedance-2.0-omni",
+    provider_id: "muapi",
+    name: "Seedance 2.0 Omni",
+    category: "video",
+    endpoint: "seedance-2.0-omni-reference",
+    description: "Seedance 2.0 Omni-Reference — combina até 9 imagens, 3 vídeos e 3 áudios numa geração. O mais multimodal.",
+    inputs: {
+      aspect_ratios: ["16:9", "9:16", "1:1"],
+      default_aspect_ratio: "16:9",
+      durations: [5, 10, 15],
+      default_duration: 5,
+      qualities: ["basic", "high"],
+      default_quality: "basic",
+      supports_image_upload: true,
+      multi_image: true,
+      image_field: "images_list",
+      supports_audio_upload: true,
+      audio_field: "audio_files",
+      supports_video_upload: true,
+      video_field: "video_files",
+      has_prompt: true,
+      prompt_required: true,
+    },
+  },
+
+  {
     id: "seedance-pro",
     provider_id: "muapi",
     name: "Seedance Pro",

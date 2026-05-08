@@ -51,10 +51,13 @@ export interface ForgeModelInputs {
   // Inputs binários
   supports_image_upload?: boolean;
   supports_audio_upload?: boolean;
+  supports_video_upload?: boolean;
   image_required?: boolean;
   multi_image?: boolean;
   audio_required?: boolean;
   image_field?: string;
+  video_field?: string;
+  audio_field?: string;
   // Prompt
   has_prompt?: boolean;
   prompt_required?: boolean;
@@ -88,5 +91,7 @@ export interface GenerateRequest {
   image_url?: string;
   image_urls?: string[];
   audio_url?: string;
+  video_url?: string;
+  video_urls?: string[];
   offer_id?: string;
 }

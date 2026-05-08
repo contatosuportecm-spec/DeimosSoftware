@@ -2,10 +2,10 @@
 
 import { useState, useRef, DragEvent } from "react";
 import { cn } from "@/lib/utils";
-import { Upload, X, Image as ImageIcon, Music, Loader2 } from "lucide-react";
+import { Upload, X, Image as ImageIcon, Music, Video, Loader2 } from "lucide-react";
 
 interface UploadZoneProps {
-  accept: "image" | "audio";
+  accept: "image" | "audio" | "video";
   onUpload: (file: File) => Promise<string | null>;
   uploadedUrl: string | null;
   onClear: () => void;
@@ -14,12 +14,15 @@ interface UploadZoneProps {
   label?: string;
 }
 
+const ACCEPT_MAP = { image: "image/*", audio: "audio/*", video: "video/*" };
+const ICON_MAP = { image: ImageIcon, audio: Music, video: Video };
+
 export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, uploading, className, label }: UploadZoneProps) {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const acceptStr = accept === "image" ? "image/*" : "audio/*";
-  const Icon = accept === "image" ? ImageIcon : Music;
+  const acceptStr = ACCEPT_MAP[accept];
+  const Icon = ICON_MAP[accept];
   const headerLabel = label || (accept === "image" ? "Imagem" : "Áudio");
   const isRequired = headerLabel.endsWith("*");
   const cleanLabel = isRequired ? headerLabel.slice(0, -1) : headerLabel;
@@ -40,6 +43,8 @@ export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, upl
       <div className={cn("relative rounded-lg overflow-hidden border border-border bg-bg-3", className)}>
         {accept === "image" ? (
           <img src={uploadedUrl} alt="Upload" className="w-full h-full object-cover" />
+        ) : accept === "video" ? (
+          <video src={uploadedUrl} muted playsInline className="w-full h-full object-cover" />
         ) : (
           <div className="flex items-center justify-center h-full gap-2 px-3">
             <Music size={16} className="text-gold" />

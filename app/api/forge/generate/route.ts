@@ -98,9 +98,20 @@ function buildPayload(model: ForgeModel, body: GenerateRequest): BuiltPayload {
   // Audio upload
   if (inputs.supports_audio_upload) {
     if (body.audio_url) {
-      payload.audio_url = body.audio_url;
+      const audioField = inputs.audio_field || "audio_url";
+      // Some endpoints (omni-reference) expect an array
+      payload[audioField] = audioField.endsWith("_files") ? [body.audio_url] : body.audio_url;
     } else if (inputs.audio_required) {
       errors.push("Áudio é obrigatório para este modelo");
+    }
+  }
+
+  // Video upload
+  if (inputs.supports_video_upload) {
+    const vUrls = body.video_urls?.length ? body.video_urls : body.video_url ? [body.video_url] : [];
+    if (vUrls.length > 0) {
+      const videoField = inputs.video_field || "video_files";
+      payload[videoField] = vUrls;
     }
   }
 
