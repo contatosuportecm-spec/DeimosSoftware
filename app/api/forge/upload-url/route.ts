@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 export const dynamic = "force-dynamic";
 
 const BUCKET = "forge-uploads";
+
+// Service role client — needed to bypass RLS for signed URL creation
+function getServiceClient() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) throw new Error("Supabase service role key not configured");
+  return createClient(url, key, { auth: { persistSession: false } });
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "filename is required" }, { status: 400 });
     }
 
-    const supabase = createServerClient();
+    const supabase = getServiceClient();
 
     // Unique path to avoid collisions
     const ts = Date.now();
