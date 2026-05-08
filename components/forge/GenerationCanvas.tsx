@@ -123,9 +123,9 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
     const isVideo = category === "video" || category === "lipsync";
 
     return (
-      <div className="flex-1 flex flex-col rounded-xl border border-border bg-bg-2 overflow-hidden min-h-0">
+      <div className="flex-1 flex flex-col rounded-xl border border-border bg-bg-2 overflow-hidden min-h-0 relative group/canvas">
         <div
-          className="flex-1 flex items-center justify-center p-6 bg-black/40 min-h-0 cursor-pointer"
+          className="flex-1 flex items-center justify-center p-6 bg-black/40 min-h-0 cursor-pointer relative"
           onClick={() => setLightbox(true)}
         >
           {isVideo ? (
@@ -141,41 +141,37 @@ export default function GenerationCanvas({ generation, isLoading, error, categor
             <img
               src={generation.result_url}
               alt={generation.prompt || "Generated"}
-              className="max-w-full max-h-full rounded-lg object-contain hover:opacity-90 transition-opacity"
+              className="max-w-full max-h-full rounded-lg object-contain"
             />
           )}
-        </div>
-        <div className="flex items-center justify-between px-4 py-2.5 border-t border-border bg-bg-2">
-          <div className="flex items-center gap-2 min-w-0">
-            <span className="text-[10px] text-text-muted font-mono uppercase tracking-[0.12em] flex-shrink-0">
-              {generation.model_id}
-            </span>
-            {generation.prompt && (
-              <span className="text-[10px] text-text-muted/60 truncate">
-                · {generation.prompt}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
+
+          {/* Action icons overlay */}
+          <div className="absolute top-4 right-4 flex items-center gap-2 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
             {supportsImageRef && onUseAsReference && generation.category === "image" && (
               <button
                 type="button"
-                onClick={() => onUseAsReference(generation.result_url!)}
-                className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-gold/10 hover:bg-gold/20 text-gold hover:text-gold-hover text-[10px] uppercase tracking-[0.12em] transition-colors border border-gold/20"
-                title="Usar como referência no prompt"
+                onClick={(e) => { e.stopPropagation(); onUseAsReference(generation.result_url!); }}
+                className="w-9 h-9 rounded-lg bg-black/60 hover:bg-gold/20 backdrop-blur-sm border border-white/10 hover:border-gold/40 flex items-center justify-center transition-all"
+                title="Usar como referência"
               >
-                <ArrowUpRight size={11} strokeWidth={1.5} />
-                Referência
+                <ArrowUpRight size={15} strokeWidth={1.5} className="text-gold" />
               </button>
             )}
             <button
               type="button"
-              onClick={() => forceDownload(generation.result_url!, category)}
-              className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-bg-3 hover:bg-bg-4 text-text-secondary hover:text-text-primary text-[10px] uppercase tracking-[0.12em] transition-colors border border-border"
+              onClick={(e) => { e.stopPropagation(); forceDownload(generation.result_url!, category); }}
+              className="w-9 h-9 rounded-lg bg-black/60 hover:bg-white/15 backdrop-blur-sm border border-white/10 hover:border-white/25 flex items-center justify-center transition-all"
+              title="Download"
             >
-              <Download size={11} strokeWidth={1.5} />
-              Download
+              <Download size={15} strokeWidth={1.5} className="text-white/80" />
             </button>
+          </div>
+
+          {/* Model info bottom */}
+          <div className="absolute bottom-3 left-3 flex items-center gap-2 opacity-0 group-hover/canvas:opacity-100 transition-opacity">
+            <span className="px-2 py-1 rounded-md bg-black/60 backdrop-blur-sm border border-white/10 text-[9px] text-white/60 font-mono uppercase tracking-[0.1em]">
+              {generation.model_id}
+            </span>
           </div>
         </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useForgeHistory } from "@/hooks/useForgeHistory";
 import { ForgeCategory, ForgeGeneration } from "@/types/forge";
@@ -148,6 +148,7 @@ interface HistoryStripProps {
   supportsImageRef?: boolean;
   onUseAsReference?: (url: string) => void;
   label?: string;
+  refreshKey?: number;
 }
 
 const STATUS_DOT = {
@@ -157,8 +158,16 @@ const STATUS_DOT = {
   processing: "bg-gold animate-pulse",
 };
 
-export default function HistoryStrip({ category, onSelect, activeId, supportsImageRef, onUseAsReference, label }: HistoryStripProps) {
-  const { generations, loading } = useForgeHistory(category, 20);
+export default function HistoryStrip({ category, onSelect, activeId, supportsImageRef, onUseAsReference, label, refreshKey }: HistoryStripProps) {
+  const { generations, loading, refetch } = useForgeHistory(category, 20);
+  const prevRefreshKey = useRef(refreshKey);
+
+  useEffect(() => {
+    if (refreshKey !== undefined && refreshKey !== prevRefreshKey.current) {
+      prevRefreshKey.current = refreshKey;
+      refetch();
+    }
+  }, [refreshKey, refetch]);
   const CategoryIcon = category === "image" ? ImageIcon : category === "video" ? Video : Mic;
   const [lightboxGen, setLightboxGen] = useState<ForgeGeneration | null>(null);
   const closeLightbox = useCallback(() => setLightboxGen(null), []);

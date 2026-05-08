@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent, useRef, ClipboardEvent } from "react";
+import { useState, useEffect, FormEvent, useRef, ClipboardEvent } from "react";
 import { ForgeModel, ForgeGeneration, ForgeCategory } from "@/types/forge";
 import { useForgeGenerate } from "@/hooks/useForgeGenerate";
 import { useForgeUpload } from "@/hooks/useForgeUpload";
@@ -34,6 +34,16 @@ export default function StudioShell({ category, models, title }: StudioShellProp
   const imageUpload = useForgeUpload();
   const audioUpload = useForgeUpload();
   const formRef = useRef<HTMLFormElement>(null);
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+
+  // Refresh history when generation completes
+  const prevStatus = useRef(generation?.status);
+  useEffect(() => {
+    if (prevStatus.current !== "completed" && generation?.status === "completed") {
+      setHistoryRefreshKey((k) => k + 1);
+    }
+    prevStatus.current = generation?.status;
+  }, [generation?.status]);
 
   const model = models.find((m) => m.id === selectedModelId);
   const inputs = model?.inputs;
@@ -389,6 +399,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
               activeId={generation?.id}
               supportsImageRef={supportsImageRef}
               onUseAsReference={handleUseAsReference}
+              refreshKey={historyRefreshKey}
             />
 
             {/* Imagens geradas — disponível em studios de vídeo/lipsync que aceitam imagem */}
