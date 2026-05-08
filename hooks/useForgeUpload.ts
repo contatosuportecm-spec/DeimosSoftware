@@ -18,13 +18,17 @@ export function useForgeUpload() {
       body: formData,
     });
 
+    const text = await res.text();
+
     if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || "Upload failed");
+      let msg = "Upload failed";
+      try { msg = JSON.parse(text).error || msg; } catch { msg = text.slice(0, 200) || msg; }
+      throw new Error(msg);
     }
 
-    const { url } = await res.json();
-    return url as string;
+    let data: { url?: string };
+    try { data = JSON.parse(text); } catch { throw new Error(`Invalid response: ${text.slice(0, 100)}`); }
+    return (data.url as string) || null;
   }, []);
 
   const upload = useCallback(async (file: File, providerId = "muapi") => {

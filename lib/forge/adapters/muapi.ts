@@ -204,13 +204,15 @@ export async function muapiUploadFile(file: Buffer, filename: string, apiKey: st
     body: formData,
   });
 
+  const rawText = await response.text();
+
   if (!response.ok) {
-    const text = await response.text();
-    throw new Error(`Upload failed (${response.status}): ${text.slice(0, 200)}`);
+    throw new Error(`Upload failed (${response.status}): ${rawText.slice(0, 200)}`);
   }
 
-  const data = await response.json();
-  const fileUrl = data.url || data.file_url || data.data?.url;
+  let data: Record<string, unknown>;
+  try { data = JSON.parse(rawText); } catch { throw new Error(`Upload returned non-JSON: ${rawText.slice(0, 200)}`); }
+  const fileUrl = data.url || data.file_url || (data.data as Record<string, unknown> | undefined)?.url;
   if (!fileUrl) throw new Error("No URL returned from upload");
-  return fileUrl;
+  return fileUrl as string;
 }
