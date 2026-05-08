@@ -31,6 +31,7 @@ export default function AspectRatioPicker({ options, selected, onSelect }: Aspec
 
         return (
           <button
+            type="button"
             key={ar}
             onClick={() => onSelect(ar)}
             className={cn(

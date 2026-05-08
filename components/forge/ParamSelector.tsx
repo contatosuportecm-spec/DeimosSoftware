@@ -22,6 +22,7 @@ export default function ParamSelector({ label, options, selected, onSelect }: Pa
 
           return (
             <button
+              type="button"
               key={String(opt)}
               onClick={() => onSelect(opt)}
               className={cn(
