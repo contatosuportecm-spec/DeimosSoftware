@@ -18,7 +18,8 @@ function buildPayload(model: ForgeModel, body: GenerateRequest): BuiltPayload {
   const inputs = model.inputs;
 
   // Decide qual endpoint usar: variant com imagem ou base.
-  const usingImageVariant = !!(body.image_url && model.endpoint_with_image);
+  const hasImage = !!(body.image_url || (body.image_urls && body.image_urls.length > 0));
+  const usingImageVariant = !!(hasImage && model.endpoint_with_image);
   const variant: ForgeModelVariant | undefined = usingImageVariant ? model.endpoint_with_image : undefined;
   const endpoint = variant?.endpoint || model.endpoint;
   const omit = new Set(variant?.omit_when_image || []);
