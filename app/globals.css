@@ -98,3 +98,9 @@ body {
 
 /* ── Tracking brand ── */
 .tracking-brand { letter-spacing: 0.2em; }
+
+/* ── Animations ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
