@@ -3,17 +3,21 @@
 import { useState, useCallback, useRef } from "react";
 import { ForgeGeneration, GenerateRequest } from "@/types/forge";
 
+const MAX_POLL_FAILURES = 8;
+
 export function useForgeGenerate() {
   const [generation, setGeneration] = useState<ForgeGeneration | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const failCountRef = useRef(0);
 
   const stopPolling = useCallback(() => {
     if (pollingRef.current) {
       clearInterval(pollingRef.current);
       pollingRef.current = null;
     }
+    failCountRef.current = 0;
   }, []);
 
   const startPolling = useCallback((id: string) => {
@@ -22,8 +26,16 @@ export function useForgeGenerate() {
     pollingRef.current = setInterval(async () => {
       try {
         const res = await fetch(`/api/forge/status?id=${id}`);
-        if (!res.ok) return;
+        if (!res.ok) {
+          failCountRef.current++;
+          if (failCountRef.current >= MAX_POLL_FAILURES) {
+            stopPolling();
+            setError("Conexão com o servidor perdida. Tente recarregar a página.");
+          }
+          return;
+        }
 
+        failCountRef.current = 0;
         const data: ForgeGeneration = await res.json();
         setGeneration(data);
 
@@ -34,7 +46,11 @@ export function useForgeGenerate() {
           }
         }
       } catch {
-        // continue polling
+        failCountRef.current++;
+        if (failCountRef.current >= MAX_POLL_FAILURES) {
+          stopPolling();
+          setError("Conexão com o servidor perdida. Tente recarregar a página.");
+        }
       }
     }, 2500);
   }, [stopPolling]);
@@ -63,7 +79,6 @@ export function useForgeGenerate() {
       setGeneration(data);
       setSubmitting(false);
 
-      // Start polling if not already completed
       if (data.status !== "completed") {
         startPolling(data.id);
       }

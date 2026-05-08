@@ -53,17 +53,13 @@ export function useForgeUpload() {
     setError(null);
   }, []);
 
-  const removeUrl = useCallback((url: string) => {
+  const removeUrl = useCallback((urlToRemove: string) => {
     setUploadedUrls((prev) => {
-      const next = prev.filter((u) => u !== url);
-      if (next.length === 0) {
-        setUploadedUrl(null);
-      } else if (uploadedUrl === url) {
-        setUploadedUrl(next[next.length - 1]);
-      }
+      const next = prev.filter((u) => u !== urlToRemove);
+      setUploadedUrl(next.length > 0 ? next[next.length - 1] : null);
       return next;
     });
-  }, [uploadedUrl]);
+  }, []);
 
   const setUrl = useCallback((url: string) => {
     setUploadedUrl(url);

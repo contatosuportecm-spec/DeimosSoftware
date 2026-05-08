@@ -139,12 +139,14 @@ export default function StudioShell({ category, models, title }: StudioShellProp
   const promptOk = !inputs?.prompt_required || prompt.trim().length > 0;
   const imageOk = !inputs?.image_required || !!imageUpload.uploadedUrl || imageUpload.uploadedUrls.length > 0;
   const audioOk = !inputs?.audio_required || !!audioUpload.uploadedUrl;
-  const canSubmit = !isLoading && !!selectedModelId && promptOk && imageOk && audioOk;
+  const canSubmit = !isLoading && !imageUpload.uploading && !audioUpload.uploading && !!selectedModelId && promptOk && imageOk && audioOk;
 
   const missing: string[] = [];
   if (!promptOk) missing.push("Prompt");
   if (!imageOk) missing.push("Imagem");
   if (!audioOk) missing.push("Áudio");
+  if (imageUpload.uploading) missing.push("Upload em andamento...");
+  if (audioUpload.uploading) missing.push("Upload em andamento...");
 
   // Quando há imagem e a variante omite certos campos, esconde-os da UI.
   const omittedParams = new Set(
