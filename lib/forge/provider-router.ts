@@ -28,13 +28,13 @@ export async function getProviderKey(providerId: string): Promise<string> {
 
 export async function submitGeneration(
   providerId: string,
-  modelId: string,
+  endpoint: string,
   payload: Record<string, unknown>,
   apiKey: string
 ): Promise<SubmitResult> {
   switch (providerId) {
     case "muapi":
-      return muapiSubmit(modelId, payload, apiKey);
+      return muapiSubmit(endpoint, payload, apiKey);
     default:
       throw new Error(`Unknown provider: ${providerId}`);
   }

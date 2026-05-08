@@ -10,31 +10,53 @@ export interface ForgeProvider {
   is_active: boolean;
 }
 
+export interface ForgeModelVariant {
+  endpoint: string;
+  image_field: string;
+  image_as_array?: boolean; // se true, manda imagem como array (e.g. images_list)
+  // Campos do schema base que NÃO são aceitos por essa variante.
+  // Ex: seedance-pro-i2v aceita resolution+duration mas não aspect_ratio.
+  omit_when_image?: Array<"aspect_ratio" | "resolution" | "duration" | "quality" | "effect">;
+}
+
 export interface ForgeModel {
   id: string;
   provider_id: string;
   name: string;
   category: ForgeCategory;
-  endpoint: string;
+  endpoint: string; // endpoint padrão (sem imagem ou T2V)
+  // Variante usada quando o usuário envia uma imagem.
+  // Permite combinar T2V/I2V (ou T2I/I2I) num único modelo da UI.
+  endpoint_with_image?: ForgeModelVariant;
   description?: string;
   inputs: ForgeModelInputs;
 }
 
 export interface ForgeModelInputs {
+  // Aspect ratio
   aspect_ratios?: string[];
   default_aspect_ratio?: string;
+  // Resolução
   resolutions?: string[];
   default_resolution?: string;
+  // Duração (vídeo)
   durations?: number[];
   default_duration?: number;
+  // Qualidade
   qualities?: string[];
   default_quality?: string;
+  // Efeitos (Wan AI Effects)
   effects?: string[];
   default_effect?: string;
+  // Inputs binários
   supports_image_upload?: boolean;
   supports_audio_upload?: boolean;
+  image_required?: boolean;
+  audio_required?: boolean;
   image_field?: string;
+  // Prompt
   has_prompt?: boolean;
+  prompt_required?: boolean;
 }
 
 export interface ForgeGeneration {

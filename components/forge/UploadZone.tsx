@@ -11,15 +11,18 @@ interface UploadZoneProps {
   onClear: () => void;
   uploading?: boolean;
   className?: string;
+  label?: string;
 }
 
-export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, uploading, className }: UploadZoneProps) {
+export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, uploading, className, label }: UploadZoneProps) {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const acceptStr = accept === "image" ? "image/*" : "audio/*";
   const Icon = accept === "image" ? ImageIcon : Music;
-  const label = accept === "image" ? "Arraste uma imagem" : "Arraste um áudio";
+  const headerLabel = label || (accept === "image" ? "Imagem" : "Áudio");
+  const isRequired = headerLabel.endsWith("*");
+  const cleanLabel = isRequired ? headerLabel.slice(0, -1) : headerLabel;
 
   const handleFile = (file: File) => {
     onUpload(file);
@@ -69,11 +72,14 @@ export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, upl
         <Loader2 size={20} className="animate-spin text-text-muted" />
       ) : (
         <>
-          <div className="w-9 h-9 rounded-lg bg-bg-3 flex items-center justify-center">
-            <Icon size={16} strokeWidth={1.5} className="text-text-muted" />
+          <div className="w-8 h-8 rounded-lg bg-bg-3 flex items-center justify-center">
+            <Icon size={14} strokeWidth={1.5} className="text-text-muted" />
           </div>
-          <p className="text-[10px] text-text-muted">{label}</p>
-          <p className="text-[9px] text-text-muted/60">ou clique para selecionar</p>
+          <p className="text-[10px] text-text-secondary font-medium">
+            {cleanLabel}
+            {isRequired && <span className="text-ember ml-0.5">*</span>}
+          </p>
+          <p className="text-[9px] text-text-muted/60">Arraste ou clique</p>
         </>
       )}
 
