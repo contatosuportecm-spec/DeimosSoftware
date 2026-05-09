@@ -28,7 +28,7 @@ const STUDIOS: StudioCard[] = [
     description: "Gere imagens para anúncios e criativos com modelos de última geração.",
     icon: Image,
     path: "/forge/image",
-    models: ["Nano Banana 2", "GPT Image 1.5"],
+    models: ["Nano Banana 2", "GPT Image 2"],
   },
   {
     id: "video",
@@ -37,7 +37,7 @@ const STUDIOS: StudioCard[] = [
     description: "Crie vídeos cinematográficos para hooks, VSLs e criativos de performance.",
     icon: Video,
     path: "/forge/video",
-    models: ["Seedance 2.0", "Seedance Pro", "Veo 3", "AI Video Effects"],
+    models: ["Seedance 2 VIP", "Omni Reference", "First & Last Frame", "Veo 3.1", "Kling Motion", "AI Effects"],
   },
   {
     id: "lipsync",

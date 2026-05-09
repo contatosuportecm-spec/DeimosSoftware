@@ -17,6 +17,17 @@ export interface ForgeModelVariant {
   // Campos do schema base que NÃO são aceitos por essa variante.
   // Ex: seedance-pro-i2v aceita resolution+duration mas não aspect_ratio.
   omit_when_image?: Array<"aspect_ratio" | "resolution" | "duration" | "quality" | "effect">;
+  // Pricing override quando rodando essa variante (ex: I2V geralmente custa diferente de T2V)
+  pricing?: ForgePricing;
+}
+
+export interface ForgePricing {
+  base_usd: number; // custo base em USD por geração
+  resolution_mult?: Record<string, number>; // multiplicador por resolução
+  duration_mult?: Record<number, number>;   // multiplicador por duração (segundos)
+  quality_mult?: Record<string, number>;    // multiplicador por qualidade
+  // Marca como aproximado — UI prefixa "≈" no display.
+  approx?: boolean;
 }
 
 export interface ForgeModel {
@@ -30,6 +41,7 @@ export interface ForgeModel {
   endpoint_with_image?: ForgeModelVariant;
   description?: string;
   inputs: ForgeModelInputs;
+  pricing?: ForgePricing;
 }
 
 export interface ForgeModelInputs {
@@ -52,9 +64,12 @@ export interface ForgeModelInputs {
   supports_image_upload?: boolean;
   supports_audio_upload?: boolean;
   supports_video_upload?: boolean;
+  supports_last_image?: boolean; // segunda imagem (frame final) pra transições start→end
   image_required?: boolean;
   multi_image?: boolean;
   audio_required?: boolean;
+  video_required?: boolean;
+  last_image_required?: boolean;
   image_field?: string;
   video_field?: string;
   audio_field?: string;
@@ -90,6 +105,7 @@ export interface GenerateRequest {
   effect?: string;
   image_url?: string;
   image_urls?: string[];
+  last_image_url?: string;
   audio_url?: string;
   video_url?: string;
   video_urls?: string[];

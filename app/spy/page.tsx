@@ -9,6 +9,7 @@ import AddOfferModal from "@/components/spy/AddOfferModal";
 import SpyTabs, { SpyTab } from "@/components/spy/SpyTabs";
 import OfertasTab from "@/components/spy/OfertasTab";
 import EspionagemTab from "@/components/spy/EspionagemTab";
+import ScrapeAllButton from "@/components/spy/ScrapeAllButton";
 import { useSpy } from "@/hooks/useSpy";
 import { useNiches } from "@/hooks/useNiches";
 
@@ -68,6 +69,7 @@ function SpyPageContent() {
           <div className="flex items-center gap-2">
             {activeTab === "ofertas" && (
               <>
+                <ScrapeAllButton onDone={refetch} />
                 <button
                   onClick={refetch}
                   className="p-2 rounded-md text-text-muted hover:text-text-secondary hover:bg-bg-3 transition-colors"

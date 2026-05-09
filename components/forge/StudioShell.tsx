@@ -12,7 +12,8 @@ import GenerationCanvas from "./GenerationCanvas";
 import HistoryStrip from "./HistoryStrip";
 import UploadZone from "./UploadZone";
 import ApiKeyGate from "./ApiKeyGate";
-import { Sparkles, Loader2, ArrowUp, ChevronLeft, Plus, X as XIcon } from "lucide-react";
+import { calculateCost, formatCost, resolveCostParams } from "@/lib/forge/pricing";
+import { Sparkles, Loader2, ArrowUp, ChevronLeft, Plus, X as XIcon, Maximize2, History } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StudioShellProps {
@@ -32,6 +33,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
 
   const { generation, generate, isLoading, error, reset } = useForgeGenerate();
   const imageUpload = useForgeUpload();
+  const lastImageUpload = useForgeUpload();
   const audioUpload = useForgeUpload();
   const videoUpload = useForgeUpload();
   const formRef = useRef<HTMLFormElement>(null);
@@ -60,6 +62,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
       setEffect(m.inputs.default_effect || "");
     }
     imageUpload.clear();
+    lastImageUpload.clear();
     audioUpload.clear();
     videoUpload.clear();
     reset();
@@ -87,7 +90,9 @@ export default function StudioShell({ category, models, title }: StudioShellProp
       effect: effect || undefined,
       image_url: !multiImage ? (imageUpload.uploadedUrl || undefined) : undefined,
       image_urls: multiImage ? imageUpload.uploadedUrls : undefined,
+      last_image_url: lastImageUpload.uploadedUrl || undefined,
       audio_url: audioUpload.uploadedUrl || undefined,
+      video_url: !inputs?.video_field?.endsWith("_files") ? (videoUpload.uploadedUrl || undefined) : undefined,
       video_urls: videoUpload.uploadedUrls.length > 0 ? videoUpload.uploadedUrls : undefined,
     });
   };
@@ -142,15 +147,20 @@ export default function StudioShell({ category, models, title }: StudioShellProp
 
   const promptOk = !inputs?.prompt_required || prompt.trim().length > 0;
   const imageOk = !inputs?.image_required || !!imageUpload.uploadedUrl || imageUpload.uploadedUrls.length > 0;
+  const lastImageOk = !inputs?.last_image_required || !!lastImageUpload.uploadedUrl;
   const audioOk = !inputs?.audio_required || !!audioUpload.uploadedUrl;
-  const canSubmit = !isLoading && !imageUpload.uploading && !audioUpload.uploading && !videoUpload.uploading && !!selectedModelId && promptOk && imageOk && audioOk;
+  const videoOk = !inputs?.video_required || !!videoUpload.uploadedUrl;
+  const canSubmit = !isLoading && !imageUpload.uploading && !lastImageUpload.uploading && !audioUpload.uploading && !videoUpload.uploading && !!selectedModelId && promptOk && imageOk && lastImageOk && audioOk && videoOk;
 
   const missing: string[] = [];
   if (!promptOk) missing.push("Prompt");
   if (!imageOk) missing.push("Imagem");
+  if (!lastImageOk) missing.push("Frame final");
   if (!audioOk) missing.push("Áudio");
-  if (imageUpload.uploading) missing.push("Upload em andamento...");
-  if (audioUpload.uploading) missing.push("Upload em andamento...");
+  if (!videoOk) missing.push("Vídeo");
+  if (imageUpload.uploading || lastImageUpload.uploading || audioUpload.uploading || videoUpload.uploading) {
+    missing.push("Upload em andamento...");
+  }
 
   // Quando há imagem e a variante omite certos campos, esconde-os da UI.
   const omittedParams = new Set(
@@ -158,6 +168,16 @@ export default function StudioShell({ category, models, title }: StudioShellProp
       ? model.endpoint_with_image.omit_when_image
       : [],
   );
+
+  // Custo estimado da config atual (recalcula a cada mudança).
+  const costParams = model && inputs ? resolveCostParams(inputs, {
+    resolution,
+    duration,
+    quality,
+    hasImage: !!imageUpload.uploadedUrl,
+  }) : null;
+  const costResult = model && costParams ? calculateCost(model, costParams) : null;
+  const costLabel = formatCost(costResult);
 
   const promptCount = prompt.length;
   const promptMax = 2000;
@@ -186,7 +206,13 @@ export default function StudioShell({ category, models, title }: StudioShellProp
               type="button"
               onClick={triggerSubmit}
               disabled={!canSubmit}
-              title={missing.length > 0 ? `Faltando: ${missing.join(", ")}` : undefined}
+              title={
+                missing.length > 0
+                  ? `Faltando: ${missing.join(", ")}`
+                  : costResult?.approx
+                  ? "Custo aproximado — confirme no dashboard Muapi"
+                  : undefined
+              }
               className={cn(
                 "flex items-center gap-2 px-4 py-2.5 md:py-2 rounded-lg text-xs font-semibold uppercase tracking-[0.12em] transition-all",
                 "bg-gold text-black hover:bg-gold-hover disabled:opacity-30 disabled:cursor-not-allowed",
@@ -198,7 +224,12 @@ export default function StudioShell({ category, models, title }: StudioShellProp
               ) : (
                 <Sparkles size={13} strokeWidth={2} />
               )}
-              Gerar
+              <span>Gerar</span>
+              {costLabel && (
+                <span className="font-mono font-medium opacity-70 normal-case tracking-normal pl-1.5 ml-0.5 border-l border-black/30">
+                  {costLabel}
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -275,7 +306,8 @@ export default function StudioShell({ category, models, title }: StudioShellProp
             )}
 
             {/* UPLOADS */}
-            {(inputs?.supports_image_upload || inputs?.supports_audio_upload || inputs?.supports_video_upload) && (
+            {(inputs?.supports_image_upload || inputs?.supports_audio_upload ||
+              inputs?.supports_last_image || inputs?.supports_video_upload) && (
               <section className="space-y-2">
                 <div className="flex items-baseline justify-between">
                   <span className="text-[10px] uppercase tracking-[0.18em] text-text-muted font-semibold">
@@ -292,7 +324,7 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                     </span>
                   )}
                 </div>
-                <div className="flex gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {inputs?.supports_image_upload && inputs?.multi_image ? (
                     <MultiImageUpload
                       urls={imageUpload.uploadedUrls}
@@ -305,14 +337,29 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                   ) : inputs?.supports_image_upload ? (
                     <UploadZone
                       accept="image"
-                      label={inputs?.image_required ? "Imagem*" : "Imagem"}
+                      label={
+                        inputs?.supports_last_image
+                          ? inputs?.image_required ? "Frame inicial*" : "Frame inicial"
+                          : inputs?.image_required ? "Imagem*" : "Imagem"
+                      }
                       onUpload={(file) => imageUpload.upload(file, providerId)}
                       uploadedUrl={imageUpload.uploadedUrl}
                       onClear={imageUpload.clear}
                       uploading={imageUpload.uploading}
-                      className="h-24 flex-1"
+                      className="h-24"
                     />
                   ) : null}
+                  {inputs?.supports_last_image && (
+                    <UploadZone
+                      accept="image"
+                      label={inputs?.last_image_required ? "Frame final*" : "Frame final"}
+                      onUpload={lastImageUpload.upload}
+                      uploadedUrl={lastImageUpload.uploadedUrl}
+                      onClear={lastImageUpload.clear}
+                      uploading={lastImageUpload.uploading}
+                      className="h-24"
+                    />
+                  )}
                   {inputs?.supports_audio_upload && (
                     <UploadZone
                       accept="audio"
@@ -321,18 +368,18 @@ export default function StudioShell({ category, models, title }: StudioShellProp
                       uploadedUrl={audioUpload.uploadedUrl}
                       onClear={audioUpload.clear}
                       uploading={audioUpload.uploading}
-                      className="h-24 flex-1"
+                      className="h-24"
                     />
                   )}
                   {inputs?.supports_video_upload && (
                     <UploadZone
                       accept="video"
-                      label="Vídeo"
+                      label={inputs?.video_required ? "Vídeo ref.*" : "Vídeo ref."}
                       onUpload={(file) => videoUpload.upload(file, providerId)}
                       uploadedUrl={videoUpload.uploadedUrl}
                       onClear={videoUpload.clear}
                       uploading={videoUpload.uploading}
-                      className="h-24 flex-1"
+                      className="h-24"
                     />
                   )}
                 </div>

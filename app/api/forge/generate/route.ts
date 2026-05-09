@@ -12,6 +12,17 @@ interface BuiltPayload {
   errors: string[];
 }
 
+/**
+ * Decide se um campo do Muapi espera array.
+ * Heurísticas: nome termina em `_list`/`_files`/`_urls` (convenção de nomenclatura
+ * do Muapi pra arrays) ou flag explícita do modelo.
+ */
+function fieldExpectsArray(fieldName: string, opts?: { explicit?: boolean; multi?: boolean }): boolean {
+  if (opts?.explicit === true) return true;
+  if (opts?.multi === true) return true;
+  return fieldName.endsWith("_list") || fieldName.endsWith("_files") || fieldName.endsWith("_urls");
+}
+
 function buildPayload(model: ForgeModel, body: GenerateRequest): BuiltPayload {
   const errors: string[] = [];
   const payload: Record<string, unknown> = {};
@@ -83,35 +94,55 @@ function buildPayload(model: ForgeModel, body: GenerateRequest): BuiltPayload {
     }
   }
 
-  // Image upload
+  // Image upload (1ª imagem + opcionalmente last_image pra transições)
   if (inputs.supports_image_upload) {
     const urls = body.image_urls?.length ? body.image_urls : body.image_url ? [body.image_url] : [];
     if (urls.length > 0) {
       const field = variant?.image_field || inputs.image_field || "image_url";
-      const asArray = variant?.image_as_array === true;
-      payload[field] = asArray ? urls : urls[0];
+      const asArray = fieldExpectsArray(field, {
+        explicit: variant?.image_as_array,
+        multi: inputs.multi_image,
+      });
+      if (asArray) {
+        const list = [...urls];
+        // Se também tem last_image_url e o modelo suporta, anexa no mesmo array
+        if (body.last_image_url && inputs.supports_last_image) list.push(body.last_image_url);
+        payload[field] = list;
+      } else {
+        payload[field] = urls[0];
+        // Em modelos single-image (image_url), last_image vai em campo separado
+        if (body.last_image_url && inputs.supports_last_image) {
+          payload.last_image = body.last_image_url;
+        }
+      }
     } else if (inputs.image_required) {
       errors.push("Imagem é obrigatória para este modelo");
     }
+  }
+
+  // Last image (frame final pra transições — quando inputs aceita campo separado)
+  if (inputs.supports_last_image && inputs.last_image_required && !body.last_image_url) {
+    errors.push("Frame final é obrigatório para este modelo");
   }
 
   // Audio upload
   if (inputs.supports_audio_upload) {
     if (body.audio_url) {
       const audioField = inputs.audio_field || "audio_url";
-      // Some endpoints (omni-reference) expect an array
-      payload[audioField] = audioField.endsWith("_files") ? [body.audio_url] : body.audio_url;
+      payload[audioField] = fieldExpectsArray(audioField) ? [body.audio_url] : body.audio_url;
     } else if (inputs.audio_required) {
       errors.push("Áudio é obrigatório para este modelo");
     }
   }
 
-  // Video upload
+  // Video upload (Kling Motion Control, Omni-Reference etc)
   if (inputs.supports_video_upload) {
     const vUrls = body.video_urls?.length ? body.video_urls : body.video_url ? [body.video_url] : [];
     if (vUrls.length > 0) {
-      const videoField = inputs.video_field || "video_files";
-      payload[videoField] = vUrls;
+      const videoField = inputs.video_field || "video_url";
+      payload[videoField] = fieldExpectsArray(videoField) ? vUrls : vUrls[0];
+    } else if (inputs.video_required) {
+      errors.push("Vídeo de referência é obrigatório para este modelo");
     }
   }
 

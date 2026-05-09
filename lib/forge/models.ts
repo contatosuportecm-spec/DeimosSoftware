@@ -1,8 +1,10 @@
 import { ForgeModel } from "@/types/forge";
 
-// Schemas auditados contra schema_data.json oficial do muapi.ai (267 modelos).
-// Sem valores "auto" nem parâmetros inventados — só o que cada endpoint aceita.
-// Última auditoria: 2026-05-08.
+// Catálogo de modelos do Forge.
+// Preços extraídos do dashboard oficial muapi.ai (2026-05-09) — valores pós-desconto.
+// Schemas auditados contra schema_data.json oficial onde existe; modelos novos
+// (sd-2-vip-*, kling-v3.0-pro-motion-control, gpt-image-2, nano-banana-2) usam
+// schema inferido do parente mais próximo na mesma família.
 //
 // Modelos com `endpoint_with_image` aceitam imagem opcional: sem imagem usam
 // o endpoint base (T2I/T2V), com imagem trocam pro endpoint da variante (I2I/I2V).
@@ -11,17 +13,18 @@ export const FORGE_MODELS: ForgeModel[] = [
   // ═══ IMAGE ═══════════════════════════════════════════════════════════════
 
   {
-    id: "nano-banana-pro",
+    id: "nano-banana-2",
     provider_id: "muapi",
     name: "Nano Banana 2",
     category: "image",
-    endpoint: "nano-banana-pro",
+    endpoint: "nano-banana-2",
     endpoint_with_image: {
-      endpoint: "nano-banana-pro-edit",
+      endpoint: "nano-banana-2-edit",
       image_field: "images_list",
       image_as_array: true,
+      pricing: { base_usd: 0.060 },
     },
-    description: "Google DeepMind — sem imagem gera do zero (T2I), com imagem edita preservando estilo.",
+    description: "Google Gemini 3.1 Flash Image — modelo mais avançado da Google. Sem imagem gera do zero, com imagem edita preservando estilo.",
     inputs: {
       aspect_ratios: ["1:1", "3:4", "4:3", "9:16", "16:9", "3:2", "2:3", "5:4", "4:5", "21:9"],
       default_aspect_ratio: "1:1",
@@ -33,44 +36,60 @@ export const FORGE_MODELS: ForgeModel[] = [
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: { base_usd: 0.060 },
   },
 
   {
-    id: "gpt-image-1.5",
+    id: "gpt-image-2-text-to-image",
     provider_id: "muapi",
-    name: "GPT Image 1.5",
+    name: "GPT Image 2",
     category: "image",
-    endpoint: "gpt-image-1.5",
-    description: "Motor de imagem da OpenAI — texto em imagem perfeito, fotorrealismo de ponta.",
+    endpoint: "gpt-image-2-text-to-image",
+    endpoint_with_image: {
+      endpoint: "gpt-image-2-image-to-image",
+      image_field: "images_list",
+      image_as_array: true,
+      pricing: { base_usd: 0.090 },
+    },
+    description: "OpenAI GPT Image 2 — fotorrealismo de ponta, prompts até 20.000 caracteres, edição com até 16 imagens de referência.",
     inputs: {
       aspect_ratios: ["1:1", "2:3", "3:2"],
       default_aspect_ratio: "1:1",
       qualities: ["low", "medium", "high"],
       default_quality: "medium",
+      supports_image_upload: true,
+      image_field: "images_list",
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: { base_usd: 0.090 },
   },
 
   // ═══ VIDEO ═══════════════════════════════════════════════════════════════
 
   {
-    id: "seedance-v2.0-t2v",
+    id: "seedance-vip",
     provider_id: "muapi",
-    name: "Seedance 2.0",
+    name: "Seedance 2 VIP",
     category: "video",
-    endpoint: "seedance-v2.0-t2v",
-    description: "Seedance 2.0 (ByteDance) — text-to-video com áudio nativo. Único da família com seleção de qualidade.",
+    endpoint: "sd-2-vip-text-to-video",
+    endpoint_with_image: {
+      endpoint: "sd-2-vip-image-to-video",
+      image_field: "image_url",
+      pricing: { base_usd: 1.500 },
+    },
+    description: "Seedance 2 VIP (ByteDance) — text/image-to-video com áudio nativo, 4-15s, qualidade premium.",
     inputs: {
       aspect_ratios: ["16:9", "9:16", "1:1"],
       default_aspect_ratio: "16:9",
       durations: [5, 10, 15],
       default_duration: 5,
-      qualities: ["basic", "high"],
-      default_quality: "basic",
+      supports_image_upload: true,
+      image_field: "image_url",
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: { base_usd: 1.500 },
   },
 
   {
@@ -97,54 +116,77 @@ export const FORGE_MODELS: ForgeModel[] = [
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: { base_usd: 1.500 },
   },
 
   {
-    id: "seedance-pro",
+    id: "sd-2-vip-first-last-frame",
     provider_id: "muapi",
-    name: "Seedance Pro",
+    name: "Seedance First & Last Frame",
     category: "video",
-    endpoint: "seedance-pro-t2v",
-    endpoint_with_image: {
-      endpoint: "seedance-pro-i2v",
-      image_field: "image_url",
-      omit_when_image: ["aspect_ratio"],
-    },
-    description: "Seedance Pro — sem imagem gera do zero (T2V), com imagem anima a foto. Aspects amplos e até 1080p.",
+    endpoint: "sd-2-vip-first-last-frame",
+    description: "Seedance VIP — gera transição cinematográfica entre 2 imagens (frame inicial → frame final). Perfeito pra storytelling visual.",
     inputs: {
-      aspect_ratios: ["16:9", "9:16", "1:1", "4:3", "3:4", "21:9", "9:21"],
+      aspect_ratios: ["16:9", "9:16", "1:1"],
       default_aspect_ratio: "16:9",
-      resolutions: ["480p", "720p", "1080p"],
-      default_resolution: "480p",
       durations: [5, 10],
       default_duration: 5,
       supports_image_upload: true,
+      supports_last_image: true,
+      image_required: true,
+      last_image_required: true,
       image_field: "image_url",
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: { base_usd: 1.500 },
   },
 
   {
-    id: "veo3-text-to-video",
+    id: "veo3.1-text-to-video",
     provider_id: "muapi",
-    name: "Veo 3",
+    name: "Veo 3.1",
     category: "video",
-    endpoint: "veo3-text-to-video",
+    endpoint: "veo3.1-text-to-video",
     endpoint_with_image: {
-      endpoint: "veo3-image-to-video",
-      image_field: "images_list",
-      image_as_array: true,
+      endpoint: "veo3.1-image-to-video",
+      image_field: "image_url",
+      pricing: { base_usd: 2.500 },
     },
-    description: "Google Veo 3 — sem imagem gera do zero (T2V), com imagem anima a foto preservando composição.",
+    description: "Google Veo 3.1 — vídeos de 8s, 1080p, áudio nativo. Sem imagem gera do zero, com imagem anima preservando composição.",
     inputs: {
       aspect_ratios: ["16:9", "9:16"],
       default_aspect_ratio: "16:9",
+      durations: [8],
+      default_duration: 8,
+      resolutions: ["1080p"],
+      default_resolution: "1080p",
       supports_image_upload: true,
-      image_field: "images_list",
+      supports_last_image: true, // Veo3.1 I2V aceita last_image opcional pra transição
+      image_field: "image_url",
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: { base_usd: 2.500 },
+  },
+
+  {
+    id: "kling-v3.0-pro-motion-control",
+    provider_id: "muapi",
+    name: "Kling Motion Control",
+    category: "video",
+    endpoint: "kling-v3.0-pro-motion-control",
+    description: "Kling 3.0 Pro Motion Control — aplica o movimento de um vídeo de referência a uma imagem-sujeito. Controle preciso de câmera e ação.",
+    inputs: {
+      supports_image_upload: true,
+      supports_video_upload: true,
+      image_required: true,
+      video_required: true,
+      image_field: "image_url",
+      has_prompt: true,
+      prompt_required: true,
+    },
+    pricing: { base_usd: 0.160 },
   },
 
   {
@@ -153,7 +195,7 @@ export const FORGE_MODELS: ForgeModel[] = [
     name: "AI Video Effects",
     category: "video",
     endpoint: "generate_wan_ai_effects",
-    description: "Wan2.1 14B I2V — transforme uma imagem em vídeo com 64 efeitos cinematográficos.",
+    description: "Wan2.1 14B I2V — transforme uma imagem em vídeo com 64 efeitos cinematográficos (Hulk Transformation, Cakeify, Kamehameha…).",
     inputs: {
       aspect_ratios: ["16:9", "9:16", "1:1"],
       default_aspect_ratio: "16:9",
@@ -184,6 +226,13 @@ export const FORGE_MODELS: ForgeModel[] = [
       has_prompt: true,
       prompt_required: true,
     },
+    pricing: {
+      base_usd: 0.10,
+      resolution_mult: { "480p": 1, "720p": 1.5 },
+      duration_mult: { 5: 1, 10: 2 },
+      quality_mult: { medium: 1, high: 1.6 },
+      approx: true,
+    },
   },
 
   // ═══ LIPSYNC ═════════════════════════════════════════════════════════════
@@ -203,6 +252,11 @@ export const FORGE_MODELS: ForgeModel[] = [
       audio_required: true,
       image_field: "image_url",
       has_prompt: true,
+    },
+    pricing: {
+      base_usd: 0.10,
+      resolution_mult: { "480p": 1, "720p": 2, "1080p": 4 },
+      approx: true,
     },
   },
 ];

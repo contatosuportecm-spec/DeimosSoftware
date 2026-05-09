@@ -14,8 +14,9 @@ interface UploadZoneProps {
   label?: string;
 }
 
-const ACCEPT_MAP = { image: "image/*", audio: "audio/*", video: "video/*" };
-const ICON_MAP = { image: ImageIcon, audio: Music, video: Video };
+const ICON_MAP = { image: ImageIcon, audio: Music, video: Video } as const;
+const ACCEPT_MAP = { image: "image/*", audio: "audio/*", video: "video/*" } as const;
+const DEFAULT_LABEL = { image: "Imagem", audio: "Áudio", video: "Vídeo" } as const;
 
 export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, uploading, className, label }: UploadZoneProps) {
   const [dragOver, setDragOver] = useState(false);
@@ -23,7 +24,7 @@ export default function UploadZone({ accept, onUpload, uploadedUrl, onClear, upl
 
   const acceptStr = ACCEPT_MAP[accept];
   const Icon = ICON_MAP[accept];
-  const headerLabel = label || (accept === "image" ? "Imagem" : "Áudio");
+  const headerLabel = label || DEFAULT_LABEL[accept];
   const isRequired = headerLabel.endsWith("*");
   const cleanLabel = isRequired ? headerLabel.slice(0, -1) : headerLabel;
 
