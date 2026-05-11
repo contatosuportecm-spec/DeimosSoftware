@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Plus, RefreshCw, Eye } from "lucide-react";
+import { Plus, RefreshCw } from "lucide-react";
 import LayoutApp from "@/app/layout-app";
 import Button from "@/components/ui/Button";
 import AddOfferModal from "@/components/spy/AddOfferModal";
@@ -33,7 +33,8 @@ function SpyPageContent() {
 
   const {
     offers, loading, error, scrapingId,
-    addOffer, scrapeNow, archiveOffer, refetch,
+    addOffer, scrapeNow, scrapeAll, scrapingAll,
+    addManualSnapshot, archiveOffer, refetch,
   } = useSpy();
   const { niches } = useNiches();
 
@@ -52,30 +53,30 @@ function SpyPageContent() {
       <div className="flex flex-col h-full">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-border flex-shrink-0">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-bg-3 border border-border flex items-center justify-center">
-              <Eye size={14} strokeWidth={1.5} className="text-amber" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted leading-none mb-1">
-                Inteligência
-              </p>
-              <h1 className="text-sm font-semibold text-text-primary leading-none">
-                Spy
-              </h1>
-            </div>
+          <div>
+            <h1 className="text-lg font-semibold text-text-primary leading-snug">
+              Ofertas Espionadas
+            </h1>
+            <p className="text-xs text-text-muted mt-0.5">
+              Monitore anúncios e descubra novas oportunidades todos os dias.
+            </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {activeTab === "ofertas" && (
               <>
                 <ScrapeAllButton onDone={refetch} />
+                <span className="hidden sm:flex items-center gap-1.5 text-[10px] text-text-muted">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  Atualizado agora
+                </span>
                 <button
-                  onClick={refetch}
-                  className="p-2 rounded-md text-text-muted hover:text-text-secondary hover:bg-bg-3 transition-colors"
-                  title="Atualizar"
+                  onClick={scrapeAll}
+                  disabled={scrapingAll}
+                  className="p-2 rounded-md text-text-muted hover:text-text-secondary hover:bg-bg-3 transition-colors disabled:opacity-50"
+                  title="Atualizar todas as ofertas"
                 >
-                  <RefreshCw size={13} strokeWidth={1.5} />
+                  <RefreshCw size={14} strokeWidth={1.5} className={scrapingAll ? "animate-spin" : ""} />
                 </button>
                 <Button size="sm" onClick={() => setModalOpen(true)}>
                   <Plus size={13} strokeWidth={2} />
@@ -103,6 +104,7 @@ function SpyPageContent() {
             scrapingId={scrapingId}
             onScrapeNow={scrapeNow}
             onArchive={archiveOffer}
+            onManualValue={addManualSnapshot}
             onAddOffer={() => setModalOpen(true)}
           />
         ) : (

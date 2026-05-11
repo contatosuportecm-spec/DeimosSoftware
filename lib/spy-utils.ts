@@ -1,6 +1,17 @@
 import { OfferSnapshot, Country, COUNTRY_CODES } from "@/types";
 
 /**
+ * Retorna cor do tier baseado na quantidade de anúncios ativos.
+ * emerald(50+) > amber(30+) > ember(15+) > gray(<15)
+ */
+export function tierColor(count: number): string {
+  if (count >= 50) return "#34D399";
+  if (count >= 30) return "#F4C430";
+  if (count >= 15) return "#FF8A1F";
+  return "#6B6B73";
+}
+
+/**
  * Calcula variação percentual entre primeiro e último snapshot.
  * Usado em componentes client-side (OfferCard, OfferRow).
  */

@@ -8,6 +8,7 @@ export function useSpy() {
   const [loading, setLoading]   = useState(true);
   const [error, setError]       = useState<string | null>(null);
   const [scrapingId, setScrapingId] = useState<string | null>(null);
+  const [scrapingAll, setScrapingAll] = useState(false);
 
   const fetchOffers = useCallback(async () => {
     try {
@@ -67,6 +68,43 @@ export function useSpy() {
     }
   }, [fetchOffers]);
 
+  const scrapeAll = useCallback(async (): Promise<void> => {
+    setScrapingAll(true);
+    try {
+      const active = offers.filter((o) => o.status !== "archived" && o.page_id);
+      for (const offer of active) {
+        try {
+          await fetch("/api/spy/scrape", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ offer_id: offer.id }),
+          });
+        } catch {
+          // continua mesmo se uma falhar
+        }
+      }
+      await fetchOffers();
+    } finally {
+      setScrapingAll(false);
+    }
+  }, [offers, fetchOffers]);
+
+  const addManualSnapshot = useCallback(async (
+    offerId: string,
+    activeAdsCount: number,
+  ): Promise<void> => {
+    const res = await fetch(`/api/spy/offers/${offerId}/snapshot`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ active_ads_count: activeAdsCount }),
+    });
+    if (!res.ok) {
+      const body = await res.json() as { error?: string };
+      throw new Error(body.error ?? "Erro ao salvar valor");
+    }
+    await fetchOffers();
+  }, [fetchOffers]);
+
   const archiveOffer = useCallback(async (offerId: string): Promise<void> => {
     const res = await fetch(`/api/spy/offers/${offerId}`, {
       method: "PATCH",
@@ -95,6 +133,9 @@ export function useSpy() {
     stats,
     addOffer,
     scrapeNow,
+    scrapeAll,
+    scrapingAll,
+    addManualSnapshot,
     archiveOffer,
     refetch: fetchOffers,
   };
