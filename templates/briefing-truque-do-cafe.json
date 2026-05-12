@@ -1,0 +1,67 @@
+{
+  "offer_name": "Truque do Café",
+  "niche": "Emagrecimento",
+  "ticket": 37,
+  "new_opportunity": "Desinflamar seu corpo",
+  "desire": "emagrecer definitivamente",
+  "new_mechanism": "Truque do Café",
+  "promise": "Emagreça 7kg em 20 dias e mantenha seu peso e metabolismo controlado.",
+  "protocol": "Protocolo Ritual Matinal",
+  "target_audience": "Mulher 35-55 anos, na pré/menopausa ou entrando nela, longo histórico de tentativas fracassadas, com percepção (não certeza) de que é algo hormonal ou metabólico.",
+  "main_pains": [
+    "Corpo travado / metabolismo lento",
+    "Compulsão / ansiedade alimentar",
+    "Cansaço / exaustão",
+    "Identidade / autoestima"
+  ],
+  "main_desires": [
+    "Emagrecer de forma definitiva",
+    "Destravar o corpo",
+    "Voltar a se reconhecer",
+    "Simplicidade / direção"
+  ],
+  "failed_attempts": [
+    "Dietas restritivas",
+    "Chás / suplementos",
+    "Academia / exercícios intensos",
+    "Remédios para emagrecer",
+    "Jejum intermitente"
+  ],
+  "fears": [
+    "Medo de fracassar novamente",
+    "Medo de remédios",
+    "Medo de envelhecer e nunca mais emagrecer",
+    "Medo de nunca resolver"
+  ],
+  "beliefs": [
+    "\"Meu metabolismo é lento\"",
+    "\"Meu corpo está inflamado\"",
+    "\"Tenho problema hormonal\"",
+    "\"Meu corpo trava\"",
+    "\"Meu intestino é ruim\"",
+    "\"Meu corpo entra em modo de defesa\"",
+    "\"Dieta funciona só por um tempo\"",
+    "\"Remédio só funciona enquanto toma\"",
+    "\"Jejum faz passar mal\"",
+    "\"Precisa destravar o metabolismo\""
+  ],
+  "root_cause": "O verdadeiro motivo para você estar gorda é seu CORPO INFLAMADO e seu corpo só está inflamado, pois seu metabolismo está lento assim as toxinas do seu sangue acumulam nas suas células.",
+  "why_nothing_worked": "Pois nenhum dos métodos que você testou aceleram seu metabolismo definitivamente. Exercícios, dietas e chás até diminuem seu metabolismo e por isso você consegue perder um pouco de peso, mas depois seu corpo volta ao normal e continua acumulando toxinas.",
+  "why_this_works": "Porque o café acelera seu metabolismo definitivamente assim seu corpo vai desinflamar definitivamente, assim ele entra em um modo de queima constante e permanente.",
+  "syndrome_name": "O problema não é que você come demais. O problema é que anos de dieta, ansiedade, noites ruins e efeito sanfona colocaram seu corpo em modo de defesa. E quando o corpo entra nesse modo… ele desacelera o metabolismo, retém líquido, inflama, acumula gordura e trava o emagrecimento.",
+  "main_headline": "Porque milhares de mulheres estão usando café para desinflamar o corpo? Funciona!?",
+  "alt_headlines": [
+    "Porque esse truque do café está viralizando na internet com milhares d",
+    "É possível uma colher de café pela manhã destravar seu metabolismo?"
+  ],
+  "quiz_hook": "TESTE",
+  "vsl_opening": "TESTE",
+  "absolution_phrase": "TESTE",
+  "deep_dive_phrases": [
+    "Eu sinto que tem alguma coisa travando dentro do meu corpo — meu metabolismo, meu hormônio, algo que eu não consigo controlar.",
+    "Meu corpo não responde mais como antes. Tem alguma coisa biológica/hormonal me travando, e ninguém sabe me explicar o que é.",
+    "Eu não consigo parar de comer — principalmente doce, pão e massa. A ansiedade me empurra pra comida e eu não tenho controle.",
+    "Eu já faço dieta, faço academia, como saudável — e o ponteiro da balança simplesmente não se move. Parece que meu corpo tá travado.",
+    "Eu até consigo emagrecer — o problema é que eu sempre ganho tudo de volta, ou eu desisto no meio do caminho."
+  ]
+}

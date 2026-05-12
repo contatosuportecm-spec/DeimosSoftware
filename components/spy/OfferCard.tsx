@@ -92,10 +92,23 @@ export default function OfferCard({
   return (
     <div
       className={cn(
-        "group rounded-lg border bg-bg-3/40 p-4 transition-all duration-200",
-        isArchived ? "opacity-40" : "hover:bg-bg-3/60"
+        "group rounded-xl p-4",
+        isArchived && "opacity-40"
       )}
-      style={{ borderColor: `${color}20` }}
+      style={{
+        background: "#0F0F11",
+        border: "1px solid rgba(255,255,255,0.06)",
+        transition: "border-color 0.25s ease, background 0.25s ease",
+      }}
+      onMouseEnter={(e) => {
+        if (isArchived) return;
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+        e.currentTarget.style.background = "#121214";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
+        e.currentTarget.style.background = "#0F0F11";
+      }}
     >
       {/* Header: icon + name + status */}
       <div className="flex items-center justify-between mb-4">
@@ -113,7 +126,7 @@ export default function OfferCard({
             <p className="text-[13px] font-semibold text-text-primary truncate leading-snug">
               {offer.name}
             </p>
-            <p className="text-[11px] text-text-muted capitalize leading-none mt-0.5">
+            <p className="text-[11px] text-[#9B9BA5] capitalize leading-none mt-0.5">
               {niche?.name ?? offer.niche}
             </p>
           </div>
@@ -123,14 +136,14 @@ export default function OfferCard({
             className="w-[6px] h-[6px] rounded-full"
             style={{ backgroundColor: status.color }}
           />
-          <span className="text-[10px] text-text-muted">{status.label}</span>
+          <span className="text-[10px] text-[#9B9BA5]">{status.label}</span>
         </div>
       </div>
 
       {/* Body: count + chart */}
       <div className="flex items-end gap-3">
         <div className="flex-shrink-0 min-w-[72px]">
-          <p className="text-[9px] uppercase tracking-[0.15em] text-text-muted mb-1.5">
+          <p className="text-[9px] uppercase tracking-[0.15em] text-[#9B9BA5] mb-1.5">
             Anuncios hoje
           </p>
           {editing ? (
@@ -163,13 +176,13 @@ export default function OfferCard({
               <Pencil
                 size={10}
                 strokeWidth={1.5}
-                className="text-text-muted opacity-0 group-hover/edit:opacity-60 transition-opacity -mt-3"
+                className="text-[#9B9BA5] opacity-0 group-hover/edit:opacity-60 transition-opacity -mt-3"
               />
             </button>
           )}
           {yesterdayCount !== null && (
             <div className="flex items-center gap-1.5 mt-1.5">
-              <span className="text-[10px] font-mono text-text-muted">
+              <span className="text-[10px] font-mono text-[#9B9BA5]">
                 ontem {formatNumber(yesterdayCount)}
               </span>
               {deltaPct !== null && (
@@ -192,7 +205,7 @@ export default function OfferCard({
           {chartData.length >= 2 ? (
             <MiniChart data={chartData} color={color} />
           ) : (
-            <div className="h-[80px] w-full flex items-center justify-center border border-dashed border-bg-4 rounded text-[10px] text-text-muted">
+            <div className="h-[80px] w-full flex items-center justify-center border border-dashed border-bg-4 rounded text-[10px] text-[#9B9BA5]">
               Aguardando dados...
             </div>
           )}
@@ -230,7 +243,7 @@ export default function OfferCard({
           <button
             onClick={() => onScrapeNow(offer.id)}
             disabled={scraping || isArchived}
-            className="text-text-muted hover:text-amber transition-colors disabled:opacity-30"
+            className="text-[#9B9BA5] hover:text-amber transition-colors disabled:opacity-30"
             title="Atualizar agora"
           >
             <RefreshCw
@@ -242,7 +255,7 @@ export default function OfferCard({
           <button
             onClick={() => onArchive(offer.id)}
             disabled={isArchived}
-            className="text-text-muted hover:text-danger transition-colors disabled:opacity-30"
+            className="text-[#9B9BA5] hover:text-danger transition-colors disabled:opacity-30"
             title="Arquivar"
           >
             <Archive size={12} strokeWidth={1.5} />

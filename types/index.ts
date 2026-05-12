@@ -134,6 +134,126 @@ export interface CreateProductInput {
   offer_id?: string;
 }
 
+// ═══ Offer Briefing types ═══
+
+export type OfferBriefingStatus = "draft" | "active" | "paused" | "archived";
+
+export interface OfferBriefing {
+  id: string;
+  // Secao 01: A Oferta
+  offer_name: string;
+  niche: string;
+  ticket: number | null;
+
+  new_opportunity: string | null;
+  desire: string | null;
+  new_mechanism: string | null;
+  promise: string | null;
+  protocol: string | null;
+  tangible_result: string | null;
+  result_timeline: string | null;
+  full_result_timeline: string | null;
+  // Secao 02: Pra Quem E
+  target_audience: string | null;
+  main_pains: string[];
+  main_desires: string[];
+  failed_attempts: string[];
+  fears: string[];
+  beliefs: string[];
+  patterns: string[];
+  // Secao 03: Mecanismo Unico
+  root_cause: string | null;
+  why_nothing_worked: string | null;
+  why_this_works: string | null;
+  syndrome_name: string | null;
+  // Secao 04: O Que Ela Recebe
+  product_name: string | null;
+  product_format: string | null;
+  product_contents: string | null;
+  bonuses: string[];
+  price: number | null;
+  installment_info: string | null;
+  guarantee: string | null;
+  // Secao 05: Copy Essencial
+  main_headline: string | null;
+  alt_headlines: string[];
+  quiz_hook: string | null;
+  vsl_opening: string | null;
+  absolution_phrase: string | null;
+  main_cta: string | null;
+  // Secao 06: Estrutura do Funil
+  traffic_source: string | null;
+  page_1: string | null;
+  page_2: string | null;
+  post_purchase: string | null;
+  follow_up: string | null;
+  upsell_product: string | null;
+  upsell_price: number | null;
+  upsell_pitch: string | null;
+  downsell_product: string | null;
+  downsell_price: number | null;
+  // Secao 07: Deep Dive
+  buckets: string[];
+  deep_dive_phrases: string[];
+  // Meta
+  sales_count: number;
+  revenue: number;
+  status: OfferBriefingStatus;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateOfferBriefingInput {
+  offer_name: string;
+  niche?: string;
+  ticket?: number;
+
+  new_opportunity?: string;
+  desire?: string;
+  new_mechanism?: string;
+  promise?: string;
+  protocol?: string;
+  tangible_result?: string;
+  result_timeline?: string;
+  full_result_timeline?: string;
+  target_audience?: string;
+  main_pains?: string[];
+  main_desires?: string[];
+  failed_attempts?: string[];
+  fears?: string[];
+  beliefs?: string[];
+  patterns?: string[];
+  root_cause?: string;
+  why_nothing_worked?: string;
+  why_this_works?: string;
+  syndrome_name?: string;
+  product_name?: string;
+  product_format?: string;
+  product_contents?: string;
+  bonuses?: string[];
+  price?: number;
+  installment_info?: string;
+  guarantee?: string;
+  main_headline?: string;
+  alt_headlines?: string[];
+  quiz_hook?: string;
+  vsl_opening?: string;
+  absolution_phrase?: string;
+  main_cta?: string;
+  traffic_source?: string;
+  page_1?: string;
+  page_2?: string;
+  post_purchase?: string;
+  follow_up?: string;
+  upsell_product?: string;
+  upsell_price?: number;
+  upsell_pitch?: string;
+  downsell_product?: string;
+  downsell_price?: number;
+  buckets?: string[];
+  deep_dive_phrases?: string[];
+}
+
 // ═══ Module registry ═══
 
 export interface Module {

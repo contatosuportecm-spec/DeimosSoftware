@@ -72,10 +72,17 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
 
   return (
     <div
-      className="rounded-lg border p-6 transition-all duration-300"
+      className="rounded-xl p-6"
       style={{
-        borderColor: `${color}25`,
-        background: `linear-gradient(135deg, ${color}08 0%, transparent 60%)`,
+        background: `linear-gradient(135deg, ${color}06 0%, #0F0F11 60%)`,
+        border: "1px solid rgba(255,255,255,0.06)",
+        transition: "border-color 0.25s ease, background 0.25s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
       }}
     >
       <div className="flex flex-col lg:flex-row lg:items-start gap-6">
@@ -83,7 +90,7 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
         <div className="flex-shrink-0 lg:min-w-[200px]">
           <div className="flex items-center gap-2 mb-4">
             <Crown size={12} strokeWidth={1.5} style={{ color }} />
-            <span className="text-[10px] uppercase tracking-[0.18em] text-text-muted font-medium">
+            <span className="text-[10px] uppercase tracking-[0.18em] text-[#9B9BA5] font-medium">
               Maior volume hoje
             </span>
           </div>
@@ -102,7 +109,7 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
               <p className="text-[15px] font-semibold text-text-primary truncate leading-snug">
                 {offer.name}
               </p>
-              <p className="text-[11px] text-text-muted capitalize leading-none mt-0.5">
+              <p className="text-[11px] text-[#9B9BA5] capitalize leading-none mt-0.5">
                 {niche?.name ?? offer.niche}
               </p>
             </div>
@@ -138,12 +145,12 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
               <Pencil
                 size={12}
                 strokeWidth={1.5}
-                className="text-text-muted opacity-0 group-hover/edit:opacity-60 transition-opacity -mt-4"
+                className="text-[#9B9BA5] opacity-0 group-hover/edit:opacity-60 transition-opacity -mt-4"
               />
             </button>
           )}
 
-          <p className="text-[10px] uppercase tracking-[0.15em] text-text-muted mb-1">
+          <p className="text-[10px] uppercase tracking-[0.15em] text-[#9B9BA5] mb-1">
             anuncios ativos
           </p>
 
@@ -182,7 +189,7 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
 
         {/* Right: Chart */}
         <div className="flex-1 min-w-0">
-          <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted font-medium mb-3">
+          <p className="text-[10px] uppercase tracking-[0.18em] text-[#9B9BA5] font-medium mb-3">
             Variacao \u2014 Ultimos 5 Dias
           </p>
           {chartData.length >= 2 ? (
@@ -195,7 +202,7 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
             />
           ) : (
             <div className="h-20 flex items-center justify-center border border-dashed border-bg-4 rounded">
-              <span className="text-xs text-text-muted">
+              <span className="text-xs text-[#9B9BA5]">
                 Aguardando dados...
               </span>
             </div>

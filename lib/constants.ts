@@ -3,6 +3,7 @@ import { Module } from "@/types";
 export const MODULES: Module[] = [
   { id: "dashboard", name: "Dashboard", icon: "Home", path: "/dashboard", status: "active" },
   { id: "spy", name: "Spy", icon: "Radar", path: "/spy", status: "active" },
+  { id: "ofertas", name: "Ofertas", icon: "FileText", path: "/offer-briefings", status: "active" },
   { id: "creatives", name: "Criativos", icon: "Brain", path: "/creatives", status: "active" },
   { id: "products", name: "Produtos", icon: "Package", path: "/products", status: "active" },
   { id: "compass", name: "Compass", icon: "Chart", path: "/compass", status: "coming" },
