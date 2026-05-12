@@ -61,8 +61,7 @@ export default function DashboardPage() {
 
   return (
     <LayoutApp>
-      <div className="flex-1 overflow-auto">
-        <div className="px-8 py-7 space-y-7 max-w-[1400px]">
+      <div className="p-8 space-y-7">
 
           {/* ── Header ── */}
           <div className="flex items-start justify-between">
@@ -94,7 +93,7 @@ export default function DashboardPage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-lg">🔥</span>
+                  <Eye size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
                   <div>
                     <h2 className="text-[15px] font-bold text-white">Spy em alta</h2>
                     <p className="text-[12px] text-[#9B9BA5] mt-0.5">Ofertas com mais anuncios ativos hoje</p>
@@ -119,7 +118,7 @@ export default function DashboardPage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <span className="text-lg">💎</span>
+                  <FileText size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
                   <div>
                     <h2 className="text-[15px] font-bold text-white">Suas ofertas ativas</h2>
                     <p className="text-[12px] text-[#9B9BA5] mt-0.5">Acompanhe o desempenho das suas ofertas</p>
@@ -141,7 +140,6 @@ export default function DashboardPage() {
 
           {/* ── AI Studio Section ── */}
           <AIStudioSection generations={generations} loading={histLoading} />
-        </div>
       </div>
     </LayoutApp>
   );
@@ -304,20 +302,6 @@ function BriefingMiniCard({ briefing }: { briefing: OfferBriefing }) {
           <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Conversao</p>
           <p className="text-[14px] font-mono font-bold text-white mt-0.5">{sales > 0 ? "2,45%" : "—"}</p>
         </div>
-      </div>
-
-      {/* Mini spark */}
-      <div className="flex items-end gap-[2px] h-5 mb-3">
-        {[2, 4, 3, 5, 4, 6, 5, 7, 6, 8, 5, 7, 8, 9, 7, 10].map((h, i) => (
-          <div
-            key={i}
-            className="flex-1 rounded-full"
-            style={{
-              height: `${h * 2}px`,
-              background: `linear-gradient(to top, ${nicheColor}30, ${nicheColor}70)`,
-            }}
-          />
-        ))}
       </div>
 
       {/* Footer */}
