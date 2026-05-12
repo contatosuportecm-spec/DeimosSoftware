@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary:   "bg-nova text-white hover:bg-nova-hover border-transparent font-semibold hover:shadow-[7px_5px_56px_-14px_rgba(255,138,31,0.75)] active:scale-[0.97] active:shadow-[7px_5px_56px_-10px_rgba(255,138,31,0.85)]",
+  primary:   "bg-[#FF6B00] text-black hover:bg-[#FF7A1A] border-transparent font-bold shadow-[0_0_18px_rgba(255,107,0,0.35)] hover:shadow-[0_0_32px_rgba(255,107,0,0.55),0_0_10px_rgba(255,107,0,0.35)] active:scale-[0.96]",
   secondary: "bg-bg-3 hover:bg-bg-4 text-text-primary border-border hover:border-border-strong",
   ghost:     "bg-transparent hover:bg-bg-3 text-text-secondary hover:text-text-primary border-transparent",
   danger:    "bg-danger/10 hover:bg-danger/20 text-danger border-danger/20 hover:border-danger/40",

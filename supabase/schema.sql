@@ -203,6 +203,81 @@ CREATE INDEX idx_products_platform ON products(platform);
 CREATE TRIGGER tr_products_updated BEFORE UPDATE ON products
 FOR EACH ROW EXECUTE FUNCTION update_updated_at();
 
+-- ═══ Offer Briefings (briefings das nossas ofertas) ═══
+
+CREATE TYPE offer_briefing_status AS ENUM ('draft', 'active', 'paused', 'archived');
+
+CREATE TABLE offer_briefings (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  -- Secao 01: A Oferta
+  offer_name TEXT NOT NULL,
+  niche TEXT NOT NULL DEFAULT 'geral',
+  ticket NUMERIC(10,2),
+
+  new_opportunity TEXT,
+  desire TEXT,
+  new_mechanism TEXT,
+  promise TEXT,
+  protocol TEXT,
+  tangible_result TEXT,
+  result_timeline TEXT,
+  full_result_timeline TEXT,
+  -- Secao 02: Pra Quem E
+  target_audience TEXT,
+  main_pains JSONB DEFAULT '[]'::jsonb,
+  main_desires JSONB DEFAULT '[]'::jsonb,
+  failed_attempts JSONB DEFAULT '[]'::jsonb,
+  fears JSONB DEFAULT '[]'::jsonb,
+  beliefs JSONB DEFAULT '[]'::jsonb,
+  patterns JSONB DEFAULT '[]'::jsonb,
+  -- Secao 03: Mecanismo Unico
+  root_cause TEXT,
+  why_nothing_worked TEXT,
+  why_this_works TEXT,
+  syndrome_name TEXT,
+  -- Secao 04: O Que Ela Recebe
+  product_name TEXT,
+  product_format TEXT,
+  product_contents TEXT,
+  bonuses JSONB DEFAULT '[]'::jsonb,
+  price NUMERIC(10,2),
+  installment_info TEXT,
+  guarantee TEXT,
+  -- Secao 05: Copy Essencial
+  main_headline TEXT,
+  alt_headlines JSONB DEFAULT '[]'::jsonb,
+  quiz_hook TEXT,
+  vsl_opening TEXT,
+  absolution_phrase TEXT,
+  main_cta TEXT,
+  -- Secao 06: Estrutura do Funil
+  traffic_source TEXT,
+  page_1 TEXT,
+  page_2 TEXT,
+  post_purchase TEXT,
+  follow_up TEXT,
+  upsell_product TEXT,
+  upsell_price NUMERIC(10,2),
+  upsell_pitch TEXT,
+  downsell_product TEXT,
+  downsell_price NUMERIC(10,2),
+  -- Secao 07: Deep Dive
+  buckets JSONB DEFAULT '[]'::jsonb,
+  deep_dive_phrases JSONB DEFAULT '[]'::jsonb,
+  -- Meta
+  sales_count INTEGER DEFAULT 0,
+  revenue NUMERIC(12,2) DEFAULT 0,
+  status offer_briefing_status DEFAULT 'draft',
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE INDEX idx_offer_briefings_status ON offer_briefings(status);
+CREATE INDEX idx_offer_briefings_niche ON offer_briefings(niche);
+
+CREATE TRIGGER tr_offer_briefings_updated BEFORE UPDATE ON offer_briefings
+FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
 -- Seed nichos iniciais
 INSERT INTO niches (id, name, description, emoji, color) VALUES
   ('emagrecimento', 'Emagrecimento', 'Perda de peso, GLP-1, receitas, suplementos', '🔥', '#E94560'),

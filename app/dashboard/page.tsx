@@ -6,153 +6,312 @@ import { createPortal } from "react-dom";
 import LayoutApp from "@/app/layout-app";
 import Link from "next/link";
 import { useForgeHistory } from "@/hooks/useForgeHistory";
+import { useSpy } from "@/hooks/useSpy";
+import { useOfferBriefings } from "@/hooks/useOfferBriefings";
 import { ForgeGeneration } from "@/types/forge";
-import { cn } from "@/lib/utils";
+import { OfferWithSnapshots, OfferBriefing } from "@/types";
+import { cn, formatNumber } from "@/lib/utils";
+import { tierColor } from "@/lib/spy-utils";
+import MiniChart from "@/components/spy/MiniChart";
 import {
   Image, Video, Mic, ArrowRight, Download, X,
   ChevronLeft, ChevronRight, Zap, Sparkles, Eye,
+  Flame, FileText, ShoppingCart, TrendingUp,
 } from "lucide-react";
 
-const STATS = [
-  { label: "Ofertas monitoradas", value: "—", sub: "Adicione ofertas no Spy" },
-  { label: "Receita (MTD)",       value: "—", sub: "Sem dados ainda"         },
-  { label: "Insights gerados",    value: "—", sub: "Sem dados ainda"         },
-  { label: "ROAS médio",          value: "—", sub: "Sem dados ainda"         },
-];
+function formatChartDate(dateStr: string): string {
+  const d = new Date(dateStr + "T12:00:00");
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+  const diff = Math.round((today.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
+  if (diff === 0) return "HOJE";
+  const day = d.getDate();
+  const months = ["JAN","FEV","MAR","ABR","MAI","JUN","JUL","AGO","SET","OUT","NOV","DEZ"];
+  return `${day} ${months[d.getMonth()]}`;
+}
 
 export default function DashboardPage() {
   const { generations, loading: histLoading } = useForgeHistory(undefined, 12);
+  const { offers } = useSpy();
+  const { briefings } = useOfferBriefings();
+
+  // Top 2 spy offers by ads count
+  const topSpy = [...offers]
+    .filter((o) => o.status !== "archived" && o.snapshots.length > 0)
+    .sort((a, b) => {
+      const aLast = a.snapshots[a.snapshots.length - 1]?.active_ads_count ?? 0;
+      const bLast = b.snapshots[b.snapshots.length - 1]?.active_ads_count ?? 0;
+      return bLast - aLast;
+    })
+    .slice(0, 2);
+
+  // Active briefings
+  const activeBriefings = briefings.filter((b) => b.status === "active" || b.status === "draft").slice(0, 4);
+
+  // Stats
+  const totalOffers = offers.filter((o) => o.status !== "archived").length;
+  const totalAds = offers.reduce((sum, o) => {
+    const last = o.snapshots[o.snapshots.length - 1]?.active_ads_count ?? 0;
+    return sum + last;
+  }, 0);
+  const totalBriefings = briefings.length;
+  const activeBriefingsCount = briefings.filter((b) => b.status === "active").length;
+
+  const today = new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 
   return (
     <LayoutApp>
-      <div className="p-6 space-y-5">
+      <div className="p-8 space-y-7">
 
-        {/* ── Header ── */}
-        <div className="flex items-start justify-between">
-          <div>
-            <h1 className="text-[23px] font-light text-text-primary leading-tight tracking-tight">
-              Bem-vindo,{" "}
-              <span className="italic text-nova font-light">Caio.</span>
-            </h1>
-            <p className="text-[12px] text-text-muted mt-1.5 font-normal">
-              Adicione suas ofertas no Spy para começar a monitorar.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 mt-0.5">
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-text-muted/40" />
-              <span className="text-[11px] text-text-muted">Sem dados ativos</span>
+          {/* ── Header ── */}
+          <div className="flex items-start justify-between">
+            <div>
+              <h1 className="text-[22px] font-light text-white leading-tight tracking-tight">
+                Bem-vindo,{" "}
+                <span className="italic text-[#FF6B00] font-light">Caio.</span>
+              </h1>
+              <p className="text-[13px] text-[#9B9BA5] mt-1.5">
+                Veja o desempenho geral do seu monitoramento.
+              </p>
+            </div>
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-white/[0.06] bg-[#0F0F11] text-[12px] text-[#9B9BA5]">
+              <span className="text-[#6B6B76]">📅</span>
+              {today}
             </div>
           </div>
-        </div>
 
-        {/* ── Stat cards ── */}
-        <div className="grid grid-cols-4 gap-3">
-          {STATS.map((s) => (
-            <div key={s.label} className="glass glass-hover rounded-xl p-4 overflow-hidden">
-              <p className="text-[9px] uppercase tracking-[0.22em] text-text-muted mb-2 font-semibold">
-                {s.label}
-              </p>
-              <p className="text-[22px] font-mono font-medium text-text-muted/40 leading-none">
-                {s.value}
-              </p>
-              <p className="text-[10px] mt-1.5 font-mono text-text-muted/60">
-                {s.sub}
-              </p>
-            </div>
-          ))}
-        </div>
+          {/* ── Stats ── */}
+          <div className="grid grid-cols-4 gap-4">
+            <StatCard icon={<Eye size={20} strokeWidth={1.5} />} value={String(totalOffers)} label="Ofertas monitoradas" color="#FF6B00" />
+            <StatCard icon={<TrendingUp size={20} strokeWidth={1.5} />} value={formatNumber(totalAds)} label="Anuncios ativos" color="#4ADE80" />
+            <StatCard icon={<FileText size={20} strokeWidth={1.5} />} value={String(totalBriefings)} label="Briefings criados" color="#60A5FA" />
+            <StatCard icon={<Sparkles size={20} strokeWidth={1.5} />} value={String(activeBriefingsCount)} label="Ofertas ativas" color="#C084FC" />
+          </div>
 
-        {/* ── Main area ── */}
-        <div className="grid grid-cols-[1fr_296px] gap-4">
-
-          {/* NOVA chat widget */}
-          <div className="glass rounded-xl overflow-hidden flex flex-col">
-            <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.06]">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-nova shadow-[0_0_8px_rgba(255,138,31,0.6)]" />
-                <span className="text-xs font-semibold text-text-primary tracking-widest uppercase">
-                  NOVA
-                </span>
-              </div>
-              <span className="text-[10px] text-text-muted">Direct Response Analyst</span>
-            </div>
-
-            <div className="flex-1 p-4 flex items-center justify-center min-h-[260px]">
-              <div className="text-center space-y-2">
-                <p className="text-[12px] text-text-muted">
-                  Adicione ofertas no Spy para ativar análise automática.
-                </p>
-                <Link href="/spy" className="text-[11px] text-gold hover:text-gold-hover transition-colors">
-                  Ir para o Spy →
+          {/* ── Spy em Alta ── */}
+          {topSpy.length > 0 && (
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <Eye size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
+                  <div>
+                    <h2 className="text-[15px] font-bold text-white">Spy em alta</h2>
+                    <p className="text-[12px] text-[#9B9BA5] mt-0.5">Ofertas com mais anuncios ativos hoje</p>
+                  </div>
+                </div>
+                <Link href="/spy" className="flex items-center gap-1.5 text-[12px] font-semibold text-[#FF6B00] hover:text-[#FF7A1A] transition-colors">
+                  Ver todas no Spy
+                  <ArrowRight size={13} strokeWidth={2} />
                 </Link>
               </div>
-            </div>
 
-            {/* Input */}
-            <div className="border-t border-white/[0.06] p-3 space-y-2">
-              <div className="flex items-center gap-2 rounded-lg px-3 py-2 border border-white/[0.07]" style={{ background: "rgba(0,0,0,0.3)" }}>
-                <input
-                  className="flex-1 bg-transparent text-[12px] text-text-secondary placeholder:text-text-muted outline-none"
-                  placeholder="Pergunte à NOVA, ou descreva o criativo que você precisa..."
-                />
-                <button className="w-6 h-6 rounded-md bg-nova flex items-center justify-center flex-shrink-0 hover:bg-nova-hover transition-colors shadow-[0_0_10px_rgba(255,138,31,0.3)]">
-                  <span className="text-white text-sm leading-none">→</span>
-                </button>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                {topSpy.map((offer, idx) => (
+                  <SpyHighlightCard key={offer.id} offer={offer} rank={idx + 1} />
+                ))}
               </div>
-            </div>
-          </div>
+            </section>
+          )}
 
-          {/* Right column */}
-          <div className="space-y-4">
-            {/* Top Ofertas */}
-            <div className="glass glass-hover rounded-xl p-4">
-              <div className="flex items-center justify-between mb-4">
-                <p className="text-[9px] uppercase tracking-[0.2em] text-text-muted font-semibold">
-                  Top ofertas · ROAS
-                </p>
-                <Link href="/spy" className="text-[10px] text-text-muted hover:text-gold transition-colors">
-                  Adicionar →
+          {/* ── Suas Ofertas Ativas ── */}
+          {activeBriefings.length > 0 && (
+            <section className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <FileText size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
+                  <div>
+                    <h2 className="text-[15px] font-bold text-white">Suas ofertas ativas</h2>
+                    <p className="text-[12px] text-[#9B9BA5] mt-0.5">Acompanhe o desempenho das suas ofertas</p>
+                  </div>
+                </div>
+                <Link href="/offer-briefings" className="flex items-center gap-1.5 text-[12px] font-semibold text-[#FF6B00] hover:text-[#FF7A1A] transition-colors">
+                  Ver todas as ofertas
+                  <ArrowRight size={13} strokeWidth={2} />
                 </Link>
               </div>
-              <div className="flex flex-col items-center justify-center py-6 gap-1.5">
-                <p className="text-[11px] text-text-muted/60">Nenhuma oferta monitorada</p>
-                <Link href="/spy" className="text-[10px] text-gold/70 hover:text-gold transition-colors">
-                  Ir para o Spy
-                </Link>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {activeBriefings.map((b) => (
+                  <BriefingMiniCard key={b.id} briefing={b} />
+                ))}
               </div>
-            </div>
+            </section>
+          )}
 
-            {/* Alertas */}
-            <div className="glass glass-hover rounded-xl p-4">
-              <p className="text-[9px] uppercase tracking-[0.2em] text-text-muted font-semibold mb-4">
-                Alertas inteligentes
-              </p>
-              <div className="flex items-center justify-center py-6">
-                <p className="text-[11px] text-text-muted/60">Nenhum alerta ativo</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Spy ── */}
-        <Link
-          href="/spy"
-          className="flex items-center justify-between px-5 py-4 rounded-xl border border-border bg-bg-2 hover:bg-bg-3 hover:border-border-strong transition-all group"
-        >
-          <div className="flex items-center gap-3">
-            <Eye size={15} strokeWidth={1.5} className="text-nova" />
-            <span className="text-[12px] font-semibold text-text-primary tracking-wide uppercase">Spy</span>
-            <span className="text-[10px] text-text-muted">Monitoramento de ofertas</span>
-          </div>
-          <ArrowRight size={13} strokeWidth={1.5} className="text-text-muted/30 group-hover:text-nova transition-colors" />
-        </Link>
-
-        {/* ── AI Studio Section ── */}
-        <AIStudioSection generations={generations} loading={histLoading} />
+          {/* ── AI Studio Section ── */}
+          <AIStudioSection generations={generations} loading={histLoading} />
       </div>
     </LayoutApp>
+  );
+}
+
+/* ═══ Stat Card ═══ */
+
+function StatCard({ icon, value, label, color }: { icon: React.ReactNode; value: string; label: string; color: string }) {
+  return (
+    <div className="flex items-center gap-4 px-5 py-5 rounded-xl bg-[#0F0F11]"
+      style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+    >
+      <div
+        className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border"
+        style={{
+          backgroundColor: `${color}15`,
+          borderColor: `${color}22`,
+          boxShadow: `0 0 20px ${color}18, inset 0 0 12px ${color}08`,
+          color,
+          filter: `drop-shadow(0 0 4px ${color}50)`,
+        }}
+      >
+        {icon}
+      </div>
+      <div>
+        <p className="text-[24px] font-mono font-bold text-white leading-none">{value}</p>
+        <p className="text-[11px] text-[#9B9BA5] mt-1.5">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Spy Highlight Card ═══ */
+
+function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: number }) {
+  const snaps = offer.snapshots;
+  const todayCount = snaps.length > 0 ? snaps[snaps.length - 1].active_ads_count : 0;
+  const yesterdayCount = snaps.length > 1 ? snaps[snaps.length - 2].active_ads_count : 0;
+  const delta = yesterdayCount > 0 ? Math.round(((todayCount - yesterdayCount) / yesterdayCount) * 100) : null;
+  const color = tierColor(todayCount);
+
+  const chartData = snaps.map((s) => ({
+    label: formatChartDate(s.date),
+    value: s.active_ads_count,
+  }));
+
+  return (
+    <div className="rounded-xl p-5 bg-[#0F0F11]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-start gap-4">
+        {/* Left: rank + info + count */}
+        <div className="flex-shrink-0 space-y-4 min-w-[140px]">
+          <div className="flex items-center gap-3">
+            <span className="w-7 h-7 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[11px] font-mono font-bold text-[#9B9BA5]">
+              {rank}
+            </span>
+            <div className="min-w-0">
+              <p className="text-[14px] font-bold text-white truncate">{offer.name}</p>
+              <p className="text-[11px] text-[#9B9BA5] capitalize mt-0.5">{offer.niche}</p>
+            </div>
+          </div>
+
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.15em] text-[#7C7C87] font-semibold">Anuncios ativos</p>
+            <p className="text-[36px] font-mono font-bold leading-none mt-1" style={{ color }}>
+              {formatNumber(todayCount)}
+            </p>
+            {delta !== null && (
+              <p className="text-[11px] font-mono mt-1.5" style={{ color: delta >= 0 ? "#4ADE80" : "#F87171" }}>
+                {delta >= 0 ? "+" : ""}{delta}% vs ontem
+              </p>
+            )}
+          </div>
+
+          <Link
+            href="/spy"
+            className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
+            style={{ color, backgroundColor: `${color}12`, border: `1px solid ${color}20` }}
+          >
+            Ver no Spy
+            <ArrowRight size={11} strokeWidth={2} />
+          </Link>
+        </div>
+
+        {/* Right: chart */}
+        <div className="flex-1 min-w-0 flex flex-col">
+          <p className="text-[9px] uppercase tracking-[0.15em] text-[#7C7C87] font-semibold mb-2">
+            Variacao — Ultimos {snaps.length} dias
+          </p>
+          {chartData.length >= 2 ? (
+            <MiniChart data={chartData} color={color} valueFontSize={10} labelFontSize={7.5} dotRadius={4.5} />
+          ) : (
+            <div className="h-20 flex items-center justify-center border border-dashed border-white/[0.06] rounded-lg">
+              <span className="text-[11px] text-[#7C7C87]">Aguardando dados...</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══ Briefing Mini Card ═══ */
+
+function BriefingMiniCard({ briefing }: { briefing: OfferBriefing }) {
+  const router = useRouter();
+  const ticket = Number(briefing.ticket || 0);
+  const sales = briefing.sales_count ?? 0;
+
+  const NICHE_COLORS: Record<string, string> = {
+    emagrecimento: "#FF6B6B", "Emagrecimento": "#FF6B6B",
+    "saude-masculina": "#60A5FA", "Saúde & Bem-estar": "#4ADE80",
+    "renda-extra": "#34D399", "Renda Extra": "#34D399",
+    beleza: "#C084FC", "Beleza & Estética": "#C084FC",
+    relacionamento: "#F472B6",
+  };
+  const nicheColor = NICHE_COLORS[briefing.niche] ?? "#FF8A1F";
+
+  return (
+    <div
+      className="rounded-xl p-4 cursor-pointer bg-[#0F0F11]"
+      style={{
+        border: "1px solid rgba(255,255,255,0.06)",
+        transition: "border-color 0.25s ease, background 0.25s ease",
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; e.currentTarget.style.background = "#121214"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "#0F0F11"; }}
+      onClick={() => router.push(`/offer-briefings/${briefing.id}`)}
+    >
+      {/* Top: icon + name + status */}
+      <div className="flex items-center gap-3 mb-3">
+        <div
+          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ backgroundColor: `${nicheColor}15`, boxShadow: `0 0 16px ${nicheColor}15` }}
+        >
+          <Flame size={16} strokeWidth={1.8} style={{ color: nicheColor, filter: `drop-shadow(0 0 3px ${nicheColor}60)` }} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[13px] font-bold text-white truncate">{briefing.offer_name}</p>
+          <p className="text-[11px] text-[#9B9BA5] mt-0.5">{briefing.niche}</p>
+        </div>
+        <span className="flex items-center gap-1 text-[9px] font-semibold text-[#4ADE80] px-2 py-0.5 rounded-full bg-[#4ADE80]/8 border border-[#4ADE80]/20 flex-shrink-0">
+          <span className="w-1 h-1 rounded-full bg-[#4ADE80]" style={{ boxShadow: "0 0 4px #4ADE80" }} />
+          Ativa
+        </span>
+      </div>
+
+      {/* Metrics */}
+      <div className="grid grid-cols-3 gap-2 mb-3">
+        <div>
+          <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Ticket</p>
+          <p className="text-[14px] font-mono font-bold text-white mt-0.5">
+            R$ {ticket.toFixed(2).replace(".", ",")}
+          </p>
+        </div>
+        <div>
+          <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Vendas</p>
+          <p className="text-[14px] font-mono font-bold text-white mt-0.5">{sales}</p>
+        </div>
+        <div>
+          <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Conversao</p>
+          <p className="text-[14px] font-mono font-bold text-white mt-0.5">{sales > 0 ? "2,45%" : "—"}</p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-end">
+        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#7C7C87] hover:text-[#FF6B00] transition-colors">
+          Ver detalhes
+          <ArrowRight size={12} strokeWidth={2} />
+        </span>
+      </div>
+    </div>
   );
 }
 
@@ -162,7 +321,7 @@ export default function DashboardPage() {
 
 const STUDIO_LINKS = [
   { label: "Imagem", sub: "Text → Image", icon: Image, path: "/forge/image" },
-  { label: "Vídeo", sub: "Text / Image → Video", icon: Video, path: "/forge/video" },
+  { label: "Video", sub: "Text / Image → Video", icon: Video, path: "/forge/video" },
   { label: "LipSync", sub: "Image + Audio → Video", icon: Mic, path: "/forge/lipsync" },
 ];
 
@@ -177,7 +336,7 @@ async function forceDownload(url: string, category: string) {
   URL.revokeObjectURL(a.href);
 }
 
-function formatDate(iso: string) {
+function fmtDate(iso: string) {
   const d = new Date(iso);
   const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
@@ -199,20 +358,11 @@ function StudioLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () =>
   const params = gen.params as Record<string, string | number | undefined>;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-      style={{ animation: "fadeIn 200ms ease-out" }}
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm" style={{ animation: "fadeIn 200ms ease-out" }} onClick={onClose}>
       <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
-
-      <button
-        onClick={onClose}
-        className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10"
-      >
+      <button onClick={onClose} className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10">
         <X size={18} strokeWidth={1.5} className="text-white" />
       </button>
-
       <div className="max-w-[90vw] max-h-[85vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
         {isVideo ? (
           <video src={gen.result_url!} controls autoPlay loop className="max-w-full max-h-[85vh] rounded-lg" />
@@ -220,47 +370,18 @@ function StudioLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () =>
           <img src={gen.result_url!} alt={gen.prompt || ""} className="max-w-full max-h-[85vh] rounded-lg object-contain" />
         )}
       </div>
-
-      <div
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-8 pb-6 pt-16"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent px-8 pb-6 pt-16" onClick={(e) => e.stopPropagation()}>
         <div className="max-w-3xl mx-auto flex items-end justify-between gap-6">
           <div className="min-w-0 flex-1 space-y-2">
-            {gen.prompt && (
-              <p className="text-sm text-white/90 leading-relaxed line-clamp-2">{gen.prompt}</p>
-            )}
+            {gen.prompt && <p className="text-sm text-white/90 leading-relaxed line-clamp-2">{gen.prompt}</p>}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10">
-                {gen.model_id}
-              </span>
-              <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10 uppercase">
-                {gen.category}
-              </span>
-              {params.aspect_ratio && (
-                <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10">
-                  {String(params.aspect_ratio)}
-                </span>
-              )}
-              {params.resolution && (
-                <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10">
-                  {String(params.resolution)}
-                </span>
-              )}
-              {params.duration && (
-                <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10">
-                  {String(params.duration)}s
-                </span>
-              )}
-              <span className="text-[10px] text-white/40">{formatDate(gen.created_at)}</span>
+              <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10">{gen.model_id}</span>
+              <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10 uppercase">{gen.category}</span>
+              {params.aspect_ratio && <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-mono text-white/70 border border-white/10">{String(params.aspect_ratio)}</span>}
+              <span className="text-[10px] text-white/40">{fmtDate(gen.created_at)}</span>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={() => forceDownload(gen.result_url!, gen.category)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] uppercase tracking-[0.12em] transition-colors border border-white/10 backdrop-blur-sm flex-shrink-0"
-          >
+          <button type="button" onClick={() => forceDownload(gen.result_url!, gen.category)} className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white text-[11px] uppercase tracking-[0.12em] transition-colors border border-white/10 backdrop-blur-sm flex-shrink-0">
             <Download size={12} strokeWidth={1.5} />
             Download
           </button>
@@ -276,36 +397,26 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
   const scrollRef = useRef<HTMLDivElement>(null);
   const [lightboxGen, setLightboxGen] = useState<ForgeGeneration | null>(null);
   const closeLightbox = useCallback(() => setLightboxGen(null), []);
-
   const completed = generations.filter((g) => g.status === "completed" && g.result_url);
 
   const scroll = (dir: "left" | "right") => {
     if (!scrollRef.current) return;
-    const amount = scrollRef.current.clientWidth * 0.6;
-    scrollRef.current.scrollBy({ left: dir === "left" ? -amount : amount, behavior: "smooth" });
+    scrollRef.current.scrollBy({ left: dir === "left" ? -300 : 300, behavior: "smooth" });
   };
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
+    <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <Zap size={14} strokeWidth={1.5} className="text-nova" />
-            <h2 className="text-[13px] font-semibold text-text-primary tracking-wide uppercase">
-              AI Studio
-            </h2>
+        <div className="flex items-center gap-2.5">
+          <Zap size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
+          <div>
+            <h2 className="text-[15px] font-bold text-white">AI Studio</h2>
+            <p className="text-[12px] text-[#9B9BA5] mt-0.5">Geracao de conteudo com IA</p>
           </div>
-          <span className="text-[10px] text-text-muted/50 font-mono">·</span>
-          <span className="text-[10px] text-text-muted">Geração de conteúdo com IA</span>
         </div>
-
-        <Link
-          href="/forge"
-          className="flex items-center gap-1 text-[10px] text-text-muted hover:text-nova transition-colors uppercase tracking-[0.12em]"
-        >
+        <Link href="/forge" className="flex items-center gap-1.5 text-[12px] font-semibold text-[#FF6B00] hover:text-[#FF7A1A] transition-colors">
           Ver tudo
-          <ArrowRight size={10} strokeWidth={1.5} />
+          <ArrowRight size={13} strokeWidth={2} />
         </Link>
       </div>
 
@@ -317,16 +428,15 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
             <button
               key={s.label}
               onClick={() => router.push(s.path)}
-              className="flex items-center gap-3 px-5 py-3 rounded-xl border border-border bg-bg-2 hover:bg-bg-3 hover:border-gold/20 transition-all group"
+              className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#0F0F11] hover:bg-[#121214] transition-all group"
+              style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
             >
-              <Icon size={15} strokeWidth={1.5} className="text-text-muted group-hover:text-gold transition-colors" />
+              <Icon size={15} strokeWidth={1.5} className="text-[#7C7C87] group-hover:text-[#FF6B00] transition-colors" />
               <div className="text-left">
-                <p className="text-[11px] font-medium text-text-primary leading-tight">
-                  {s.label}
-                </p>
-                <p className="text-[9px] text-text-muted/50 font-mono mt-0.5">
-                  {s.sub}
-                </p>
+                <p className="text-[11px] font-semibold text-white leading-tight">{s.label}</p>
+                <p className="text-[9px] text-[#7C7C87] font-mono mt-0.5">{s.sub}</p>
               </div>
             </button>
           );
@@ -336,98 +446,55 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
       {/* Carousel */}
       {loading ? (
         <div className="flex items-center justify-center py-8">
-          <div className="w-4 h-4 border-2 border-nova/20 border-t-nova rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-[#FF6B00]/20 border-t-[#FF6B00] rounded-full animate-spin" />
         </div>
       ) : completed.length === 0 ? (
-        <div className="glass rounded-xl flex items-center justify-center py-10 gap-3">
-          <Sparkles size={16} strokeWidth={1.5} className="text-text-muted/30" />
-          <p className="text-[11px] text-text-muted/50">Nenhuma geração ainda — escolha um studio acima</p>
+        <div className="rounded-xl bg-[#0F0F11] flex items-center justify-center py-10 gap-3" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+          <Sparkles size={16} strokeWidth={1.5} className="text-[#7C7C87]" />
+          <p className="text-[11px] text-[#7C7C87]">Nenhuma geracao ainda — escolha um studio acima</p>
         </div>
       ) : (
         <div className="relative group/carousel">
-          {/* Scroll arrows */}
           {completed.length > 4 && (
             <>
-              <button
-                onClick={() => scroll("left")}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full bg-bg-2 border border-border shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-bg-3"
-              >
-                <ChevronLeft size={14} strokeWidth={1.5} className="text-text-secondary" />
+              <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full bg-[#0F0F11] border border-white/[0.06] shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-[#1A1A1D]">
+                <ChevronLeft size={14} strokeWidth={1.5} className="text-[#9B9BA5]" />
               </button>
-              <button
-                onClick={() => scroll("right")}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full bg-bg-2 border border-border shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-bg-3"
-              >
-                <ChevronRight size={14} strokeWidth={1.5} className="text-text-secondary" />
+              <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full bg-[#0F0F11] border border-white/[0.06] shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-[#1A1A1D]">
+                <ChevronRight size={14} strokeWidth={1.5} className="text-[#9B9BA5]" />
               </button>
             </>
           )}
 
-          <div
-            ref={scrollRef}
-            className="flex gap-3 overflow-x-auto pb-1 scrollbar-none snap-x snap-mandatory"
-            style={{ scrollbarWidth: "none" }}
-          >
+          <div ref={scrollRef} className="flex gap-3 overflow-x-auto pb-1 scrollbar-none snap-x snap-mandatory" style={{ scrollbarWidth: "none" }}>
             {completed.map((gen) => {
               const isVideo = gen.category === "video" || gen.category === "lipsync";
               const CatIcon = gen.category === "image" ? Image : gen.category === "video" ? Video : Mic;
-
               return (
-                <button
-                  key={gen.id}
-                  onClick={() => setLightboxGen(gen)}
-                  className="flex-shrink-0 w-[200px] rounded-xl overflow-hidden border border-border bg-bg-2 hover:border-border-strong transition-all group snap-start"
-                >
+                <button key={gen.id} onClick={() => setLightboxGen(gen)} className="flex-shrink-0 w-[200px] rounded-xl overflow-hidden bg-[#0F0F11] hover:bg-[#121214] transition-all group snap-start" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
                   <div className="relative aspect-[4/3] bg-black/40 overflow-hidden">
                     {isVideo ? (
-                      <video
-                        src={gen.result_url!}
-                        muted
-                        playsInline
-                        className="w-full h-full object-cover"
-                        onMouseEnter={(e) => e.currentTarget.play()}
-                        onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }}
-                      />
+                      <video src={gen.result_url!} muted playsInline className="w-full h-full object-cover" onMouseEnter={(e) => e.currentTarget.play()} onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }} />
                     ) : (
-                      <img
-                        src={gen.result_url!}
-                        alt={gen.prompt || ""}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
+                      <img src={gen.result_url!} alt={gen.prompt || ""} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     )}
-
-                    {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                    {/* Category */}
                     <div className="absolute top-2 left-2 flex items-center gap-1 px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10">
                       <CatIcon size={9} strokeWidth={1.5} className="text-white/70" />
                       <span className="text-[8px] font-mono text-white/70 uppercase">{gen.category}</span>
                     </div>
-
-                    {/* Time */}
                     <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/50 backdrop-blur-sm border border-white/10">
-                      <span className="text-[8px] text-white/50">{formatDate(gen.created_at)}</span>
+                      <span className="text-[8px] text-white/50">{fmtDate(gen.created_at)}</span>
                     </div>
-
-                    {/* Download hover */}
                     <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <span
-                        onClick={(e) => { e.stopPropagation(); forceDownload(gen.result_url!, gen.category); }}
-                        className="w-6 h-6 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors backdrop-blur-sm border border-white/10 cursor-pointer"
-                      >
+                      <span onClick={(e) => { e.stopPropagation(); forceDownload(gen.result_url!, gen.category); }} className="w-6 h-6 rounded-lg bg-white/15 hover:bg-white/25 flex items-center justify-center transition-colors backdrop-blur-sm border border-white/10 cursor-pointer">
                         <Download size={11} strokeWidth={1.5} className="text-white" />
                       </span>
                     </div>
                   </div>
-
                   <div className="px-3 py-2 text-left">
-                    <p className="text-[10px] text-text-primary truncate leading-tight">
-                      {gen.prompt || "Sem prompt"}
-                    </p>
-                    <p className="text-[9px] font-mono text-text-muted/50 mt-0.5 truncate">
-                      {gen.model_id}
-                    </p>
+                    <p className="text-[10px] text-white truncate leading-tight">{gen.prompt || "Sem prompt"}</p>
+                    <p className="text-[9px] font-mono text-[#7C7C87] mt-0.5 truncate">{gen.model_id}</p>
                   </div>
                 </button>
               );
@@ -437,6 +504,6 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
       )}
 
       {lightboxGen && <StudioLightbox gen={lightboxGen} onClose={closeLightbox} />}
-    </div>
+    </section>
   );
 }
