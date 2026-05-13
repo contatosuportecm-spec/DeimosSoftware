@@ -290,3 +290,6 @@ export interface ScrapeResult {
   active_ads_count: number;
   date: string;
 }
+
+// ═══ Knowledge System (re-export) ═══
+export * from "./knowledge";

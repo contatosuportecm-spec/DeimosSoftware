@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Eye, FileText, Sparkles, Package, Zap, type LucideIcon,
+  Home, Eye, FileText, Sparkles, Package, Zap, Feather, BookOpen, UserCircle, Pencil, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +23,14 @@ const PRINCIPAL: NavItem[] = [
   { id: "creatives", label: "Criativos", icon: Sparkles, path: "/creatives" },
   { id: "products",  label: "Produtos",  icon: Package,  path: "/products" },
   { id: "forge",     label: "AI Studio", icon: Zap,      path: "/forge" },
+];
+
+const KNOWLEDGE: NavItem[] = [
+  { id: "vsl",         label: "VSL Studio",   icon: Pencil,     path: "/vsl-studio" },
+  { id: "copywriters", label: "Copywriters",  icon: Feather,    path: "/copywriters" },
+  { id: "library",     label: "Biblioteca",   icon: BookOpen,   path: "/library" },
+  { id: "avatar",      label: "Avatar Vivo",  icon: UserCircle, path: "/avatar" },
+  { id: "reverse",     label: "Reverse-Eng",  icon: Eye,        path: "/reverse-engineering" },
 ];
 
 const W_OPEN = 176;   // 11rem = w-44
@@ -138,6 +146,49 @@ export default function Sidebar() {
               {item.badge && isActive && expanded && (
                 <span className="w-1.5 h-1.5 rounded-full bg-nova ml-auto" />
               )}
+            </Link>
+          );
+        })}
+
+        {/* Knowledge System section */}
+        <div className={cn("overflow-hidden whitespace-nowrap pt-4", expanded ? "opacity-100 h-auto mb-1.5" : "opacity-0 h-0 mb-0")}
+          style={{ transition: "opacity 0.2s ease, height 0.2s ease" }}
+        >
+          <p className="px-3 pb-1.5 text-[9px] uppercase tracking-[0.22em] text-text-muted/60">
+            Knowledge
+          </p>
+        </div>
+
+        {KNOWLEDGE.map((item) => {
+          const isActive = pathname.startsWith(item.path);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.id}
+              href={item.path}
+              title={!expanded ? item.label : undefined}
+              className={cn(
+                "flex items-center gap-2.5 rounded-lg text-[11px] transition-all duration-150",
+                expanded ? "px-3 py-[7px]" : "px-0 py-[7px] justify-center",
+                isActive
+                  ? "text-text-primary bg-white/[0.07] shadow-sm"
+                  : "text-text-muted hover:text-text-secondary hover:bg-white/[0.04]"
+              )}
+            >
+              <Icon
+                size={14}
+                strokeWidth={1.5}
+                className={cn("flex-shrink-0", isActive && "text-gold")}
+              />
+              <span className={cn(
+                "font-medium overflow-hidden whitespace-nowrap",
+                expanded ? "opacity-100 w-auto" : "opacity-0 w-0"
+              )}
+                style={{ transition: "opacity 0.2s ease" }}
+              >
+                {item.label}
+              </span>
             </Link>
           );
         })}
