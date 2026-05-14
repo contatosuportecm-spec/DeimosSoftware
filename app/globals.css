@@ -115,3 +115,217 @@ body {
   background-size: 200% 100%;
   animation: shimmerBg 1.8s ease-in-out infinite;
 }
+
+/* ═══ AI Orb — Deimos adapted ═══ */
+
+/* Empty state — large orb */
+.ai-orb-empty {
+  --s: 80px;
+  width: var(--s);
+  height: var(--s);
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: ai-orb-breathe 5s ease-in-out infinite;
+}
+
+/* Mini orb — loading indicator in messages */
+.ai-orb-mini {
+  --s: 28px;
+  width: var(--s);
+  height: var(--s);
+  position: relative;
+  display: grid;
+  place-items: center;
+  animation: ai-orb-breathe 3s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+/* Micro orb — inside input */
+.ai-orb-micro {
+  --s: 20px;
+  width: var(--s);
+  height: var(--s);
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.ai-orb-container {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background: #1a1208;
+}
+
+.ai-orb-c {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.ai-orb-c1 {
+  background: radial-gradient(50% 50% at center, #FF8A1F, #F4C430);
+  width: 65%;
+  height: 65%;
+  animation: ai-orb-spin1 5.5s linear infinite;
+}
+
+.ai-orb-c2 {
+  background: radial-gradient(50% 50% at center, #FF6B00, #FFB84D);
+  width: 35%;
+  height: 35%;
+  animation: ai-orb-spin2 6s linear infinite;
+}
+
+.ai-orb-c3 {
+  background: radial-gradient(50% 50% at center, #E5740F, transparent);
+  width: 50%;
+  height: 50%;
+  opacity: 0.6;
+  animation: ai-orb-spin3 4.8s linear infinite;
+}
+
+.ai-orb-c4 {
+  background: #8B4513;
+  width: 100%;
+  height: 100%;
+  animation: ai-orb-spin4 5.2s linear infinite;
+}
+
+.ai-orb-glass {
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  background: radial-gradient(
+    40% 40% at 65% 35%,
+    rgba(255, 138, 31, 0.12),
+    transparent
+  );
+  box-shadow:
+    0 0 20px rgba(255, 138, 31, 0.08),
+    inset 0 0 10px rgba(244, 196, 48, 0.06);
+}
+
+.ai-orb-rings {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  perspective: 10rem;
+  opacity: 0.5;
+}
+
+.ai-orb-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, rgba(255,138,31,0.4), rgba(244,196,48,0.3), rgba(255,107,0,0.3)) border-box;
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.ai-orb-ring-1 {
+  animation: ai-orb-ring-rotate 10s ease-in-out infinite;
+}
+
+.ai-orb-ring-2 {
+  animation: ai-orb-ring-rotate2 10s ease-in-out infinite;
+}
+
+@keyframes ai-orb-breathe {
+  0%, 100% { transform: scale(0.97); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes ai-orb-spin1 {
+  0% { transform: rotate(0deg) translate(40%) scale(0.9); opacity: 0; }
+  25% { transform: rotate(90deg) translate(40%) scale(1.6); opacity: 1; }
+  50% { transform: rotate(180deg) translate(40%) scale(0.7); opacity: 0.4; }
+  75% { transform: rotate(270deg) translate(40%) scale(1.2); opacity: 1; }
+  100% { transform: rotate(360deg) translate(40%) scale(0.9); opacity: 0; }
+}
+
+@keyframes ai-orb-spin2 {
+  0% { transform: rotate(90deg) translate(40%) scale(0.5); }
+  25% { transform: rotate(180deg) translate(40%) scale(1.5); opacity: 0; }
+  50% { transform: rotate(270deg) translate(40%) scale(1); opacity: 0; }
+  75% { transform: rotate(360deg) translate(40%) scale(0.8); opacity: 0; }
+  100% { transform: rotate(450deg) translate(40%) scale(0.5); opacity: 1; }
+}
+
+@keyframes ai-orb-spin3 {
+  0% { transform: rotate(180deg) translate(40%) scale(0.8); opacity: 0.8; }
+  25% { transform: rotate(270deg) translate(40%) scale(1.3); }
+  50% { transform: rotate(360deg) translate(40%) scale(0.6); opacity: 0.4; }
+  75% { transform: rotate(450deg) translate(40%) scale(1.1); opacity: 0.7; }
+  100% { transform: rotate(540deg) translate(40%) scale(0.8); opacity: 0.8; }
+}
+
+@keyframes ai-orb-spin4 {
+  0% { transform: rotate(270deg) translate(40%) scale(1); opacity: 1; }
+  25% { transform: rotate(360deg) translate(40%) scale(0.7); }
+  50% { transform: rotate(450deg) translate(40%) scale(1.4); opacity: 0.5; }
+  75% { transform: rotate(540deg) translate(40%) scale(0.9); opacity: 0.8; }
+  100% { transform: rotate(630deg) translate(40%) scale(1); opacity: 1; }
+}
+
+@keyframes ai-orb-ring-rotate {
+  0%, 25% { transform: rotateY(180deg) rotateX(180deg) rotateZ(180deg); }
+  50%, 80% { transform: rotateY(360deg) rotateX(360deg) rotateZ(360deg); }
+  100% { transform: rotateY(540deg) rotateX(540deg) rotateZ(540deg); }
+}
+
+@keyframes ai-orb-ring-rotate2 {
+  0%, 25% { transform: rotateY(90deg) rotateX(90deg) rotateZ(90deg); }
+  50%, 75% { transform: rotateY(270deg) rotateX(270deg) rotateZ(270deg); }
+  100% { transform: rotateY(450deg) rotateX(450deg) rotateZ(450deg); }
+}
+
+.animate-spin-slow {
+  animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Loading bar — slides across the top */
+.animate-loading-bar {
+  animation: loading-bar 1.8s ease-in-out infinite;
+}
+
+@keyframes loading-bar {
+  0% { width: 0%; margin-left: 0%; }
+  50% { width: 60%; margin-left: 20%; }
+  100% { width: 0%; margin-left: 100%; }
+}
+
+/* Fade in */
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animated dots after text */
+.loading-dots::after {
+  content: '';
+  animation: loading-dots 1.4s steps(4, end) infinite;
+}
+
+@keyframes loading-dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}

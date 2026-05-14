@@ -290,3 +290,116 @@ export interface ScrapeResult {
   active_ads_count: number;
   date: string;
 }
+
+// ═══ Biblioteca ═══
+
+export type BookStatus = "processing" | "ready" | "error";
+
+export type BookSourceType = "pdf" | "youtube";
+
+export interface Book {
+  id: string;
+  title: string;
+  author: string | null;
+  file_url: string | null;
+  file_name: string | null;
+  file_size: number | null;
+  source_type: BookSourceType;
+  source_url: string | null;
+  chunk_count: number;
+  status: BookStatus;
+  error_msg: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BookChunk {
+  id: string;
+  book_id: string;
+  chunk_index: number;
+  content: string;
+}
+
+export interface BookSession {
+  id: string;
+  book_id: string;
+  title: string | null;
+  created_at: string;
+  last_message_at: string;
+}
+
+export interface BookMessage {
+  id: string;
+  session_id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+}
+
+// ═══ Clientes Artificiais ═══
+
+export interface ClientPersona {
+  id: string;
+  name: string;
+  age_range: string | null;
+  gender: string | null;
+  niche: string | null;
+  pains: string[];
+  desires: string[];
+  objections: string[];
+  vocabulary: string[];
+  behavior: string | null;
+  emotional_state: string | null;
+  awareness_level: string | null;
+  study_text: string | null;
+  study_file_url: string | null;
+  avatar_color: string;
+  status: "processing" | "ready" | "error";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientSession {
+  id: string;
+  persona_id: string;
+  title: string | null;
+  created_at: string;
+  last_message_at: string;
+}
+
+export interface ClientMessage {
+  id: string;
+  session_id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+}
+
+// ═══ VSL Studio ═══
+
+export type VslContextKind = "copywriter" | "book";
+
+export interface Copywriter {
+  id: string;
+  name: string;
+  era: string;
+  description: string;
+  systemPrompt: string;
+}
+
+export interface VslSession {
+  id: string;
+  title: string | null;
+  context_kind: VslContextKind;
+  context_id: string;
+  created_at: string;
+  last_message_at: string;
+}
+
+export interface VslMessage {
+  id: string;
+  session_id: string;
+  role: "user" | "assistant";
+  content: string;
+  created_at: string;
+}

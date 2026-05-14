@@ -1,36 +1,49 @@
-import Anthropic from "@anthropic-ai/sdk";
-import { ChatMessage } from "@/types";
+// ═══════════════════════════════════════════════════════════════════
+// Wrapper de compatibilidade: a API segue chamando "callClaude" mas
+// internamente roteia para Gemini (gemini-2.5-pro). Mantido pra evitar
+// refatorar 20 imports espalhados.
+// ═══════════════════════════════════════════════════════════════════
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+import { callLLM, streamLLMRaw } from "./llm";
+import { ChatMessage } from "@/types";
 
 export interface ClaudeStreamOptions {
   messages: Pick<ChatMessage, "role" | "content">[];
   systemPrompt?: string;
   model?: string;
   maxTokens?: number;
+  temperature?: number;
 }
 
-export async function streamClaude(options: ClaudeStreamOptions) {
-  const { messages, systemPrompt, model = "claude-opus-4-6", maxTokens = 4096 } = options;
+/** Chunk no formato Anthropic — consumido pelo app/api/chat/route.ts */
+type AnthropicChunk =
+  | { type: "content_block_delta"; delta: { type: "text_delta"; text: string } }
+  | { type: "message_stop" };
 
-  const stream = await anthropic.messages.stream({
-    model,
-    max_tokens: maxTokens,
-    system: systemPrompt,
-    messages: messages.map((m) => ({
-      role: m.role === "system" ? "user" : m.role,
-      content: m.content,
-    })),
-  });
+/**
+ * Devolve um async iterable de chunks no formato Anthropic.
+ * Por trás, consome o stream do Gemini e re-emite no shape esperado.
+ */
+export async function streamClaude(options: ClaudeStreamOptions): Promise<AsyncIterable<AnthropicChunk>> {
+  const stream = await streamLLMRaw(options);
 
-  return stream;
+  async function* adapt(): AsyncIterable<AnthropicChunk> {
+    for await (const chunk of stream.stream) {
+      const text = chunk.text();
+      if (text) {
+        yield {
+          type: "content_block_delta",
+          delta: { type: "text_delta", text },
+        };
+      }
+    }
+    yield { type: "message_stop" };
+  }
+
+  return adapt();
 }
 
+/** Chamada síncrona retornando o texto completo. */
 export async function callClaude(options: ClaudeStreamOptions): Promise<string> {
-  const stream = await streamClaude(options);
-  const message = await stream.finalMessage();
-  const block = message.content[0];
-  return block.type === "text" ? block.text : "";
+  return callLLM(options);
 }
