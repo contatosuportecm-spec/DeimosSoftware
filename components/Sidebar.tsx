@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Eye, FileText, Sparkles, Package, Zap, Feather, BookOpen, UserCircle, Pencil, type LucideIcon,
+  Home, Eye, FileText, Sparkles, Package, Zap, BookOpen, Users, Pencil, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -26,11 +26,9 @@ const PRINCIPAL: NavItem[] = [
 ];
 
 const KNOWLEDGE: NavItem[] = [
-  { id: "vsl",         label: "VSL Studio",   icon: Pencil,     path: "/vsl-studio" },
-  { id: "copywriters", label: "Copywriters",  icon: Feather,    path: "/copywriters" },
-  { id: "library",     label: "Biblioteca",   icon: BookOpen,   path: "/library" },
-  { id: "avatar",      label: "Avatar Vivo",  icon: UserCircle, path: "/avatar" },
-  { id: "reverse",     label: "Reverse-Eng",  icon: Eye,        path: "/reverse-engineering" },
+  { id: "biblioteca", label: "Biblioteca",           icon: BookOpen, path: "/biblioteca" },
+  { id: "clientes",   label: "Clientes Artificiais", icon: Users,    path: "/clientes" },
+  { id: "vsl-studio", label: "VSL Studio",           icon: Pencil,   path: "/vsl-studio" },
 ];
 
 const W_OPEN = 176;   // 11rem = w-44

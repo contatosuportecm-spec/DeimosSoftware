@@ -1,0 +1,1 @@
+ALTER TABLE book_sessions ADD COLUMN IF NOT EXISTS pinned BOOLEAN DEFAULT false;
