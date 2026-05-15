@@ -246,9 +246,9 @@ function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: nu
           </div>
         )}
         <div className="mt-2 pt-2 border-t border-[rgba(255,180,100,0.06)]">
-          <Link href="/biblioteca" className="inline-flex items-center gap-1.5 text-[10px] font-medium text-gold/60 hover:text-gold transition-colors">
-            <LibraryIcon size={10} strokeWidth={1.5} />
-            Biblioteca
+          <Link href="/biblioteca" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-semibold text-nova bg-nova/8 border border-nova/15 hover:bg-nova/15 hover:border-nova/25 transition-all">
+            <LibraryIcon size={11} strokeWidth={1.5} />
+            Ver na Biblioteca
           </Link>
         </div>
       </div>
