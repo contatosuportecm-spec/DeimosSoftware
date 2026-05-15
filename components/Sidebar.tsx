@@ -84,20 +84,13 @@ export default function Sidebar() {
       onMouseLeave={() => ready && setExpanded(false)}
     >
       {/* Logo */}
-      <Link href="/dashboard" className="block px-3.5 pt-5 pb-4 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors">
-        <div className="flex items-center gap-2.5">
-          <EclipseMark />
-          <div className={cn("overflow-hidden whitespace-nowrap", expanded ? "opacity-100 w-auto" : "opacity-0 w-0")}
-            style={{ transition: "opacity 0.2s ease, width 0.3s ease" }}
-          >
-            <span className="font-sans font-semibold text-[11px] tracking-[0.28em] text-nova uppercase leading-none block">
-              DEIMOS
-            </span>
-            <span className="text-[8px] tracking-[0.22em] text-text-muted uppercase leading-none block mt-0.5">
-              Intelligence
-            </span>
-          </div>
-        </div>
+      <Link href="/dashboard" className="flex items-center justify-center px-3.5 pt-4 pb-3 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors">
+        <img
+          src="/logo.png"
+          alt="Deimos"
+          className="flex-shrink-0"
+          style={{ width: expanded ? 100 : 28, height: "auto", transition: "width 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
+        />
       </Link>
 
       {/* Nav */}
