@@ -15,8 +15,9 @@ import { tierColor } from "@/lib/spy-utils";
 import MiniChart from "@/components/spy/MiniChart";
 import {
   Image, Video, Mic, ArrowRight, Download, X,
-  ChevronLeft, ChevronRight, Zap, Sparkles, Eye,
-  Flame, FileText, ShoppingCart, TrendingUp,
+  ChevronLeft, ChevronRight, Cpu, Library as LibraryIcon, Radar,
+  CircleDot, Briefcase, BarChart2,
+  Fingerprint,
 } from "lucide-react";
 
 function formatChartDate(dateStr: string): string {
@@ -64,28 +65,27 @@ export default function DashboardPage() {
       <div className="p-8 space-y-7">
 
           {/* ── Header ── */}
-          <div className="flex items-start justify-between">
+          <div className="flex items-start justify-between animate-fade-in-up">
             <div>
               <h1 className="text-[22px] font-light text-white leading-tight tracking-tight">
                 Bem-vindo,{" "}
-                <span className="italic text-[#FF6B00] font-light">Caio.</span>
+                <span className="italic text-nova font-light">Caio.</span>
               </h1>
-              <p className="text-[13px] text-[#9B9BA5] mt-1.5">
+              <p className="text-[13px] text-text-secondary mt-1.5">
                 Veja o desempenho geral do seu monitoramento.
               </p>
             </div>
-            <div className="flex items-center gap-2 px-3.5 py-2 rounded-lg border border-white/[0.06] bg-[#0F0F11] text-[12px] text-[#9B9BA5]">
-              <span className="text-[#6B6B76]">📅</span>
+            <div className="flex items-center gap-2 px-3.5 py-2 rounded-xl border border-white/[0.06] bg-bg-3 text-[12px] text-text-secondary">
               {today}
             </div>
           </div>
 
           {/* ── Stats ── */}
-          <div className="grid grid-cols-4 gap-4">
-            <StatCard icon={<Eye size={20} strokeWidth={1.5} />} value={String(totalOffers)} label="Ofertas monitoradas" color="#FF6B00" />
-            <StatCard icon={<TrendingUp size={20} strokeWidth={1.5} />} value={formatNumber(totalAds)} label="Anuncios ativos" color="#4ADE80" />
-            <StatCard icon={<FileText size={20} strokeWidth={1.5} />} value={String(totalBriefings)} label="Briefings criados" color="#60A5FA" />
-            <StatCard icon={<Sparkles size={20} strokeWidth={1.5} />} value={String(activeBriefingsCount)} label="Ofertas ativas" color="#C084FC" />
+          <div className="grid grid-cols-4 gap-4 animate-fade-in-up stagger-1">
+            <StatCard icon={<Radar size={20} strokeWidth={1.5} />} value={String(totalOffers)} label="Ofertas monitoradas" color="#FF8A1F" />
+            <StatCard icon={<BarChart2 size={20} strokeWidth={1.5} />} value={formatNumber(totalAds)} label="Anuncios ativos" color="#34D399" />
+            <StatCard icon={<Briefcase size={20} strokeWidth={1.5} />} value={String(totalBriefings)} label="Briefings criados" color="#F4C430" />
+            <StatCard icon={<CircleDot size={20} strokeWidth={1.5} />} value={String(activeBriefingsCount)} label="Ofertas ativas" color="#34D399" />
           </div>
 
           {/* ── Spy em Alta ── */}
@@ -93,13 +93,13 @@ export default function DashboardPage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <Eye size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
+                  <Radar size={16} strokeWidth={1.5} className="text-nova" />
                   <div>
                     <h2 className="text-[15px] font-bold text-white">Spy em alta</h2>
-                    <p className="text-[12px] text-[#9B9BA5] mt-0.5">Ofertas com mais anuncios ativos hoje</p>
+                    <p className="text-[12px] text-text-secondary mt-0.5">Ofertas com mais anuncios ativos hoje</p>
                   </div>
                 </div>
-                <Link href="/spy" className="flex items-center gap-1.5 text-[12px] font-semibold text-[#FF6B00] hover:text-[#FF7A1A] transition-colors">
+                <Link href="/spy" className="flex items-center gap-1.5 text-[12px] font-semibold text-nova hover:text-nova/80 transition-colors">
                   Ver todas no Spy
                   <ArrowRight size={13} strokeWidth={2} />
                 </Link>
@@ -118,13 +118,13 @@ export default function DashboardPage() {
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <FileText size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
+                  <Briefcase size={16} strokeWidth={1.5} className="text-nova" />
                   <div>
                     <h2 className="text-[15px] font-bold text-white">Suas ofertas ativas</h2>
-                    <p className="text-[12px] text-[#9B9BA5] mt-0.5">Acompanhe o desempenho das suas ofertas</p>
+                    <p className="text-[12px] text-text-secondary mt-0.5">Acompanhe o desempenho das suas ofertas</p>
                   </div>
                 </div>
-                <Link href="/offer-briefings" className="flex items-center gap-1.5 text-[12px] font-semibold text-[#FF6B00] hover:text-[#FF7A1A] transition-colors">
+                <Link href="/offer-briefings" className="flex items-center gap-1.5 text-[12px] font-semibold text-nova hover:text-nova/80 transition-colors">
                   Ver todas as ofertas
                   <ArrowRight size={13} strokeWidth={2} />
                 </Link>
@@ -138,6 +138,49 @@ export default function DashboardPage() {
             </section>
           )}
 
+          {/* ── Knowledge System ── */}
+          <section className="space-y-4 animate-fade-in-up stagger-4">
+            <div className="flex items-center gap-2.5">
+              <LibraryIcon size={16} strokeWidth={1.5} className="text-gold" />
+              <div>
+                <h2 className="text-[15px] font-bold text-white">Knowledge System</h2>
+                <p className="text-[12px] text-text-secondary mt-0.5">Pesquise, converse com documentos e simule clientes</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Biblioteca */}
+              <Link
+                href="/biblioteca"
+                className="flex items-center gap-4 px-5 py-5 rounded-2xl bg-bg-3 border border-white/[0.06] hover:border-gold/15 transition-all group"
+              >
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-gold/10 border border-gold/15">
+                  <LibraryIcon size={20} strokeWidth={1.5} className="text-gold" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[14px] font-bold text-white">Biblioteca</p>
+                  <p className="text-[11px] text-text-secondary mt-0.5">Converse com seus documentos, PDFs e videos. Use vozes de copywriters lendarios.</p>
+                </div>
+                <ArrowRight size={14} strokeWidth={1.5} className="text-[#6B6B76] group-hover:text-gold transition-colors flex-shrink-0" />
+              </Link>
+
+              {/* Clientes Artificiais */}
+              <Link
+                href="/clientes"
+                className="flex items-center gap-4 px-5 py-5 rounded-2xl bg-bg-3 border border-white/[0.06] hover:border-gold/15 transition-all group"
+              >
+                <div className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 bg-gold/10 border border-gold/15">
+                  <Fingerprint size={20} strokeWidth={1.5} className="text-gold" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[14px] font-bold text-white">Clientes Artificiais</p>
+                  <p className="text-[11px] text-text-secondary mt-0.5">Simule seu publico-alvo com IA e teste copy antes de gastar com trafego.</p>
+                </div>
+                <ArrowRight size={14} strokeWidth={1.5} className="text-[#6B6B76] group-hover:text-gold transition-colors flex-shrink-0" />
+              </Link>
+            </div>
+          </section>
+
           {/* ── AI Studio Section ── */}
           <AIStudioSection generations={generations} loading={histLoading} />
       </div>
@@ -149,24 +192,19 @@ export default function DashboardPage() {
 
 function StatCard({ icon, value, label, color }: { icon: React.ReactNode; value: string; label: string; color: string }) {
   return (
-    <div className="flex items-center gap-4 px-5 py-5 rounded-xl bg-[#0F0F11]"
-      style={{ border: "1px solid rgba(255,255,255,0.06)" }}
-    >
-      <div
-        className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 border"
-        style={{
-          backgroundColor: `${color}15`,
-          borderColor: `${color}22`,
-          boxShadow: `0 0 20px ${color}18, inset 0 0 12px ${color}08`,
-          color,
-          filter: `drop-shadow(0 0 4px ${color}50)`,
-        }}
-      >
-        {icon}
-      </div>
-      <div>
-        <p className="text-[24px] font-mono font-bold text-white leading-none">{value}</p>
-        <p className="text-[11px] text-[#9B9BA5] mt-1.5">{label}</p>
+    <div className="group rounded-2xl overflow-hidden bg-bg-3 border border-transparent hover:border-[rgba(255,180,100,0.10)] transition-all" style={{ padding: "4px" }}>
+      <div className="rounded-xl px-4 py-4 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${color}10, transparent 70%)` }}>
+        {/* Subtle shine on hover */}
+        <div className="absolute w-[150%] h-[1px] top-0 left-[-100%] bg-white/15 rotate-[50deg] blur-[3px] group-hover:left-[70%] group-hover:top-[100%] transition-all duration-1000" />
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style={{ backgroundColor: `${color}15`, color }}>
+            {icon}
+          </div>
+          <div>
+            <p className="text-[20px] font-mono font-bold text-white leading-none">{value}</p>
+            <p className="text-[9px] text-text-muted mt-1 uppercase tracking-wider">{label}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -177,8 +215,6 @@ function StatCard({ icon, value, label, color }: { icon: React.ReactNode; value:
 function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: number }) {
   const snaps = offer.snapshots;
   const todayCount = snaps.length > 0 ? snaps[snaps.length - 1].active_ads_count : 0;
-  const yesterdayCount = snaps.length > 1 ? snaps[snaps.length - 2].active_ads_count : 0;
-  const delta = yesterdayCount > 0 ? Math.round(((todayCount - yesterdayCount) / yesterdayCount) * 100) : null;
   const color = tierColor(todayCount);
 
   const chartData = snaps.map((s) => ({
@@ -187,55 +223,28 @@ function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: nu
   }));
 
   return (
-    <div className="rounded-xl p-5 bg-[#0F0F11]" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-      <div className="flex items-start gap-4">
-        {/* Left: rank + info + count */}
-        <div className="flex-shrink-0 space-y-4 min-w-[140px]">
-          <div className="flex items-center gap-3">
-            <span className="w-7 h-7 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-[11px] font-mono font-bold text-[#9B9BA5]">
-              {rank}
-            </span>
-            <div className="min-w-0">
-              <p className="text-[14px] font-bold text-white truncate">{offer.name}</p>
-              <p className="text-[11px] text-[#9B9BA5] capitalize mt-0.5">{offer.niche}</p>
-            </div>
-          </div>
-
+    <div className="rounded-2xl overflow-hidden bg-bg-3 border border-transparent hover:border-[rgba(255,180,100,0.12)] transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]" style={{ padding: "4px" }}>
+      {/* Colored top section */}
+      <div className="rounded-xl px-4 py-4 relative" style={{ background: `linear-gradient(135deg, ${color}18, ${color}08)` }}>
+        <div className="flex items-center justify-between">
           <div>
-            <p className="text-[9px] uppercase tracking-[0.15em] text-[#7C7C87] font-semibold">Anuncios ativos</p>
-            <p className="text-[36px] font-mono font-bold leading-none mt-1" style={{ color }}>
-              {formatNumber(todayCount)}
-            </p>
-            {delta !== null && (
-              <p className="text-[11px] font-mono mt-1.5" style={{ color: delta >= 0 ? "#4ADE80" : "#F87171" }}>
-                {delta >= 0 ? "+" : ""}{delta}% vs ontem
-              </p>
-            )}
+            <p className="text-[14px] font-semibold text-white truncate">{offer.name}</p>
+            <p className="text-[10px] capitalize mt-0.5" style={{ color: `${color}aa` }}>{offer.niche}</p>
           </div>
-
-          <Link
-            href="/spy"
-            className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-lg transition-colors"
-            style={{ color, backgroundColor: `${color}12`, border: `1px solid ${color}20` }}
-          >
-            Ver no Spy
-            <ArrowRight size={11} strokeWidth={2} />
-          </Link>
-        </div>
-
-        {/* Right: chart */}
-        <div className="flex-1 min-w-0 flex flex-col">
-          <p className="text-[9px] uppercase tracking-[0.15em] text-[#7C7C87] font-semibold mb-2">
-            Variacao — Ultimos {snaps.length} dias
+          <p className="text-[26px] font-mono font-bold leading-none" style={{ color }}>
+            {formatNumber(todayCount)}
           </p>
-          {chartData.length >= 2 ? (
-            <MiniChart data={chartData} color={color} valueFontSize={10} labelFontSize={7.5} dotRadius={4.5} />
-          ) : (
-            <div className="h-20 flex items-center justify-center border border-dashed border-white/[0.06] rounded-lg">
-              <span className="text-[11px] text-[#7C7C87]">Aguardando dados...</span>
-            </div>
-          )}
         </div>
+      </div>
+      {/* Chart */}
+      <div className="px-3 py-3">
+        {chartData.length >= 2 ? (
+          <MiniChart data={chartData} color={color} valueFontSize={9} labelFontSize={7} dotRadius={3.5} />
+        ) : (
+          <div className="h-12 flex items-center justify-center">
+            <span className="text-[10px] text-text-muted">Aguardando dados</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -249,67 +258,54 @@ function BriefingMiniCard({ briefing }: { briefing: OfferBriefing }) {
   const sales = briefing.sales_count ?? 0;
 
   const NICHE_COLORS: Record<string, string> = {
-    emagrecimento: "#FF6B6B", "Emagrecimento": "#FF6B6B",
-    "saude-masculina": "#60A5FA", "Saúde & Bem-estar": "#4ADE80",
-    "renda-extra": "#34D399", "Renda Extra": "#34D399",
-    beleza: "#C084FC", "Beleza & Estética": "#C084FC",
-    relacionamento: "#F472B6",
+    emagrecimento: "#FF8A1F", "Emagrecimento": "#FF8A1F",
+    "saude-masculina": "#34D399", "Saúde & Bem-estar": "#34D399",
+    "renda-extra": "#F4C430", "Renda Extra": "#F4C430",
+    beleza: "#FF8A1F", "Beleza & Estética": "#FF8A1F",
+    relacionamento: "#F4C430",
   };
   const nicheColor = NICHE_COLORS[briefing.niche] ?? "#FF8A1F";
 
   return (
     <div
-      className="rounded-xl p-4 cursor-pointer bg-[#0F0F11]"
-      style={{
-        border: "1px solid rgba(255,255,255,0.06)",
-        transition: "border-color 0.25s ease, background 0.25s ease",
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; e.currentTarget.style.background = "#121214"; }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; e.currentTarget.style.background = "#0F0F11"; }}
+      className="group rounded-2xl overflow-hidden cursor-pointer bg-bg-3 border border-transparent hover:border-[rgba(255,180,100,0.12)] transition-all hover:translate-y-[-2px] hover:shadow-[0_8px_30px_rgba(0,0,0,0.2)]"
+      style={{ padding: "4px" }}
       onClick={() => router.push(`/offer-briefings/${briefing.id}`)}
     >
-      {/* Top: icon + name + status */}
-      <div className="flex items-center gap-3 mb-3">
-        <div
-          className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
-          style={{ backgroundColor: `${nicheColor}15`, boxShadow: `0 0 16px ${nicheColor}15` }}
-        >
-          <Flame size={16} strokeWidth={1.8} style={{ color: nicheColor, filter: `drop-shadow(0 0 3px ${nicheColor}60)` }} />
-        </div>
-        <div className="flex-1 min-w-0">
-          <p className="text-[13px] font-bold text-white truncate">{briefing.offer_name}</p>
-          <p className="text-[11px] text-[#9B9BA5] mt-0.5">{briefing.niche}</p>
-        </div>
-        <span className="flex items-center gap-1 text-[9px] font-semibold text-[#4ADE80] px-2 py-0.5 rounded-full bg-[#4ADE80]/8 border border-[#4ADE80]/20 flex-shrink-0">
-          <span className="w-1 h-1 rounded-full bg-[#4ADE80]" style={{ boxShadow: "0 0 4px #4ADE80" }} />
-          Ativa
-        </span>
-      </div>
-
-      {/* Metrics */}
-      <div className="grid grid-cols-3 gap-2 mb-3">
-        <div>
-          <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Ticket</p>
-          <p className="text-[14px] font-mono font-bold text-white mt-0.5">
-            R$ {ticket.toFixed(2).replace(".", ",")}
-          </p>
-        </div>
-        <div>
-          <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Vendas</p>
-          <p className="text-[14px] font-mono font-bold text-white mt-0.5">{sales}</p>
-        </div>
-        <div>
-          <p className="text-[9px] uppercase tracking-[0.1em] text-[#7C7C87] font-semibold">Conversao</p>
-          <p className="text-[14px] font-mono font-bold text-white mt-0.5">{sales > 0 ? "2,45%" : "—"}</p>
+      {/* Colored header band */}
+      <div className="rounded-xl px-4 py-3.5 relative overflow-hidden" style={{ background: `linear-gradient(135deg, ${nicheColor}20, ${nicheColor}08)` }}>
+        {/* Shine effect */}
+        <div className="absolute w-[150%] h-[2px] top-0 left-[-100%] bg-white/20 rotate-[50deg] blur-[4px] group-hover:left-[70%] group-hover:top-[100%] transition-all duration-1000" />
+        <div className="flex items-center justify-between">
+          <div className="min-w-0 flex-1">
+            <p className="text-[13px] font-semibold text-white truncate">{briefing.offer_name}</p>
+            <p className="text-[10px] mt-0.5" style={{ color: `${nicheColor}99` }}>{briefing.niche}</p>
+          </div>
+          <span className="flex items-center gap-1 text-[8px] font-semibold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-400/10 border border-emerald-400/20 shrink-0">
+            <span className="w-1 h-1 rounded-full bg-emerald-400" />
+            Ativa
+          </span>
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="flex items-center justify-end">
-        <span className="flex items-center gap-1.5 text-[11px] font-semibold text-[#7C7C87] hover:text-[#FF6B00] transition-colors">
-          Ver detalhes
-          <ArrowRight size={12} strokeWidth={2} />
-        </span>
+      {/* Body */}
+      <div className="px-4 py-3">
+        <div className="grid grid-cols-3 gap-2">
+          <div>
+            <p className="text-[8px] uppercase tracking-wider text-text-muted">Ticket</p>
+            <p className="text-[13px] font-mono font-bold text-white mt-0.5">
+              R$ {ticket.toFixed(0)}
+            </p>
+          </div>
+          <div className="border-l border-r" style={{ borderColor: "rgba(255,180,100,0.06)" }}>
+            <p className="text-[8px] uppercase tracking-wider text-text-muted pl-2">Vendas</p>
+            <p className="text-[13px] font-mono font-bold text-white mt-0.5 pl-2">{sales}</p>
+          </div>
+          <div>
+            <p className="text-[8px] uppercase tracking-wider text-text-muted pl-2">Conv.</p>
+            <p className="text-[13px] font-mono font-bold text-white mt-0.5 pl-2">{sales > 0 ? "2,4%" : "—"}</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -408,13 +404,13 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
     <section className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <Zap size={16} strokeWidth={1.5} className="text-[#FF6B00]" />
+          <Cpu size={16} strokeWidth={1.5} className="text-nova" />
           <div>
             <h2 className="text-[15px] font-bold text-white">AI Studio</h2>
-            <p className="text-[12px] text-[#9B9BA5] mt-0.5">Geracao de conteudo com IA</p>
+            <p className="text-[12px] text-text-secondary mt-0.5">Geracao de conteudo com IA</p>
           </div>
         </div>
-        <Link href="/forge" className="flex items-center gap-1.5 text-[12px] font-semibold text-[#FF6B00] hover:text-[#FF7A1A] transition-colors">
+        <Link href="/forge" className="flex items-center gap-1.5 text-[12px] font-semibold text-nova hover:text-nova/80 transition-colors">
           Ver tudo
           <ArrowRight size={13} strokeWidth={2} />
         </Link>
@@ -428,16 +424,10 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
             <button
               key={s.label}
               onClick={() => router.push(s.path)}
-              className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#0F0F11] hover:bg-[#121214] transition-all group"
-              style={{ border: "1px solid rgba(255,255,255,0.06)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
+              className="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-bg-3 border border-white/[0.06] hover:border-white/[0.12] transition-all group"
             >
-              <Icon size={15} strokeWidth={1.5} className="text-[#7C7C87] group-hover:text-[#FF6B00] transition-colors" />
-              <div className="text-left">
-                <p className="text-[11px] font-semibold text-white leading-tight">{s.label}</p>
-                <p className="text-[9px] text-[#7C7C87] font-mono mt-0.5">{s.sub}</p>
-              </div>
+              <Icon size={14} strokeWidth={1.5} className="text-text-muted group-hover:text-nova transition-colors" />
+              <p className="text-[11px] font-medium text-text-secondary group-hover:text-white transition-colors">{s.label}</p>
             </button>
           );
         })}
@@ -446,22 +436,22 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
       {/* Carousel */}
       {loading ? (
         <div className="flex items-center justify-center py-8">
-          <div className="w-4 h-4 border-2 border-[#FF6B00]/20 border-t-[#FF6B00] rounded-full animate-spin" />
+          <div className="w-4 h-4 border-2 border-nova/20 border-t-nova rounded-full animate-spin" />
         </div>
       ) : completed.length === 0 ? (
-        <div className="rounded-xl bg-[#0F0F11] flex items-center justify-center py-10 gap-3" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-          <Sparkles size={16} strokeWidth={1.5} className="text-[#7C7C87]" />
-          <p className="text-[11px] text-[#7C7C87]">Nenhuma geracao ainda — escolha um studio acima</p>
+        <div className="rounded-xl bg-bg-3 flex items-center justify-center py-10 gap-3" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px" }}>
+          <Cpu size={16} strokeWidth={1.5} className="text-text-muted" />
+          <p className="text-[11px] text-text-muted">Nenhuma geracao ainda — escolha um studio acima</p>
         </div>
       ) : (
         <div className="relative group/carousel">
           {completed.length > 4 && (
             <>
-              <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full bg-[#0F0F11] border border-white/[0.06] shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-[#1A1A1D]">
-                <ChevronLeft size={14} strokeWidth={1.5} className="text-[#9B9BA5]" />
+              <button onClick={() => scroll("left")} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 z-10 w-8 h-8 rounded-full bg-bg-3 border border-white/[0.06] shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-bg-4">
+                <ChevronLeft size={14} strokeWidth={1.5} className="text-text-secondary" />
               </button>
-              <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full bg-[#0F0F11] border border-white/[0.06] shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-[#1A1A1D]">
-                <ChevronRight size={14} strokeWidth={1.5} className="text-[#9B9BA5]" />
+              <button onClick={() => scroll("right")} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full bg-bg-3 border border-white/[0.06] shadow-lg flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity hover:bg-bg-4">
+                <ChevronRight size={14} strokeWidth={1.5} className="text-text-secondary" />
               </button>
             </>
           )}
@@ -471,7 +461,7 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
               const isVideo = gen.category === "video" || gen.category === "lipsync";
               const CatIcon = gen.category === "image" ? Image : gen.category === "video" ? Video : Mic;
               return (
-                <button key={gen.id} onClick={() => setLightboxGen(gen)} className="flex-shrink-0 w-[200px] rounded-xl overflow-hidden bg-[#0F0F11] hover:bg-[#121214] transition-all group snap-start" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
+                <button key={gen.id} onClick={() => setLightboxGen(gen)} className="flex-shrink-0 w-[200px] rounded-xl overflow-hidden bg-bg-3 hover:bg-bg-3/80 transition-all group snap-start" style={{ border: "1px solid rgba(255,255,255,0.06)", borderRadius: "16px" }}>
                   <div className="relative aspect-[4/3] bg-black/40 overflow-hidden">
                     {isVideo ? (
                       <video src={gen.result_url!} muted playsInline className="w-full h-full object-cover" onMouseEnter={(e) => e.currentTarget.play()} onMouseLeave={(e) => { e.currentTarget.pause(); e.currentTarget.currentTime = 0; }} />
@@ -494,7 +484,7 @@ function AIStudioSection({ generations, loading }: { generations: ForgeGeneratio
                   </div>
                   <div className="px-3 py-2 text-left">
                     <p className="text-[10px] text-white truncate leading-tight">{gen.prompt || "Sem prompt"}</p>
-                    <p className="text-[9px] font-mono text-[#7C7C87] mt-0.5 truncate">{gen.model_id}</p>
+                    <p className="text-[9px] font-mono text-text-muted mt-0.5 truncate">{gen.model_id}</p>
                   </div>
                 </button>
               );

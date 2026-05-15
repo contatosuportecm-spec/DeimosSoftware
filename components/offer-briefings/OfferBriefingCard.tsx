@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, TrendingUp, Flame, Leaf, Brain, Heart, DollarSign, Sparkles } from "lucide-react";
+import { ArrowRight, TrendingUp, Circle, DollarSign } from "lucide-react";
 import { OfferBriefing } from "@/types";
 import { formatDate } from "@/lib/utils";
 
@@ -17,19 +17,19 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 };
 
 const NICHE_CONFIG: Record<string, { icon: React.ElementType; color: string; bg: string; glow: string }> = {
-  emagrecimento:        { icon: Flame,      color: "#FF6B6B", bg: "rgba(255,107,107,0.15)", glow: "0 0 20px rgba(255,107,107,0.20), inset 0 0 12px rgba(255,107,107,0.08)" },
-  "Emagrecimento":      { icon: Flame,      color: "#FF6B6B", bg: "rgba(255,107,107,0.15)", glow: "0 0 20px rgba(255,107,107,0.20), inset 0 0 12px rgba(255,107,107,0.08)" },
-  "saude-masculina":    { icon: Heart,      color: "#60A5FA", bg: "rgba(96,165,250,0.15)",  glow: "0 0 20px rgba(96,165,250,0.20), inset 0 0 12px rgba(96,165,250,0.08)" },
-  "Saúde & Bem-estar":  { icon: Leaf,       color: "#4ADE80", bg: "rgba(74,222,128,0.15)",  glow: "0 0 20px rgba(74,222,128,0.20), inset 0 0 12px rgba(74,222,128,0.08)" },
-  "renda-extra":        { icon: DollarSign, color: "#34D399", bg: "rgba(52,211,153,0.15)",  glow: "0 0 20px rgba(52,211,153,0.20), inset 0 0 12px rgba(52,211,153,0.08)" },
-  "Renda Extra":        { icon: DollarSign, color: "#34D399", bg: "rgba(52,211,153,0.15)",  glow: "0 0 20px rgba(52,211,153,0.20), inset 0 0 12px rgba(52,211,153,0.08)" },
-  beleza:               { icon: Sparkles,   color: "#C084FC", bg: "rgba(192,132,252,0.15)", glow: "0 0 20px rgba(192,132,252,0.20), inset 0 0 12px rgba(192,132,252,0.08)" },
-  "Beleza & Estética":  { icon: Sparkles,   color: "#C084FC", bg: "rgba(192,132,252,0.15)", glow: "0 0 20px rgba(192,132,252,0.20), inset 0 0 12px rgba(192,132,252,0.08)" },
-  relacionamento:       { icon: Heart,      color: "#F472B6", bg: "rgba(244,114,182,0.15)", glow: "0 0 20px rgba(244,114,182,0.20), inset 0 0 12px rgba(244,114,182,0.08)" },
-  "Desenvolvimento Pessoal": { icon: Brain, color: "#FBBF24", bg: "rgba(251,191,36,0.15)",  glow: "0 0 20px rgba(251,191,36,0.20), inset 0 0 12px rgba(251,191,36,0.08)" },
+  emagrecimento:              { icon: Circle, color: "#FF8A1F", bg: "rgba(255,138,31,0.12)", glow: "none" },
+  "Emagrecimento":            { icon: Circle, color: "#FF8A1F", bg: "rgba(255,138,31,0.12)", glow: "none" },
+  "saude-masculina":          { icon: Circle, color: "#34D399", bg: "rgba(52,211,153,0.12)", glow: "none" },
+  "Saúde & Bem-estar":        { icon: Circle, color: "#34D399", bg: "rgba(52,211,153,0.12)", glow: "none" },
+  "renda-extra":              { icon: Circle, color: "#F4C430", bg: "rgba(244,196,48,0.12)", glow: "none" },
+  "Renda Extra":              { icon: Circle, color: "#F4C430", bg: "rgba(244,196,48,0.12)", glow: "none" },
+  beleza:                     { icon: Circle, color: "#FF8A1F", bg: "rgba(255,138,31,0.12)", glow: "none" },
+  "Beleza & Estética":        { icon: Circle, color: "#FF8A1F", bg: "rgba(255,138,31,0.12)", glow: "none" },
+  relacionamento:             { icon: Circle, color: "#F4C430", bg: "rgba(244,196,48,0.12)", glow: "none" },
+  "Desenvolvimento Pessoal":  { icon: Circle, color: "#34D399", bg: "rgba(52,211,153,0.12)", glow: "none" },
 };
 
-const DEFAULT_NICHE = { icon: Flame, color: "#FF8A1F", bg: "rgba(255,138,31,0.15)", glow: "0 0 20px rgba(255,138,31,0.20), inset 0 0 12px rgba(255,138,31,0.08)" };
+const DEFAULT_NICHE = { icon: Circle, color: "#FF8A1F", bg: "rgba(255,138,31,0.12)", glow: "none" };
 
 export default function OfferBriefingCard({ briefing, onView }: OfferBriefingCardProps) {
   const status = STATUS_CONFIG[briefing.status] ?? STATUS_CONFIG.draft;

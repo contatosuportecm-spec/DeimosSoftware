@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import { getRelevantChunks } from "@/lib/chunks";
 import { createSSEStream, SSE_HEADERS } from "@/lib/stream";
+import { COPYWRITERS } from "@/lib/copywriters";
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
@@ -19,6 +20,8 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const sessionId = body.sessionId as string;
     const message = body.message as string;
+    const offerIds: string[] = body.offer_ids || [];
+    const copywriterId: string | undefined = body.copywriter_id;
     // Support both single bookId and array bookIds
     const bookIds: string[] = body.bookIds
       || (body.bookId ? [body.bookId] : []);
@@ -27,6 +30,18 @@ export async function POST(req: NextRequest) {
     if (!sessionId) return NextResponse.json({ error: "sessionId obrigatorio" }, { status: 400 });
 
     const supabase = createServerClient();
+
+    // Fetch referenced offers
+    let offerCtx = "";
+    if (offerIds.length > 0) {
+      const { data: pOffers } = await supabase.from("persona_offers").select("title, content").in("id", offerIds);
+      const { data: briefings } = await supabase.from("offer_briefings").select("offer_name, niche, promise, main_headline, target_audience, main_pains, main_desires, new_mechanism, product_name, price, guarantee, main_cta").in("id", offerIds);
+      const parts: string[] = [];
+      if (pOffers) parts.push(...pOffers.map((o) => `[${o.title}]\n${o.content}`));
+      if (briefings) parts.push(...briefings.map((b) => [`[OFERTA: ${b.offer_name}]`, b.main_headline && `Headline: ${b.main_headline}`, b.promise && `Promessa: ${b.promise}`, b.new_mechanism && `Mecanismo: ${b.new_mechanism}`, b.target_audience && `Publico: ${b.target_audience}`, b.main_pains?.length && `Dores: ${b.main_pains.join(", ")}`, b.main_desires?.length && `Desejos: ${b.main_desires.join(", ")}`, b.product_name && `Produto: ${b.product_name}`, b.price && `Preco: R$${b.price}`, b.guarantee && `Garantia: ${b.guarantee}`, b.main_cta && `CTA: ${b.main_cta}`].filter(Boolean).join("\n")));
+      if (parts.length > 0) offerCtx = `\n\n--- CONTEXTO DA OFERTA REFERENCIADA ---\n${parts.join("\n\n")}\n---`;
+    }
+
     let systemPrompt: string;
 
     if (bookIds.length > 0) {
@@ -116,6 +131,16 @@ ${documentContext}
 O usuario esta na BIBLIOTECA — modulo para conversar com documentos (PDFs e videos YouTube).
 Nenhum documento selecionado. Sugira selecionar documentos no seletor abaixo do chat.
 Responda em portugues brasileiro.`;
+    }
+
+    if (offerCtx) systemPrompt += offerCtx;
+
+    // Inject copywriter voice if selected
+    if (copywriterId) {
+      const cw = COPYWRITERS.find((c) => c.id === copywriterId);
+      if (cw) {
+        systemPrompt += `\n\n--- VOZ DO COPYWRITER ---\n${cw.systemPrompt}\n\nAplique o estilo e principios deste copywriter nas suas respostas. Escreva como ele escreveria. Responda em portugues.\n---`;
+      }
     }
 
     // Conversation history

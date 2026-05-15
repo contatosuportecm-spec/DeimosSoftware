@@ -4,8 +4,8 @@ import { createSSEStream, SSE_HEADERS } from "@/lib/stream";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
-function buildConversationPrompt(persona: Record<string, unknown>): string {
-  return `Voce esta interpretando ${persona.name}, uma pessoa REAL. JAMAIS quebre o personagem. JAMAIS diga que e uma IA.
+function buildConversationPrompt(persona: Record<string, unknown>, offerCtx?: string): string {
+  let prompt = `Voce esta interpretando ${persona.name}, uma pessoa REAL. JAMAIS quebre o personagem. JAMAIS diga que e uma IA.
 
 PERFIL:
 - Nome: ${persona.name}
@@ -21,10 +21,21 @@ COMPORTAMENTO: ${persona.behavior || ""}
 ESTADO EMOCIONAL: ${persona.emotional_state || ""}
 
 Responda SEMPRE em primeira pessoa como ${persona.name}. Use o vocabulario listado. Mostre emocoes reais. Discorde quando apropriado.`;
+
+  if (offerCtx) {
+    prompt += `\n\n--- CONTEXTO DA OFERTA ---\nA pessoa que esta falando com voce quer discutir sobre a seguinte oferta/copy. Voce deve reagir como ${persona.name} reagiria ao ver ou ouvir sobre isso:\n\n${offerCtx}\n---`;
+  }
+  return prompt;
 }
 
-function buildTestPrompt(persona: Record<string, unknown>): string {
-  return `Voce e ${persona.name}, uma pessoa REAL com o perfil descrito abaixo. Alguem vai te mostrar uma copy, oferta, headline ou material de marketing.
+function buildTestPrompt(persona: Record<string, unknown>, offerCtx?: string): string {
+  let intro = `Voce e ${persona.name}, uma pessoa REAL com o perfil descrito abaixo. Alguem vai te mostrar uma copy, oferta, headline ou material de marketing.`;
+
+  if (offerCtx) {
+    intro += `\n\nCONTEXTO DA OFERTA SENDO TESTADA:\n${offerCtx}\n\nAnalise TUDO acima (oferta + a mensagem do usuario) como ${persona.name} faria.`;
+  }
+
+  return `${intro}
 
 PERFIL:
 - Nome: ${persona.name}
@@ -58,14 +69,58 @@ IMPORTANTE: Responda APENAS o JSON. Sem texto antes ou depois. Sem markdown.`;
 
 export async function POST(req: NextRequest, { params }: { params: { personaId: string; sessionId: string } }) {
   try {
-    const { message, mode = "chat" } = (await req.json()) as { message: string; mode?: "test" | "chat" };
+    const { message, mode = "chat", offer_ids } = (await req.json()) as {
+      message: string;
+      mode?: "test" | "chat";
+      offer_ids?: string[];
+    };
     if (!message?.trim()) return NextResponse.json({ error: "Mensagem vazia" }, { status: 400 });
     const supabase = createServerClient();
 
     const { data: persona } = await supabase.from("client_personas").select("*").eq("id", params.personaId).single();
     if (!persona) return NextResponse.json({ error: "Persona nao encontrada" }, { status: 404 });
 
-    const systemPrompt = mode === "test" ? buildTestPrompt(persona) : buildConversationPrompt(persona);
+    // Fetch referenced offers from both tables
+    let offerCtx: string | undefined;
+    if (offer_ids && offer_ids.length > 0) {
+      const parts: string[] = [];
+
+      // Check persona_offers
+      const { data: pOffers } = await supabase.from("persona_offers").select("title, content").in("id", offer_ids);
+      if (pOffers) parts.push(...pOffers.map((o) => `[${o.title}]\n${o.content}`));
+
+      // Check offer_briefings for remaining IDs
+      const foundIds = new Set(pOffers?.map((o) => o.title) || []);
+      const remainingIds = offer_ids.filter((id) => !pOffers?.some((o) => o.title === id && false));
+      if (remainingIds.length > 0) {
+        const { data: briefings } = await supabase.from("offer_briefings").select("offer_name, niche, promise, main_headline, target_audience, main_pains, main_desires, new_mechanism, product_name, price, guarantee, main_cta").in("id", offer_ids);
+        if (briefings) {
+          parts.push(...briefings.map((b) => {
+            const lines = [
+              `[OFERTA: ${b.offer_name}]`,
+              b.niche && `Nicho: ${b.niche}`,
+              b.main_headline && `Headline: ${b.main_headline}`,
+              b.promise && `Promessa: ${b.promise}`,
+              b.new_mechanism && `Mecanismo: ${b.new_mechanism}`,
+              b.target_audience && `Publico: ${b.target_audience}`,
+              b.main_pains?.length && `Dores: ${b.main_pains.join(", ")}`,
+              b.main_desires?.length && `Desejos: ${b.main_desires.join(", ")}`,
+              b.product_name && `Produto: ${b.product_name}`,
+              b.price && `Preco: R$${b.price}`,
+              b.guarantee && `Garantia: ${b.guarantee}`,
+              b.main_cta && `CTA: ${b.main_cta}`,
+            ].filter(Boolean).join("\n");
+            return lines;
+          }));
+        }
+      }
+
+      if (parts.length > 0) offerCtx = parts.join("\n\n");
+    }
+
+    const systemPrompt = mode === "test"
+      ? buildTestPrompt(persona, offerCtx)
+      : buildConversationPrompt(persona, offerCtx);
 
     const { data: history } = await supabase.from("client_messages").select("role, content").eq("session_id", params.sessionId).order("created_at", { ascending: true }).limit(10);
     const messages = [...(history || []).map((m) => ({ role: m.role as "user" | "assistant", content: m.content })), { role: "user" as const, content: message }];

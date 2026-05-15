@@ -13,7 +13,7 @@ export default function CreativesPage() {
       <div className="p-6 space-y-6">
         <div>
           <p className="text-[10px] uppercase tracking-[0.2em] text-text-muted mb-1">IA por Nicho</p>
-          <h1 className="text-lg font-medium text-text-primary">Criativos</h1>
+          <h1 className="text-xl text-text-primary tracking-tight">Criativos</h1>
         </div>
 
         {loading ? (

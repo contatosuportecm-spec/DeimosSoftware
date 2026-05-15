@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ExternalLink, RefreshCw, Archive, Pencil } from "lucide-react";
+import { ExternalLink, RefreshCw, Archive, Pencil, Library } from "lucide-react";
+import Link from "next/link";
 import MiniChart from "./MiniChart";
 import { OfferWithSnapshots, Niche } from "@/types";
 import { formatNumber, cn } from "@/lib/utils";
@@ -92,23 +93,9 @@ export default function OfferCard({
   return (
     <div
       className={cn(
-        "group rounded-xl p-4",
+        "group rounded-2xl p-4 bg-bg-3 border border-transparent hover:border-[rgba(255,180,100,0.10)] transition-all",
         isArchived && "opacity-40"
       )}
-      style={{
-        background: "#0F0F11",
-        border: "1px solid rgba(255,255,255,0.06)",
-        transition: "border-color 0.25s ease, background 0.25s ease",
-      }}
-      onMouseEnter={(e) => {
-        if (isArchived) return;
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)";
-        e.currentTarget.style.background = "#121214";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-        e.currentTarget.style.background = "#0F0F11";
-      }}
     >
       {/* Header: icon + name + status */}
       <div className="flex items-center justify-between mb-4">
@@ -214,30 +201,25 @@ export default function OfferCard({
 
       {/* Footer: library button + actions on hover */}
       <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.03]">
-        {offer.library_url ? (
-          <a
-            href={offer.library_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.1em] px-2.5 py-1 rounded-md transition-colors"
-            style={{
-              color,
-              backgroundColor: `${color}12`,
-              border: `1px solid ${color}20`,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = `${color}22`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = `${color}12`;
-            }}
+        <div className="flex items-center gap-2">
+          <Link
+            href="/biblioteca"
+            className="inline-flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1 rounded-lg text-gold/70 hover:text-gold bg-gold/5 hover:bg-gold/10 border border-gold/10 hover:border-gold/20 transition-all"
           >
-            <ExternalLink size={10} strokeWidth={1.5} />
+            <Library size={10} strokeWidth={1.5} />
             Biblioteca
-          </a>
-        ) : (
-          <span />
-        )}
+          </Link>
+          {offer.library_url && (
+            <a
+              href={offer.library_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-[10px] text-text-muted hover:text-text-secondary transition-colors"
+            >
+              <ExternalLink size={10} strokeWidth={1.5} />
+            </a>
+          )}
+        </div>
 
         <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
           <button

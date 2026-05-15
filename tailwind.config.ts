@@ -5,9 +5,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", "Poppins", "sans-serif"],
+        sans: ["var(--font-sans)", "Poppins", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "Playfair Display", "serif"],
-        mono: ["var(--font-sans)", "Poppins", "sans-serif"],
+        mono: ["var(--font-mono)", "DM Mono", "monospace"],
       },
       colors: {
         // Base (Dark Foundation)
@@ -20,9 +20,9 @@ const config: Config = {
           4: "#2A2A2E",       // bordas / divisores
           5: "#35353A",       // hover sutil
         },
-        // Amber System (renomeado de "gold" — mantém classe gold-* p/ compat)
+        // Gold / Amber — accent, autoridade, dados
         gold: {
-          DEFAULT: "#F4C430", // amber — accent primário (autoridade)
+          DEFAULT: "#F4C430",
           hover:   "#E0B020",
           dark:    "#B8901E",
           muted:   "rgba(244,196,48,0.10)",
@@ -40,9 +40,9 @@ const config: Config = {
           secondary: "#A1A1AA",
           muted:     "#6B6B73",
         },
-        // Ember (laranja brilhante — antes "nova")
+        // Nova / Ember — laranja, acao, CTA
         nova: {
-          DEFAULT: "#FF8A1F", // ember
+          DEFAULT: "#FF8A1F",
           hover:   "#E5740F",
           muted:   "rgba(255,138,31,0.10)",
           border:  "rgba(255,138,31,0.22)",
@@ -52,20 +52,16 @@ const config: Config = {
           hover:   "#E5740F",
           deep:    "#C2410C",
         },
-        // AI Accent (usar com parcimônia — max 5%)
-        ai: {
-          blue:  "#5B8CFF",
-          green: "#7CFFB2",
-        },
-        // Semântica de estado
-        success: { DEFAULT: "#7CFFB2", muted: "rgba(124,255,178,0.10)" },
-        warning: { DEFAULT: "#F5C842", muted: "rgba(245,200,66,0.10)" },
+        // Verde — sucesso, ativo, positivo
+        success: { DEFAULT: "#34D399", muted: "rgba(52,211,153,0.10)" },
+        // Semantica (usa as 3 cores base)
+        warning: { DEFAULT: "#F4C430", muted: "rgba(244,196,48,0.10)" },
         danger:  { DEFAULT: "#FF5C5C", muted: "rgba(255,92,92,0.10)" },
         // Bordas
         border: {
-          subtle:  "rgba(255,255,255,0.04)",
-          DEFAULT: "rgba(255,255,255,0.07)",
-          strong:  "rgba(255,255,255,0.12)",
+          subtle:  "rgba(255,180,100,0.04)",
+          DEFAULT: "rgba(255,180,100,0.07)",
+          strong:  "rgba(255,180,100,0.12)",
           gold:    "rgba(244,196,48,0.22)",
         },
       },

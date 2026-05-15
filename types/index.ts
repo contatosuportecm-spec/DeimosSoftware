@@ -375,6 +375,18 @@ export interface ClientMessage {
   created_at: string;
 }
 
+export interface PersonaOffer {
+  id: string;
+  persona_id: string | null;
+  title: string;
+  content: string;
+  last_report: Record<string, unknown> | null;
+  niche?: string | null;
+  source?: "briefing" | "test";
+  created_at: string;
+  updated_at: string;
+}
+
 // ═══ VSL Studio ═══
 
 export type VslContextKind = "copywriter" | "book";
