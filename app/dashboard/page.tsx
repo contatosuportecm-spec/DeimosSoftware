@@ -236,7 +236,7 @@ function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: nu
           </p>
         </div>
       </div>
-      {/* Chart */}
+      {/* Chart + Biblioteca */}
       <div className="px-3 py-3">
         {chartData.length >= 2 ? (
           <MiniChart data={chartData} color={color} valueFontSize={9} labelFontSize={7} dotRadius={3.5} />
@@ -245,6 +245,12 @@ function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: nu
             <span className="text-[10px] text-text-muted">Aguardando dados</span>
           </div>
         )}
+        <div className="mt-2 pt-2 border-t border-[rgba(255,180,100,0.06)]">
+          <Link href="/biblioteca" className="inline-flex items-center gap-1.5 text-[10px] font-medium text-gold/60 hover:text-gold transition-colors">
+            <LibraryIcon size={10} strokeWidth={1.5} />
+            Biblioteca
+          </Link>
+        </div>
       </div>
     </div>
   );
