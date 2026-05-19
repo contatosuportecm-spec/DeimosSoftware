@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, type LucideIcon,
+  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, Brain, FlaskConical, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,9 +23,11 @@ const PRINCIPAL: NavItem[] = [
   { id: "creatives", label: "Criativos", icon: PenTool,     path: "/creatives" },
   { id: "products",  label: "Produtos",  icon: Box,         path: "/products" },
   { id: "forge",     label: "AI Studio", icon: Cpu,         path: "/forge" },
+  { id: "autoresearch", label: "AutoResearch", icon: FlaskConical, path: "/autoresearch" },
 ];
 
 const KNOWLEDGE: NavItem[] = [
+  { id: "brain",      label: "Brain",                icon: Brain,        path: "/brain" },
   { id: "biblioteca", label: "Biblioteca",           icon: Library,      path: "/biblioteca" },
   { id: "clientes",   label: "Clientes Artificiais", icon: Fingerprint,  path: "/clientes" },
 ];
@@ -62,26 +64,29 @@ function EclipseMark() {
 export default function Sidebar() {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
-  const [ready, setReady] = useState(false);
+  const [locked, setLocked] = useState(true);
 
-  // Start open, then after 1.5s allow collapse
-  useEffect(() => {
-    const t = setTimeout(() => {
-      setExpanded(false);
-      setReady(true);
-    }, 1500);
-    return () => clearTimeout(t);
-  }, []);
+  const handleMouseEnter = () => {
+    if (!locked) setExpanded(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (locked) {
+      // First leave — unlock and collapse
+      setLocked(false);
+    }
+    setExpanded(false);
+  };
 
   return (
     <aside
       className="hidden md:flex flex-shrink-0 h-[100dvh] flex-col border-r border-white/[0.07] bg-black/40 backdrop-blur-xl overflow-hidden"
       style={{
         width: expanded ? W_OPEN : W_CLOSED,
-        transition: ready ? "width 0.3s cubic-bezier(0.16, 1, 0.3, 1)" : "none",
+        transition: locked ? "none" : "width 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
       }}
-      onMouseEnter={() => ready && setExpanded(true)}
-      onMouseLeave={() => ready && setExpanded(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Logo */}
       <Link href="/dashboard" className="flex items-center justify-center px-3.5 pt-4 pb-3 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors">
