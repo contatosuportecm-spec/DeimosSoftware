@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
-import { revertVariant } from "@/lib/autoresearch/deploy";
+import { deploySplitterConfig } from "@/lib/autoresearch/deploy";
+import type { RoundVariant } from "@/types/autoresearch";
 
 export const dynamic = "force-dynamic";
 
-// POST /api/autoresearch/campaigns/[id]/revert — emergency revert
+// POST /api/autoresearch/campaigns/[id]/revert — emergency revert to previous headline
 export async function POST(
   _req: NextRequest,
   { params }: { params: { id: string } }
@@ -22,31 +23,40 @@ export async function POST(
       return NextResponse.json({ error: "Campanha nao encontrada" }, { status: 404 });
     }
 
-    // Find the last iteration with variant + previous values
-    const { data: iters } = await supabase
+    const { data: rounds } = await supabase
       .from("autoresearch_iterations")
-      .select("variant_value, previous_value")
+      .select("previous_value")
       .eq("campaign_id", params.id)
       .not("previous_value", "is", null)
       .order("iteration_number", { ascending: false })
       .limit(1);
 
-    const currentValue = campaign.current_value ?? iters?.[0]?.variant_value;
-    const previousValue = iters?.[0]?.previous_value;
+    const previousValue = rounds?.[0]?.previous_value;
 
-    if (!previousValue || !currentValue) {
+    if (!previousValue) {
       return NextResponse.json({ error: "Nenhum valor anterior para reverter" }, { status: 400 });
     }
 
-    await revertVariant(
-      campaign.deploy_repo,
-      campaign.deploy_branch,
-      campaign.deploy_file_path,
-      currentValue,
-      previousValue
-    );
+    // Deploy single-slot config with previous value as control
+    if (campaign.deploy_repo !== "simulate") {
+      const slots = campaign.slots ?? [];
+      const revertVariants: RoundVariant[] = slots.map((s: { video_id: string }, i: number) => ({
+        slot_index: i,
+        video_id: s.video_id,
+        headline: previousValue,
+        hypothesis: "Emergency revert",
+        role: i === 0 ? "control" as const : "challenger" as const,
+      }));
 
-    // Pause campaign and update current value
+      await deploySplitterConfig(
+        campaign.deploy_repo,
+        campaign.deploy_branch,
+        campaign.deploy_file_path,
+        revertVariants,
+        0
+      );
+    }
+
     await supabase
       .from("autoresearch_campaigns")
       .update({

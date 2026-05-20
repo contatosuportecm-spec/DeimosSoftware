@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
 import LayoutApp from "@/app/layout-app";
 import {
   Users, Plus, Loader2, Trash2, Send, Search, X, ArrowLeft,
@@ -799,9 +800,21 @@ function GenerateModal({ setShowModal, studyText, setStudyText, generating, genE
   const close = () => { if (!generating) { setShowModal(false); setGenError(""); setUploadFile(null); } };
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" onClick={close} />
+      <motion.div
+        className="fixed inset-0 z-50 backdrop-blur-2xl bg-black/40"
+        style={{ WebkitBackdropFilter: "blur(40px)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        onClick={close}
+      />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-6 pointer-events-none">
-        <div className="bg-bg-2 border border-white/[0.10] rounded-2xl w-full max-w-lg shadow-2xl pointer-events-auto">
+        <motion.div
+          className="bg-[#0B0B0C]/90 backdrop-blur-md border border-white/[0.04] rounded-2xl w-full max-w-lg shadow-[0_32px_80px_rgba(0,0,0,0.6)] pointer-events-auto"
+          style={{ WebkitBackdropFilter: "blur(20px)" }}
+          initial={{ opacity: 0, y: 40, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ type: "spring", damping: 28, stiffness: 380, mass: 0.8 }}
+        >
           <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-white/[0.06]">
             <div>
               <h2 className="text-[15px] font-display text-text-primary">Criar Persona</h2>
@@ -853,7 +866,7 @@ function GenerateModal({ setShowModal, studyText, setStudyText, generating, genE
               {generating ? "Gerando..." : "Gerar persona"}
             </button>
           </div>
-        </div>
+        </motion.div>
       </div>
     </>
   );

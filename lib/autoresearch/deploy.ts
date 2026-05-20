@@ -1,3 +1,5 @@
+import type { RoundVariant } from "@/types/autoresearch";
+
 interface DeployResult {
   sha: string;
   url: string;
@@ -63,80 +65,34 @@ async function commitFile(
 }
 
 /**
- * Deploys a variant by doing find-and-replace in the target file.
- * Fetches the full file, replaces `oldValue` with `newValue`, commits back.
- * If oldValue is null (first iteration), searches for newValue's placeholder or fails gracefully.
+ * Deploys a splitter config JSON file with all slot headlines.
+ * The landing page reads this file to split traffic across video slots.
  */
-export async function deployVariant(
+export async function deploySplitterConfig(
   repo: string,
   branch: string,
   filePath: string,
-  newValue: string,
-  oldValue: string | null,
-  message: string,
+  variants: RoundVariant[],
+  roundNumber: number,
   token?: string
 ): Promise<DeployResult> {
   const ghToken = token || process.env.GITHUB_TOKEN;
   if (!ghToken) throw new Error("GITHUB_TOKEN not configured");
 
+  const config = {
+    slots: variants.map((v) => ({
+      slot_index: v.slot_index,
+      video_id: v.video_id,
+      headline: v.headline,
+      role: v.role,
+    })),
+    round: roundNumber,
+    updated_at: new Date().toISOString(),
+  };
+
+  const content = JSON.stringify(config, null, 2);
   const file = await getFileContents(repo, branch, filePath, ghToken);
-  if (!file) throw new Error(`File not found: ${filePath} on ${repo}@${branch}`);
+  const message = `[AutoResearch] Round #${roundNumber}: ${variants.length} slots deployed`;
 
-  let updatedContent: string;
-
-  if (oldValue && file.content.includes(oldValue)) {
-    // Replace old headline with new one
-    updatedContent = file.content.replace(oldValue, newValue);
-  } else {
-    // First iteration or old value not found — try to find newValue placeholder
-    // Look for common patterns: {{HEADLINE}}, <!-- HEADLINE -->, %HEADLINE%
-    const placeholders = ["{{HEADLINE}}", "<!-- HEADLINE -->", "%HEADLINE%", "{{headline}}", "{HEADLINE}"];
-    let replaced = false;
-    for (const ph of placeholders) {
-      if (file.content.includes(ph)) {
-        updatedContent = file.content.replace(ph, newValue);
-        replaced = true;
-        break;
-      }
-    }
-
-    if (!replaced) {
-      // No placeholder found and no old value — cannot safely replace
-      // Fall back: if the file has the current campaign value somewhere, we missed it
-      throw new Error(
-        `Cannot find "${oldValue?.slice(0, 60) ?? "placeholder"}" in ${filePath}. ` +
-        `Add a placeholder ({{HEADLINE}}) or ensure the current headline exists in the file.`
-      );
-    }
-
-    updatedContent = updatedContent!;
-  }
-
-  if (updatedContent === file.content) {
-    throw new Error("File content unchanged after replacement — old value may not match exactly");
-  }
-
-  return commitFile(repo, branch, filePath, updatedContent, message, file.sha, ghToken);
-}
-
-/**
- * Reverts by replacing the current value back to the previous one.
- */
-export async function revertVariant(
-  repo: string,
-  branch: string,
-  filePath: string,
-  currentValue: string,
-  previousValue: string,
-  token?: string
-): Promise<DeployResult> {
-  return deployVariant(
-    repo,
-    branch,
-    filePath,
-    previousValue,
-    currentValue,
-    `[AutoResearch] Revert to previous variant`,
-    token
-  );
+  return commitFile(repo, branch, filePath, content, message, file?.sha ?? null, ghToken);
 }

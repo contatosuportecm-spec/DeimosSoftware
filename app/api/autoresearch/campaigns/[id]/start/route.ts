@@ -19,6 +19,7 @@ export async function POST(
       .single();
 
     if (error) throw error;
+
     return NextResponse.json(data);
   } catch (err) {
     console.error("[api/autoresearch/campaigns/[id]/start]", err);

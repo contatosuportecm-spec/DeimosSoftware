@@ -19,13 +19,13 @@ export async function GET(
 
     if (error) throw error;
 
-    const { data: iterations } = await supabase
+    const { data: rounds } = await supabase
       .from("autoresearch_iterations")
       .select("*")
       .eq("campaign_id", params.id)
       .order("iteration_number", { ascending: true });
 
-    return NextResponse.json({ ...campaign, iterations: iterations ?? [] });
+    return NextResponse.json({ ...campaign, rounds: rounds ?? [] });
   } catch (err) {
     console.error("[api/autoresearch/campaigns/[id] GET]", err);
     return NextResponse.json({ error: "Campanha nao encontrada" }, { status: 404 });

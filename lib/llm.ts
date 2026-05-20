@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, Content, GenerateContentStreamResult } from "@google/generative-ai";
+import { GoogleGenerativeAI, Content, GenerateContentStreamResult, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { ChatMessage } from "@/types";
 
 /**
@@ -63,18 +63,35 @@ export async function callLLM(options: LLMOptions): Promise<string> {
       maxOutputTokens: options.maxTokens ?? 4096,
       temperature: options.temperature ?? 0.8,
     },
+    safetySettings: [
+      { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+      { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+      { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+      { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+    ],
   });
 
   const { history, lastUserMessage } = toGeminiContents(options.messages);
 
   if (history.length === 0) {
     const result = await model.generateContent(lastUserMessage);
-    return result.response.text();
+    const text = result.response.text();
+    if (!text) {
+      const candidates = result.response.candidates;
+      const feedback = result.response.promptFeedback;
+      console.error("[llm] Empty response. finishReason:", candidates?.[0]?.finishReason, "feedback:", JSON.stringify(feedback), "safetyRatings:", JSON.stringify(candidates?.[0]?.safetyRatings));
+    }
+    return text;
   }
 
   const chat = model.startChat({ history });
   const result = await chat.sendMessage(lastUserMessage);
-  return result.response.text();
+  const text = result.response.text();
+  if (!text) {
+    const candidates = result.response.candidates;
+    console.error("[llm] Empty chat response. finishReason:", candidates?.[0]?.finishReason);
+  }
+  return text;
 }
 
 /** Stream raw do Gemini — devolve o iterator direto. */
@@ -87,6 +104,12 @@ export async function streamLLMRaw(options: LLMOptions): Promise<GenerateContent
       maxOutputTokens: options.maxTokens ?? 4096,
       temperature: options.temperature ?? 0.8,
     },
+    safetySettings: [
+      { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+      { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
+      { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.BLOCK_NONE },
+      { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.BLOCK_NONE },
+    ],
   });
 
   const { history, lastUserMessage } = toGeminiContents(options.messages);

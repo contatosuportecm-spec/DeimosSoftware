@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Plus, Trash2, Video, ArrowRight, ChevronRight } from "lucide-react";
 import { COPYWRITERS } from "@/lib/copywriters";
-import type { CreateCampaignInput, ElementType } from "@/types/autoresearch";
+import type { CreateCampaignInput, ElementType, VideoSlot } from "@/types/autoresearch";
 import type { OfferBriefing } from "@/types";
 
 interface CreateCampaignModalProps {
@@ -20,45 +21,97 @@ const ELEMENT_TYPES: { value: ElementType; label: string }[] = [
   { value: "quiz_hook", label: "Quiz Hook" },
 ];
 
-export default function CreateCampaignModal({ briefings, onClose, onCreate }: CreateCampaignModalProps) {
+const SLOT_LABELS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
+export default function CreateCampaignModal({
+  briefings,
+  onClose,
+  onCreate,
+}: CreateCampaignModalProps) {
   const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState<1 | 2>(1);
+
   const [form, setForm] = useState({
     name: "",
     briefing_id: "",
     element_type: "headline" as ElementType,
-    vturb_video_id: "",
     vturb_api_key: "",
     deploy_repo: "",
     deploy_branch: "main",
-    deploy_file_path: "",
-    min_sessions: 200,
-    min_improvement_pct: 2.0,
-    max_iterations: 50,
-    iteration_hours: 48,
+    deploy_file_path: "autoresearch-config.json",
+    min_sessions: "" as number | "",
+    max_rounds: "" as number | "",
+    iteration_time_value: "48",
+    iteration_time_unit: "hours" as "minutes" | "hours" | "days",
     require_approval: false,
     simulate_mode: false,
     copywriter_id: "gary-halbert",
     current_value: "",
-    baseline_play_rate: 0,
+    baseline_play_rate: "" as number | "",
   });
+
+  const [slots, setSlots] = useState<VideoSlot[]>([
+    { video_id: "", label: "Slot A" },
+    { video_id: "", label: "Slot B" },
+  ]);
 
   const set = (key: string, value: string | number | boolean) =>
     setForm((prev) => ({ ...prev, [key]: value }));
 
+  const updateSlot = (index: number, videoId: string) => {
+    setSlots((prev) =>
+      prev.map((s, i) => (i === index ? { ...s, video_id: videoId } : s))
+    );
+  };
+
+  const addSlot = () => {
+    if (slots.length >= 8) return;
+    setSlots((prev) => [
+      ...prev,
+      { video_id: "", label: `Slot ${SLOT_LABELS[prev.length] ?? prev.length + 1}` },
+    ]);
+  };
+
+  const removeSlot = (index: number) => {
+    if (slots.length <= 2) return;
+    setSlots((prev) =>
+      prev
+        .filter((_, i) => i !== index)
+        .map((s, i) => ({ ...s, label: `Slot ${SLOT_LABELS[i] ?? i + 1}` }))
+    );
+  };
+
   const handleSubmit = async () => {
-    const needsDeploy = !form.simulate_mode;
-    if (!form.name || (needsDeploy && (!form.vturb_video_id || !form.deploy_repo || !form.deploy_file_path))) return;
+    if (!form.name) return;
     setSubmitting(true);
     try {
+      const multiplier =
+        form.iteration_time_unit === "days"
+          ? 1440
+          : form.iteration_time_unit === "hours"
+            ? 60
+            : 1;
+      const parsedTimeValue = parseInt(form.iteration_time_value) || 1;
+      const iteration_minutes = parsedTimeValue * multiplier;
+
       await onCreate({
-        ...form,
+        name: form.name,
         briefing_id: form.briefing_id || undefined,
-        vturb_video_id: form.vturb_video_id || "simulate",
-        deploy_repo: form.deploy_repo || "simulate/repo",
-        deploy_file_path: form.deploy_file_path || "simulate.txt",
+        element_type: form.element_type,
+        slots: form.simulate_mode ? undefined : slots.filter((s) => s.video_id.trim()),
         vturb_api_key: form.vturb_api_key || undefined,
-        baseline_play_rate: form.baseline_play_rate || undefined,
+        deploy_repo: form.deploy_repo || undefined,
+        deploy_branch: form.deploy_branch,
+        deploy_file_path: form.deploy_file_path || "autoresearch-config.json",
+        min_sessions: form.min_sessions === "" ? undefined : form.min_sessions,
+        max_rounds: form.max_rounds === "" ? undefined : form.max_rounds,
+        iteration_minutes,
+        require_approval: form.require_approval,
+        simulate_mode: form.simulate_mode,
+        copywriter_id: form.copywriter_id,
         current_value: form.current_value || undefined,
+        baseline_play_rate:
+          form.baseline_play_rate === "" ? undefined : form.baseline_play_rate,
       });
       onClose();
     } finally {
@@ -67,164 +120,501 @@ export default function CreateCampaignModal({ briefings, onClose, onCreate }: Cr
   };
 
   const inputClass =
-    "w-full bg-bg-1 border border-white/[0.07] rounded-lg px-3 py-2 text-[12px] text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-nova/40 transition-colors";
-  const labelClass = "text-[9px] uppercase tracking-[0.15em] text-text-muted mb-1 block";
+    "w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-[13px] text-white placeholder:text-white/25 focus:outline-none focus:border-nova/50 focus:bg-white/[0.06] transition-all";
+  const selectClass = `${inputClass} appearance-none`;
+
+  const validSlots = slots.filter((s) => s.video_id.trim()).length;
+  const canProceed =
+    step === 1 ? form.name && (form.simulate_mode || validSlots >= 2) : true;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-lg max-h-[85vh] overflow-y-auto bg-bg-2 border border-white/[0.07] rounded-2xl shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.07]">
-          <h2 className="text-[14px] font-semibold text-text-primary">Nova Campanha AutoResearch</h2>
-          <button onClick={onClose} className="p-1 rounded-lg hover:bg-white/[0.05] transition-colors">
-            <X size={16} strokeWidth={1.5} className="text-text-muted" />
-          </button>
-        </div>
+    <AnimatePresence>
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        {/* Backdrop — translucent blur over entire page */}
+        <motion.div
+          className="fixed inset-0 backdrop-blur-2xl bg-black/40"
+          style={{ WebkitBackdropFilter: "blur(40px)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        />
 
-        <div className="p-5 space-y-4">
-          {/* Name */}
-          <div>
-            <label className={labelClass}>Nome da campanha</label>
-            <input className={inputClass} placeholder="Ex: VSL Principal — Headline" value={form.name} onChange={(e) => set("name", e.target.value)} />
-          </div>
-
-          {/* Simulate Mode */}
-          <label className="flex items-center gap-2 cursor-pointer p-3 rounded-lg border border-amber-500/20 bg-amber-500/5">
-            <input
-              type="checkbox"
-              checked={form.simulate_mode}
-              onChange={(e) => set("simulate_mode", e.target.checked)}
-              className="w-3.5 h-3.5 rounded border-white/20 bg-bg-1 accent-amber-400"
-            />
-            <div>
-              <span className="text-[11px] text-amber-400 font-medium">Modo Simulacao</span>
-              <p className="text-[9px] text-text-muted mt-0.5">Pula VTurb e GitHub. Gera metricas fake para testar o fluxo completo.</p>
-            </div>
-          </label>
-
-          {/* Briefing + Element */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className={labelClass}>Briefing</label>
-              <select className={inputClass} value={form.briefing_id} onChange={(e) => set("briefing_id", e.target.value)}>
-                <option value="">Nenhum</option>
-                {briefings.map((b) => (
-                  <option key={b.id} value={b.id}>{b.offer_name}</option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className={labelClass}>Elemento</label>
-              <select className={inputClass} value={form.element_type} onChange={(e) => set("element_type", e.target.value)}>
-                {ELEMENT_TYPES.map((t) => (
-                  <option key={t.value} value={t.value}>{t.label}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* VTurb + Deploy — hidden in simulate mode */}
-          {!form.simulate_mode && (
-            <>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className={labelClass}>VTurb Video ID</label>
-                  <input className={inputClass} placeholder="abc123" value={form.vturb_video_id} onChange={(e) => set("vturb_video_id", e.target.value)} />
-                </div>
-                <div>
-                  <label className={labelClass}>VTurb API Key (opcional)</label>
-                  <input className={inputClass} placeholder="Usa env se vazio" value={form.vturb_api_key} onChange={(e) => set("vturb_api_key", e.target.value)} />
-                </div>
+        {/* Card — slides up with spring */}
+        <motion.div
+          className="relative w-full max-w-[540px] max-h-[88vh] overflow-y-auto rounded-2xl shadow-[0_32px_80px_rgba(0,0,0,0.6)] border border-white/[0.04] bg-[#0B0B0C]/90 backdrop-blur-md"
+          style={{ WebkitBackdropFilter: "blur(20px)" }}
+          initial={{ opacity: 0, y: 40, scale: 0.97 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.97 }}
+          transition={{ type: "spring", damping: 28, stiffness: 380, mass: 0.8 }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-5 border-b border-white/[0.06]">
+            <div className="flex items-center gap-3.5">
+              <div className="w-10 h-10 rounded-xl bg-nova/15 flex items-center justify-center">
+                <Video size={18} strokeWidth={1.5} className="text-nova" />
               </div>
-
               <div>
-                <label className={labelClass}>Repo GitHub (owner/repo)</label>
-                <input className={inputClass} placeholder="user/landing-page" value={form.deploy_repo} onChange={(e) => set("deploy_repo", e.target.value)} />
+                <h2 className="text-[16px] font-semibold text-white">Nova Campanha A/B</h2>
+                <p className="text-[12px] text-white/35 mt-0.5">
+                  {step === 1
+                    ? "Configure os slots e o conteudo da sua campanha"
+                    : "Ajuste fino — thresholds e copywriter"}
+                </p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl hover:bg-white/[0.06] transition-colors"
+            >
+              <X size={18} strokeWidth={1.5} className="text-white/30" />
+            </button>
+          </div>
+
+          <div className="p-6 space-y-6">
+            {step === 1 && (
+              <>
+                {/* 1. Nome */}
                 <div>
-                  <label className={labelClass}>Branch</label>
-                  <input className={inputClass} value={form.deploy_branch} onChange={(e) => set("deploy_branch", e.target.value)} />
+                  <p className="text-[14px] font-semibold text-white mb-1.5">
+                    1. Nome da campanha
+                  </p>
+                  <input
+                    className={inputClass}
+                    placeholder="Ex: VSL Principal — Headline A/B"
+                    value={form.name}
+                    onChange={(e) => set("name", e.target.value)}
+                  />
+                  <p className="text-[11px] text-white/25 mt-1.5">
+                    De um nome claro para identificar sua campanha.
+                  </p>
                 </div>
+
+                {/* Simulate Mode */}
+                <div
+                  className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${
+                    form.simulate_mode
+                      ? "border-nova/40 bg-nova/10"
+                      : "border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04]"
+                  }`}
+                  onClick={() => set("simulate_mode", !form.simulate_mode)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        form.simulate_mode ? "bg-nova/20" : "bg-white/[0.06]"
+                      }`}
+                    >
+                      <span className="text-[14px]">
+                        {form.simulate_mode ? "\u26A1" : "\uD83E\uDDEA"}
+                      </span>
+                    </div>
+                    <div>
+                      <p
+                        className={`text-[13px] font-semibold ${
+                          form.simulate_mode ? "text-nova" : "text-white/70"
+                        }`}
+                      >
+                        Modo Simulacao
+                      </p>
+                      <p className="text-[11px] text-white/30">
+                        IA avalia as headlines como publico-alvo. Sem VTurb ou GitHub.
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className={`w-11 h-6 rounded-full p-0.5 transition-all ${
+                      form.simulate_mode ? "bg-nova" : "bg-white/10"
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                        form.simulate_mode ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                <div className="border-t border-white/[0.05]" />
+
+                {/* 2. Headline Atual */}
                 <div>
-                  <label className={labelClass}>File Path</label>
-                  <input className={inputClass} placeholder="src/components/Hero.tsx" value={form.deploy_file_path} onChange={(e) => set("deploy_file_path", e.target.value)} />
+                  <p className="text-[14px] font-semibold text-white mb-1.5">
+                    2. Headline atual <span className="font-normal text-white/30">(controle)</span>
+                  </p>
+                  <input
+                    className={inputClass}
+                    placeholder="Headline atual da sua LP"
+                    value={form.current_value}
+                    onChange={(e) => set("current_value", e.target.value)}
+                  />
+                  <p className="text-[11px] text-white/25 mt-1.5">
+                    Informe a headline que esta no ar hoje.
+                  </p>
                 </div>
-              </div>
-            </>
-          )}
 
-          {/* Current value + Baseline */}
-          <div>
-            <label className={labelClass}>Headline Atual</label>
-            <input className={inputClass} placeholder="Headline atual da LP" value={form.current_value} onChange={(e) => set("current_value", e.target.value)} />
-          </div>
-          <div>
-            <label className={labelClass}>Play Rate Baseline (%)</label>
-            <input className={inputClass} type="number" step="0.01" placeholder="0.00" value={form.baseline_play_rate || ""} onChange={(e) => set("baseline_play_rate", parseFloat(e.target.value) || 0)} />
+                <div className="border-t border-white/[0.05]" />
+
+                {/* 3. Video Slots */}
+                {!form.simulate_mode && (
+                  <div>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <p className="text-[14px] font-semibold text-white">
+                        3. Video slots <span className="font-normal text-white/30">(VTurb)</span>
+                      </p>
+                    </div>
+                    <p className="text-[11px] text-white/25 mb-3">
+                      Use videos diferentes (mesmo conteudo) para cada slot.
+                    </p>
+
+                    <div className="space-y-2.5">
+                      {slots.map((slot, i) => (
+                        <div key={i} className="flex items-center gap-3">
+                          <div
+                            className="w-9 h-9 rounded-lg flex items-center justify-center text-[12px] font-bold shrink-0"
+                            style={{
+                              backgroundColor:
+                                i === 0 ? "rgba(245,158,11,0.15)" : "rgba(59,130,246,0.15)",
+                              color: i === 0 ? "#f59e0b" : "#3b82f6",
+                            }}
+                          >
+                            {SLOT_LABELS[i]}
+                          </div>
+                          <span className="text-[12px] text-white/40 w-12 shrink-0">
+                            {slot.label}
+                          </span>
+                          <div className="flex-1 relative">
+                            <Video
+                              size={14}
+                              strokeWidth={1.5}
+                              className="absolute left-3 top-1/2 -translate-y-1/2 text-white/20"
+                            />
+                            <input
+                              className={`${inputClass} pl-9`}
+                              placeholder={
+                                i === 0 ? "Video ID do controle" : `Video ID do challenger ${i}`
+                              }
+                              value={slot.video_id}
+                              onChange={(e) => updateSlot(i, e.target.value)}
+                            />
+                          </div>
+                          {slots.length > 2 && (
+                            <button
+                              onClick={() => removeSlot(i)}
+                              className="p-2 rounded-lg hover:bg-red-500/10 text-white/20 hover:text-red-400 transition-colors"
+                            >
+                              <Trash2 size={14} strokeWidth={1.5} />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+
+                      {slots.length < 8 && (
+                        <button
+                          onClick={addSlot}
+                          className="flex items-center gap-1.5 text-[12px] text-nova hover:text-nova/80 font-medium transition-colors ml-12 mt-1"
+                        >
+                          <Plus size={12} strokeWidth={2} />
+                          Adicionar slot
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-white/20 mt-2.5">
+                      Slot A = controle (headline atual). Slots B-
+                      {SLOT_LABELS[slots.length - 1]} = challengers gerados pela IA.
+                    </p>
+                  </div>
+                )}
+
+                <div className="border-t border-white/[0.05]" />
+
+                {/* 4. Briefing */}
+                <div>
+                  <p className="text-[14px] font-semibold text-white mb-3">
+                    {form.simulate_mode ? "3" : "4"}. Briefing
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">Objetivo</p>
+                      <select
+                        className={selectClass}
+                        value={form.briefing_id}
+                        onChange={(e) => set("briefing_id", e.target.value)}
+                      >
+                        <option value="">Nenhum</option>
+                        {briefings.map((b) => (
+                          <option key={b.id} value={b.id}>
+                            {b.offer_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">Elemento em destaque</p>
+                      <select
+                        className={selectClass}
+                        value={form.element_type}
+                        onChange={(e) => set("element_type", e.target.value)}
+                      >
+                        {ELEMENT_TYPES.map((t) => (
+                          <option key={t.value} value={t.value}>
+                            {t.label}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {step === 2 && (
+              <>
+                {/* Deploy */}
+                {!form.simulate_mode && (
+                  <>
+                    <div>
+                      <p className="text-[14px] font-semibold text-white mb-3">Deploy</p>
+                      <div className="space-y-3">
+                        <div>
+                          <p className="text-[11px] text-white/35 mb-1.5">Repo GitHub (owner/repo)</p>
+                          <input
+                            className={inputClass}
+                            placeholder="user/landing-page"
+                            value={form.deploy_repo}
+                            onChange={(e) => set("deploy_repo", e.target.value)}
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-3">
+                          <div>
+                            <p className="text-[11px] text-white/35 mb-1.5">Branch</p>
+                            <input
+                              className={inputClass}
+                              value={form.deploy_branch}
+                              onChange={(e) => set("deploy_branch", e.target.value)}
+                            />
+                          </div>
+                          <div>
+                            <p className="text-[11px] text-white/35 mb-1.5">Config file path</p>
+                            <input
+                              className={inputClass}
+                              placeholder="autoresearch-config.json"
+                              value={form.deploy_file_path}
+                              onChange={(e) => set("deploy_file_path", e.target.value)}
+                            />
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-[11px] text-white/35 mb-1.5">
+                            VTurb API Key{" "}
+                            <span className="text-white/15">opcional — usa env se vazio</span>
+                          </p>
+                          <input
+                            className={inputClass}
+                            placeholder="Usa VTURB_API_KEY do env"
+                            value={form.vturb_api_key}
+                            onChange={(e) => set("vturb_api_key", e.target.value)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="border-t border-white/[0.05]" />
+                  </>
+                )}
+
+                {/* Parametros */}
+                <div>
+                  <p className="text-[14px] font-semibold text-white mb-3">Parametros</p>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">
+                        Play Rate Baseline (%){" "}
+                        <span className="text-white/15">opcional — medido no round 1</span>
+                      </p>
+                      <input
+                        className={inputClass}
+                        type="number"
+                        step="0.01"
+                        placeholder="Medido automaticamente"
+                        value={form.baseline_play_rate}
+                        onChange={(e) =>
+                          set(
+                            "baseline_play_rate",
+                            e.target.value === "" ? "" : parseFloat(e.target.value)
+                          )
+                        }
+                      />
+                    </div>
+
+                    {/* Copywriter */}
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">Copywriter IA</p>
+                      <select
+                        className={selectClass}
+                        value={form.copywriter_id}
+                        onChange={(e) => set("copywriter_id", e.target.value)}
+                      >
+                        {COPYWRITERS.map((cw) => (
+                          <option key={cw.id} value={cw.id}>
+                            {cw.name} — {cw.era}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Min sessions */}
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">
+                        Min sessoes por slot{" "}
+                        <span className="text-white/15">opcional — so tempo</span>
+                      </p>
+                      <input
+                        className={inputClass}
+                        type="number"
+                        placeholder="Sem limite"
+                        value={form.min_sessions}
+                        onChange={(e) =>
+                          set("min_sessions", e.target.value === "" ? "" : parseInt(e.target.value))
+                        }
+                      />
+                    </div>
+
+                    {/* Max rounds */}
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">
+                        Max rounds{" "}
+                        <span className="text-white/15">opcional — roda indefinidamente</span>
+                      </p>
+                      <input
+                        className={inputClass}
+                        type="number"
+                        placeholder="Sem limite"
+                        value={form.max_rounds}
+                        onChange={(e) =>
+                          set("max_rounds", e.target.value === "" ? "" : parseInt(e.target.value))
+                        }
+                      />
+                    </div>
+
+                    {/* Tempo por round */}
+                    <div>
+                      <p className="text-[11px] text-white/35 mb-1.5">Tempo por round</p>
+                      <div className="grid grid-cols-[1fr_140px] gap-2">
+                        <input
+                          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-[13px] text-white placeholder:text-white/25 focus:outline-none focus:border-nova/50 focus:bg-white/[0.06] transition-all"
+                          type="text"
+                          inputMode="numeric"
+                          pattern="[0-9]*"
+                          placeholder="48"
+                          value={form.iteration_time_value}
+                          onChange={(e) => {
+                            const v = e.target.value.replace(/[^0-9]/g, "");
+                            set("iteration_time_value", v);
+                          }}
+                        />
+                        <select
+                          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-[13px] text-white appearance-none focus:outline-none focus:border-nova/50 focus:bg-white/[0.06] transition-all"
+                          value={form.iteration_time_unit}
+                          onChange={(e) => set("iteration_time_unit", e.target.value)}
+                        >
+                          <option value="minutes">Minutos</option>
+                          <option value="hours">Horas</option>
+                          <option value="days">Dias</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="border-t border-white/[0.05]" />
+
+                {/* Approval */}
+                <div
+                  className={`flex items-center justify-between p-4 rounded-xl border cursor-pointer transition-all ${
+                    form.require_approval
+                      ? "border-amber-500/30 bg-amber-500/5"
+                      : "border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04]"
+                  }`}
+                  onClick={() => set("require_approval", !form.require_approval)}
+                >
+                  <div>
+                    <p
+                      className={`text-[13px] font-medium ${
+                        form.require_approval ? "text-amber-400" : "text-white/60"
+                      }`}
+                    >
+                      Aprovacao manual
+                    </p>
+                    <p className="text-[11px] text-white/25">
+                      Revisar cada round antes do deploy
+                    </p>
+                  </div>
+                  <div
+                    className={`w-11 h-6 rounded-full p-0.5 transition-all ${
+                      form.require_approval ? "bg-amber-500" : "bg-white/10"
+                    }`}
+                  >
+                    <div
+                      className={`w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${
+                        form.require_approval ? "translate-x-5" : "translate-x-0"
+                      }`}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
-          {/* Copywriter */}
-          <div>
-            <label className={labelClass}>Copywriter</label>
-            <select className={inputClass} value={form.copywriter_id} onChange={(e) => set("copywriter_id", e.target.value)}>
-              {COPYWRITERS.map((cw) => (
-                <option key={cw.id} value={cw.id}>{cw.name} — {cw.era}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Thresholds */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Footer */}
+          <div className="flex items-center justify-between px-6 py-5 border-t border-white/[0.06]">
             <div>
-              <label className={labelClass}>Min Sessoes</label>
-              <input className={inputClass} type="number" value={form.min_sessions} onChange={(e) => set("min_sessions", parseInt(e.target.value) || 200)} />
+              {step === 2 && (
+                <button
+                  onClick={() => setStep(1)}
+                  className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-white/40 hover:text-white/60 hover:bg-white/[0.04] transition-all"
+                >
+                  Voltar
+                </button>
+              )}
+              {step === 1 && (
+                <button
+                  onClick={onClose}
+                  className="px-4 py-2.5 rounded-xl text-[13px] font-medium text-white/40 hover:text-white/60 hover:bg-white/[0.04] transition-all"
+                >
+                  Cancelar
+                </button>
+              )}
             </div>
-            <div>
-              <label className={labelClass}>Min Melhoria (%)</label>
-              <input className={inputClass} type="number" step="0.1" value={form.min_improvement_pct} onChange={(e) => set("min_improvement_pct", parseFloat(e.target.value) || 2.0)} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className={labelClass}>Max Iteracoes</label>
-              <input className={inputClass} type="number" value={form.max_iterations} onChange={(e) => set("max_iterations", parseInt(e.target.value) || 50)} />
-            </div>
-            <div>
-              <label className={labelClass}>Horas por Iteracao</label>
-              <input className={inputClass} type="number" value={form.iteration_hours} onChange={(e) => set("iteration_hours", parseInt(e.target.value) || 48)} />
-            </div>
-          </div>
 
-          {/* Approval gate */}
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={form.require_approval}
-              onChange={(e) => set("require_approval", e.target.checked)}
-              className="w-3.5 h-3.5 rounded border-white/20 bg-bg-1 accent-nova"
-            />
-            <span className="text-[11px] text-text-secondary">Requer aprovacao manual antes de deploy</span>
-          </label>
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-2 px-5 py-4 border-t border-white/[0.07]">
-          <button
-            onClick={onClose}
-            className="px-4 py-2 rounded-lg text-[11px] font-medium text-text-muted hover:text-text-secondary hover:bg-white/[0.04] transition-colors"
-          >
-            Cancelar
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={submitting || !form.name || (!form.simulate_mode && (!form.vturb_video_id || !form.deploy_repo || !form.deploy_file_path))}
-            className="px-4 py-2 rounded-lg text-[11px] font-medium bg-nova text-black hover:bg-nova/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            {submitting ? "Criando..." : "Criar Campanha"}
-          </button>
-        </div>
-      </div>
-    </div>
+            {step === 1 ? (
+              <button
+                onClick={() => setStep(2)}
+                disabled={!canProceed}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-nova text-black hover:bg-nova/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                Proximo
+                <ArrowRight size={14} strokeWidth={2} />
+              </button>
+            ) : (
+              <button
+                onClick={handleSubmit}
+                disabled={submitting}
+                className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-[13px] font-semibold bg-nova text-black hover:bg-nova/90 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+              >
+                {submitting ? "Criando..." : "Criar Campanha"}
+                {!submitting && <ChevronRight size={14} strokeWidth={2} />}
+              </button>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 }

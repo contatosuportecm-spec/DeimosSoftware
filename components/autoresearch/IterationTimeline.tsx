@@ -1,73 +1,73 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { IterationStatusBadge, DecisionBadge } from "./StatusBadge";
-import type { AutoresearchIteration } from "@/types/autoresearch";
+import { RoundStatusBadge, DecisionBadge } from "./StatusBadge";
+import type { AutoresearchRound } from "@/types/autoresearch";
 
-export default function IterationTimeline({ iterations }: { iterations: AutoresearchIteration[] }) {
-  if (!iterations.length) {
+export default function IterationTimeline({ rounds }: { rounds: AutoresearchRound[] }) {
+  if (!rounds.length) {
     return (
-      <div className="flex items-center justify-center py-8 text-[11px] text-text-muted">
-        Nenhuma iteracao ainda
+      <div className="flex flex-col items-center justify-center py-10 gap-1">
+        <p className="text-[13px] text-white/30">Nenhum round ainda</p>
+        <p className="text-[11px] text-white/15">Inicie a campanha para comecar</p>
       </div>
     );
   }
 
   return (
     <div className="relative space-y-0">
-      {/* Vertical line */}
-      <div className="absolute left-[11px] top-3 bottom-3 w-px bg-white/[0.07]" />
+      <div className="absolute left-[13px] top-4 bottom-4 w-px bg-white/[0.06]" />
 
-      {[...iterations].reverse().map((iter) => (
-        <div key={iter.id} className="relative pl-8 py-3">
+      {[...rounds].reverse().map((round) => (
+        <div key={round.id} className="relative pl-10 py-3.5">
           {/* Dot */}
-          <div className={cn(
-            "absolute left-[7px] top-[18px] w-[9px] h-[9px] rounded-full border-2",
-            iter.decision === "keep"
-              ? "bg-emerald-500 border-emerald-500/30"
-              : iter.decision === "revert"
-              ? "bg-red-500 border-red-500/30"
-              : "bg-white/20 border-white/10"
-          )} />
+          <div
+            className={cn(
+              "absolute left-[8px] top-[20px] w-[11px] h-[11px] rounded-full border-2",
+              round.decision === "promoted"
+                ? "bg-emerald-500 border-emerald-500/30"
+                : round.decision === "kept"
+                  ? "bg-amber-500 border-amber-500/30"
+                  : "bg-white/15 border-white/[0.08]"
+            )}
+          />
 
-          <div className="flex items-start justify-between gap-2 mb-1.5">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono text-text-muted">#{iter.iteration_number}</span>
-              <IterationStatusBadge status={iter.status} />
-              {iter.decision && <DecisionBadge decision={iter.decision} />}
+          {/* Header */}
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex items-center gap-2.5 flex-wrap">
+              <span className="text-[12px] font-mono font-semibold text-white/60">
+                R{round.iteration_number}
+              </span>
+              <RoundStatusBadge status={round.status} />
+              {round.decision && <DecisionBadge decision={round.decision} />}
             </div>
-            {iter.play_rate != null && (
-              <span className="text-[12px] font-mono text-text-primary">
-                {Number(iter.play_rate).toFixed(2)}%
+            {round.play_rate != null && (
+              <span className="text-[14px] font-mono font-semibold text-white">
+                {Number(round.play_rate).toFixed(2)}%
               </span>
             )}
           </div>
 
-          {iter.variant_value && (
-            <p className="text-[11px] text-text-secondary leading-relaxed mb-1">
-              &ldquo;{iter.variant_value}&rdquo;
+          {/* Decision reason */}
+          {round.decision_reason && (
+            <p
+              className={cn(
+                "text-[12px] leading-relaxed",
+                round.decision === "promoted" ? "text-emerald-400/60" : "text-amber-400/60"
+              )}
+            >
+              {round.decision_reason.split("|")[0].trim()}
             </p>
           )}
 
-          {iter.hypothesis && (
-            <p className="text-[10px] text-text-muted italic leading-relaxed mb-1">
-              {iter.hypothesis}
-            </p>
-          )}
-
-          {iter.decision_reason && (
-            <p className={cn(
-              "text-[10px] leading-relaxed",
-              iter.decision === "keep" ? "text-emerald-400/70" : "text-red-400/70"
-            )}>
-              {iter.decision_reason}
-            </p>
-          )}
-
-          {iter.status === "measuring" && (
-            <p className="text-[10px] text-cyan-400/70">
-              {iter.sessions_collected} sessoes coletadas
-            </p>
+          {/* Measuring status */}
+          {round.status === "measuring" && (
+            <div className="flex items-center gap-2 mt-1">
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
+              <p className="text-[11px] text-cyan-400/60">
+                {round.sessions_collected} sessoes coletadas
+              </p>
+            </div>
           )}
         </div>
       ))}

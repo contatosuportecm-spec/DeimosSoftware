@@ -3,6 +3,7 @@
 import { useRef, useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
 import LayoutApp from "@/app/layout-app";
 import Link from "next/link";
 import { useForgeHistory } from "@/hooks/useForgeHistory";
@@ -14,7 +15,7 @@ import { cn, formatNumber } from "@/lib/utils";
 import { tierColor } from "@/lib/spy-utils";
 import MiniChart from "@/components/spy/MiniChart";
 import {
-  Image, Video, Mic, ArrowRight, Download, X,
+  Image, Video, Mic, ArrowRight, Download, X, ExternalLink,
   ChevronLeft, ChevronRight, Cpu, Library as LibraryIcon, Radar,
   CircleDot, Briefcase, BarChart2,
   Fingerprint,
@@ -246,10 +247,18 @@ function SpyHighlightCard({ offer, rank }: { offer: OfferWithSnapshots; rank: nu
           </div>
         )}
         <div className="mt-2 pt-2 border-t border-[rgba(255,180,100,0.06)]">
-          <Link href="/biblioteca" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-semibold text-nova bg-nova/8 border border-nova/15 hover:bg-nova/15 hover:border-nova/25 transition-all">
-            <LibraryIcon size={11} strokeWidth={1.5} />
-            Ver na Biblioteca
-          </Link>
+          {offer.library_url ? (
+            <a href={offer.library_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] font-semibold text-nova bg-nova/8 border border-nova/15 hover:bg-nova/15 hover:border-nova/25 transition-all">
+              <LibraryIcon size={11} strokeWidth={1.5} />
+              Biblioteca
+              <ExternalLink size={9} strokeWidth={1.5} />
+            </a>
+          ) : (
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-[10px] text-text-muted/40">
+              <LibraryIcon size={11} strokeWidth={1.5} />
+              Sem link
+            </span>
+          )}
         </div>
       </div>
     </div>
@@ -360,8 +369,15 @@ function StudioLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () =>
   const params = gen.params as Record<string, string | number | undefined>;
 
   return createPortal(
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm" style={{ animation: "fadeIn 200ms ease-out" }} onClick={onClose}>
-      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
+    <motion.div
+      className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-2xl bg-black/40"
+      style={{ WebkitBackdropFilter: "blur(40px)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      onClick={onClose}
+    >
       <button onClick={onClose} className="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors z-10">
         <X size={18} strokeWidth={1.5} className="text-white" />
       </button>
@@ -389,7 +405,7 @@ function StudioLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () =>
           </button>
         </div>
       </div>
-    </div>,
+    </motion.div>,
     document.body,
   );
 }
