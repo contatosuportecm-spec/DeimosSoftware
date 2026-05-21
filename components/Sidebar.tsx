@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, Brain, FlaskConical, type LucideIcon,
+  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, Brain, FlaskConical, Workflow, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -24,6 +24,7 @@ const PRINCIPAL: NavItem[] = [
   { id: "products",  label: "Produtos",  icon: Box,         path: "/products" },
   { id: "forge",     label: "AI Studio", icon: Cpu,         path: "/forge" },
   { id: "autoresearch", label: "AutoResearch", icon: FlaskConical, path: "/autoresearch" },
+  { id: "funnels",      label: "Funnels",      icon: Workflow,      path: "/funnels" },
 ];
 
 const KNOWLEDGE: NavItem[] = [
