@@ -1,40 +1,51 @@
 "use client";
 
-import { useCallback, useState, useRef, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useCallback, useState, useRef, useMemo } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import LayoutApp from "@/app/layout-app";
-import FunnelFlow from "@/components/funnels/FunnelFlow";
+import FunnelCanvas from "@/components/funnels/FunnelCanvas";
 import { useFunnelDetail } from "@/hooks/useFunnels";
 import { ArrowLeft, Pencil, Check } from "lucide-react";
-import type { FunnelStage, FunnelConnection } from "@/types/funnels";
 
 export default function FunnelEditorPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
-  const { funnel, loading, save } = useFunnelDetail(id);
+  const searchParams = useSearchParams();
+  const {
+    funnel, allNodes, allEdges, loading,
+    saveFunnel, createNode, updateNode, savePosition, deleteNode,
+    createEdge, deleteEdge,
+  } = useFunnelDetail(id);
+
   const [editingName, setEditingName] = useState(false);
   const [nameValue, setNameValue] = useState("");
   const [saved, setSaved] = useState(false);
   const saveTimer = useRef<NodeJS.Timeout>();
 
-  const handleSave = useCallback(
-    (patch: { stages?: FunnelStage[]; connections?: FunnelConnection[] }) => {
-      clearTimeout(saveTimer.current);
-      saveTimer.current = setTimeout(async () => {
-        await save(patch);
-        setSaved(true);
-        setTimeout(() => setSaved(false), 1500);
-      }, 600);
-    },
-    [save]
-  );
+  // Parse initial path from URL
+  const initialPath = useMemo(() => {
+    const pathParam = searchParams.get("path");
+    return pathParam ? pathParam.split(".").filter(Boolean) : [];
+  }, [searchParams]);
 
   const handleNameSave = useCallback(async () => {
     if (nameValue.trim()) {
-      await save({ name: nameValue.trim() });
+      await saveFunnel({ name: nameValue.trim() });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 1500);
     }
     setEditingName(false);
-  }, [nameValue, save]);
+  }, [nameValue, saveFunnel]);
+
+  // Debounced node update
+  const handleUpdateNode = useCallback((nodeId: string, patch: Record<string, unknown>) => {
+    clearTimeout(saveTimer.current);
+    saveTimer.current = setTimeout(() => {
+      updateNode(nodeId, patch);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 1200);
+    }, 500);
+  }, [updateNode]);
 
   if (loading) {
     return (
@@ -64,9 +75,9 @@ export default function FunnelEditorPage() {
 
   return (
     <LayoutApp>
-      <div className="min-h-screen flex flex-col">
+      <div className="h-screen flex flex-col">
         {/* Top bar */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/[0.06] bg-bg-1/60 backdrop-blur-sm sticky top-0 z-20">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-white/[0.06] bg-bg-1/60 backdrop-blur-sm sticky top-0 z-30 flex-shrink-0">
           <div className="flex items-center gap-3">
             <button
               onClick={() => router.push("/funnels")}
@@ -124,9 +135,19 @@ export default function FunnelEditorPage() {
           </div>
         </div>
 
-        {/* Flow */}
-        <div className="flex-1 overflow-y-auto">
-          <FunnelFlow funnel={funnel} onSave={handleSave} />
+        {/* Canvas */}
+        <div className="flex-1 relative overflow-hidden">
+          <FunnelCanvas
+            allNodes={allNodes}
+            allEdges={allEdges}
+            onCreateNode={createNode}
+            onUpdateNode={handleUpdateNode}
+            onSavePosition={savePosition}
+            onDeleteNode={deleteNode}
+            onCreateEdge={createEdge}
+            onDeleteEdge={deleteEdge}
+            initialPath={initialPath}
+          />
         </div>
       </div>
     </LayoutApp>

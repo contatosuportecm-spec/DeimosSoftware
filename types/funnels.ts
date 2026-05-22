@@ -1,145 +1,188 @@
-/* ── Funnels — Types ── */
+/* ── Funnels — Fractal Canvas Types (v2) ── */
 
-export type StageType =
-  | "sales-page"
+import type { LucideIcon } from "lucide-react";
+import {
+  Video, ListChecks, HelpCircle, Mail, MessageCircle,
+  ArrowUpCircle, ArrowDownCircle, FileText, ShoppingCart,
+  CheckCircle2, Type, Heading, MousePointerClick, Square, TextCursorInput,
+} from "lucide-react";
+
+/* ── Node Types ── */
+
+export type FunnelNodeType =
   | "vsl"
   | "quiz"
-  | "email-whatsapp"
+  | "sales_page"
+  | "email"
+  | "whatsapp"
+  | "upsell"
+  | "downsell"
   | "checkout"
-  | "venda"
-  | "recusado";
+  | "sale"
+  | "headline"
+  | "copy_block"
+  | "button"
+  | "quiz_question"
+  | "button_answer"
+  | "text_answer";
 
-export const STAGE_META: Record<
-  StageType,
-  { label: string; color: string; icon: string; description: string }
-> = {
-  "sales-page":     { label: "Pagina de Vendas", color: "#FF8A1F", icon: "FileText",    description: "Landing page principal" },
-  vsl:              { label: "VSL",               color: "#5B8CFF", icon: "Play",        description: "Video Sales Letter" },
-  quiz:             { label: "Quiz",              color: "#A78BFA", icon: "HelpCircle",  description: "Quiz de qualificacao" },
-  "email-whatsapp": { label: "Email / WhatsApp",  color: "#34D399", icon: "MessageCircle", description: "Automacoes de follow-up" },
-  checkout:         { label: "Checkout",          color: "#F4C430", icon: "CreditCard",  description: "Pagina de pagamento" },
-  venda:            { label: "Venda",             color: "#22C55E", icon: "CheckCircle", description: "Compra aprovada" },
-  recusado:         { label: "Recusado",          color: "#F87171", icon: "XCircle",     description: "Pagamento recusado" },
+export type NodeCategory = "container" | "block" | "terminal";
+
+export interface NodeTypeMeta {
+  label: string;
+  icon: LucideIcon;
+  category: NodeCategory;
+  color: string;
+  /** Card width override (default 220) */
+  cardWidth?: number;
+}
+
+export const NODE_TYPE_META: Record<FunnelNodeType, NodeTypeMeta> = {
+  // Containers
+  vsl:         { label: "VSL",           icon: Video,           category: "container", color: "#5B8CFF" },
+  quiz:        { label: "Quiz",          icon: ListChecks,      category: "container", color: "#A78BFA" },
+  sales_page:  { label: "Sales Page",    icon: FileText,        category: "container", color: "#FF8A1F" },
+  email:       { label: "Email",         icon: Mail,            category: "container", color: "#34D399" },
+  whatsapp:    { label: "WhatsApp",      icon: MessageCircle,   category: "container", color: "#22D3EE" },
+  upsell:      { label: "Upsell",        icon: ArrowUpCircle,   category: "container", color: "#F4C430" },
+  downsell:    { label: "Downsell",      icon: ArrowDownCircle, category: "container", color: "#FB923C" },
+  // Terminals
+  checkout:    { label: "Checkout",      icon: ShoppingCart,    category: "terminal",  color: "#F4C430" },
+  sale:        { label: "Sale",          icon: CheckCircle2,    category: "terminal",  color: "#22C55E" },
+  // Blocks
+  headline:    { label: "Headline",      icon: Heading,         category: "block",     color: "#60A5FA", cardWidth: 280 },
+  copy_block:  { label: "Copy Block",    icon: Type,            category: "block",     color: "#94A3B8" },
+  button:      { label: "Button",        icon: MousePointerClick, category: "block",   color: "#FB923C", cardWidth: 180 },
+  quiz_question: { label: "Pergunta",    icon: HelpCircle,      category: "block",     color: "#C084FC" },
+  button_answer: { label: "Resposta · Botao", icon: Square,     category: "block",     color: "#A78BFA", cardWidth: 300 },
+  text_answer:   { label: "Resposta · Texto", icon: TextCursorInput, category: "block", color: "#8B8BFA", cardWidth: 260 },
 };
 
-/* ── Sub-structure for each stage ── */
-
-export interface SubItem {
-  id: string;
-  label: string;
-  notes?: string;
-  status?: "active" | "draft" | "disabled";
-}
-
-export interface FunnelStage {
-  id: string;
-  type: StageType;
-  label: string;
-  notes?: string;
-  url?: string;
-  children: SubItem[];
-  metrics?: {
-    visitors?: number;
-    conversions?: number;
-    rate?: number;
-  };
-}
-
-/* ── Default sub-structures ── */
-
-export const DEFAULT_CHILDREN: Record<StageType, SubItem[]> = {
-  "sales-page": [
-    { id: "sp-1", label: "Headline", status: "active" },
-    { id: "sp-2", label: "Sub-headline", status: "active" },
-    { id: "sp-3", label: "CTA Principal", status: "active" },
-    { id: "sp-4", label: "Prova Social", status: "active" },
-    { id: "sp-5", label: "Garantia", status: "active" },
-  ],
-  vsl: [
-    { id: "vsl-1", label: "Hook (0-30s)", status: "active" },
-    { id: "vsl-2", label: "Problema", status: "active" },
-    { id: "vsl-3", label: "Agitacao", status: "active" },
-    { id: "vsl-4", label: "Mecanismo", status: "active" },
-    { id: "vsl-5", label: "Prova", status: "active" },
-    { id: "vsl-6", label: "Oferta", status: "active" },
-    { id: "vsl-7", label: "CTA / Fechamento", status: "active" },
-  ],
-  quiz: [
-    { id: "qz-1", label: "Pergunta 1 — Qualificacao", status: "active" },
-    { id: "qz-2", label: "Pergunta 2 — Dor", status: "active" },
-    { id: "qz-3", label: "Pergunta 3 — Desejo", status: "active" },
-    { id: "qz-4", label: "Resultado / Score", status: "active" },
-    { id: "qz-5", label: "Redirect por Score", status: "active" },
-  ],
-  "email-whatsapp": [
-    { id: "ew-1", label: "Welcome (D+0)", status: "active" },
-    { id: "ew-2", label: "Nurture (D+1)", status: "active" },
-    { id: "ew-3", label: "Prova Social (D+2)", status: "active" },
-    { id: "ew-4", label: "Urgencia (D+3)", status: "active" },
-    { id: "ew-5", label: "Ultimo CTA (D+5)", status: "active" },
-    { id: "ew-6", label: "WhatsApp — Lembrete", status: "active" },
-    { id: "ew-7", label: "WhatsApp — Carrinho", status: "active" },
-  ],
-  checkout: [
-    { id: "ck-1", label: "Order Bump", status: "active" },
-    { id: "ck-2", label: "Upsell 1", status: "draft" },
-    { id: "ck-3", label: "Downsell", status: "draft" },
-    { id: "ck-4", label: "Pixel / Tracking", status: "active" },
-  ],
-  venda: [
-    { id: "v-1", label: "Thank You Page", status: "active" },
-    { id: "v-2", label: "Email de Boas-Vindas", status: "active" },
-    { id: "v-3", label: "Acesso ao Produto", status: "active" },
-    { id: "v-4", label: "Onboarding", status: "draft" },
-  ],
-  recusado: [
-    { id: "r-1", label: "Retry Pagamento", status: "active" },
-    { id: "r-2", label: "Boleto Alternativo", status: "active" },
-    { id: "r-3", label: "Email Recuperacao", status: "active" },
-    { id: "r-4", label: "WhatsApp Suporte", status: "draft" },
-  ],
+/** Types allowed as children per parent type */
+export const ALLOWED_CHILDREN: Partial<Record<FunnelNodeType, FunnelNodeType[]>> = {
+  vsl:           ["headline", "copy_block", "button"],
+  quiz:          ["quiz_question", "button_answer", "text_answer"],
+  sales_page:    ["copy_block", "button"],
+  email:         ["copy_block"],
+  whatsapp:      ["copy_block"],
+  upsell:        ["vsl", "quiz", "sales_page"],
+  downsell:      ["vsl", "quiz", "sales_page"],
 };
 
-/* ── Funnel connections (fixed flow) ── */
+/** Root-level types */
+export const ROOT_TYPES: FunnelNodeType[] = [
+  "vsl", "quiz", "sales_page", "email", "whatsapp",
+  "upsell", "downsell", "checkout", "sale",
+];
 
-export interface FunnelConnection {
-  from: string;
-  to: string;
-  label?: string;
-  type?: "default" | "success" | "reject";
+export const ALL_NODE_TYPES = Object.keys(NODE_TYPE_META) as FunnelNodeType[];
+
+/* ── Content schemas per type ── */
+
+// Containers — empty
+// Blocks
+export interface HeadlineContent { text: string }
+export interface CopyBlockContent { body: string; role?: string }
+export interface ButtonContent { label: string; target_url?: string }
+export interface QuizQuestionContent { question: string; question_type: "single" | "multi" | "open" }
+export interface ButtonAnswerContent { options: Array<{ id: string; label: string }> }
+export interface TextAnswerContent { label: string; placeholder?: string }
+
+/* ── Metrics per type ── */
+
+export interface HeadlineMetrics { playrate?: number }
+export interface CopyBlockVslMetrics { retention?: number }
+export interface CopyBlockPageMetrics { ctr?: number }
+export interface CopyBlockEmailMetrics { open_rate?: number; click_rate?: number }
+export interface ButtonMetrics { ctr?: number }
+export interface QuizMetrics { initialization_rate?: number; final_button_ctr?: number }
+export interface CheckoutMetrics { conversion_rate?: number }
+export interface SaleMetrics { revenue?: number; notes?: string }
+
+export type NodeMetrics = Record<string, unknown>;
+
+/* ── Aggregated metrics for containers ── */
+
+export interface AggregatedMetrics {
+  [key: string]: number | undefined;
 }
 
-export const DEFAULT_FLOW: StageType[] = [
-  "sales-page",
-  "vsl",
-  "quiz",
-  "email-whatsapp",
-  "checkout",
-];
+/* ── DB Row types ── */
 
-export const DEFAULT_CONNECTIONS: { from: StageType; to: StageType; label?: string; type?: "default" | "success" | "reject" }[] = [
-  { from: "sales-page", to: "vsl" },
-  { from: "vsl", to: "quiz" },
-  { from: "quiz", to: "email-whatsapp" },
-  { from: "email-whatsapp", to: "checkout" },
-  { from: "checkout", to: "venda", label: "Aprovado", type: "success" },
-  { from: "checkout", to: "recusado", label: "Recusado", type: "reject" },
-];
+export interface FunnelRow {
+  id: string;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+}
 
-/* ── Persisted funnel ── */
+export interface FunnelNodeRow {
+  id: string;
+  funnel_id: string;
+  parent_node_id: string | null;
+  type: FunnelNodeType;
+  label: string;
+  position_x: number;
+  position_y: number;
+  content: Record<string, unknown>;
+  metrics: Record<string, unknown>;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FunnelEdgeRow {
+  id: string;
+  funnel_id: string;
+  source_node_id: string;
+  target_node_id: string;
+  label: string | null;
+  condition: Record<string, unknown> | null;
+  source_handle: string | null;
+  target_handle: string | null;
+}
+
+/* ── Frontend models ── */
+
+export interface FunnelPreviewNode {
+  type: FunnelNodeType;
+  label: string;
+}
 
 export interface Funnel {
   id: string;
   name: string;
   description?: string;
-  stages: FunnelStage[];
-  connections: FunnelConnection[];
   created_at: string;
   updated_at: string;
-  // legacy compat
-  nodes?: unknown;
-  edges?: unknown;
-  viewport?: unknown;
+  node_count?: number;
+  preview_nodes?: FunnelPreviewNode[];
+}
+
+export interface FunnelNode {
+  id: string;
+  funnel_id: string;
+  parent_node_id: string | null;
+  type: FunnelNodeType;
+  label: string;
+  position_x: number;
+  position_y: number;
+  content: Record<string, unknown>;
+  metrics: NodeMetrics;
+  order_index: number;
+  has_children?: boolean;
+}
+
+export interface FunnelEdge {
+  id: string;
+  funnel_id: string;
+  source_node_id: string;
+  target_node_id: string;
+  label?: string;
+  condition?: Record<string, unknown>;
+  source_handle?: string;
+  target_handle?: string;
 }
 
 export interface CreateFunnelInput {
