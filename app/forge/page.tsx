@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
 import LayoutApp from "@/app/layout-app";
 import { Image, Video, Mic, ArrowRight, KeyRound, Clock, Sparkles, Download, X, ChevronLeft, ChevronRight, Library } from "lucide-react";
 import { type LucideIcon } from "lucide-react";
@@ -192,12 +193,15 @@ function GenLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () => vo
   const params = gen.params as Record<string, string | number | undefined>;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-      style={{ animation: "fadeIn 200ms ease-out" }}
+    <motion.div
+      className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-2xl bg-black/40"
+      style={{ WebkitBackdropFilter: "blur(40px)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       onClick={onClose}
     >
-      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
 
       {/* Close */}
       <button
@@ -267,7 +271,7 @@ function GenLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () => vo
           </button>
         </div>
       </div>
-    </div>,
+    </motion.div>,
     document.body,
   );
 }

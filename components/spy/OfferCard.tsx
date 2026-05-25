@@ -202,22 +202,22 @@ export default function OfferCard({
       {/* Footer: library button + actions on hover */}
       <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/[0.03]">
         <div className="flex items-center gap-2">
-          <Link
-            href="/biblioteca"
-            className="inline-flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1 rounded-lg text-gold/70 hover:text-gold bg-gold/5 hover:bg-gold/10 border border-gold/10 hover:border-gold/20 transition-all"
-          >
-            <Library size={10} strokeWidth={1.5} />
-            Biblioteca
-          </Link>
-          {offer.library_url && (
+          {offer.library_url ? (
             <a
               href={offer.library_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-[10px] text-text-muted hover:text-text-secondary transition-colors"
+              className="inline-flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1 rounded-lg text-nova/70 hover:text-nova bg-nova/5 hover:bg-nova/10 border border-nova/10 hover:border-nova/20 transition-all"
             >
-              <ExternalLink size={10} strokeWidth={1.5} />
+              <Library size={10} strokeWidth={1.5} />
+              Biblioteca
+              <ExternalLink size={8} strokeWidth={1.5} />
             </a>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1 rounded-lg text-text-muted/40">
+              <Library size={10} strokeWidth={1.5} />
+              Sem link
+            </span>
           )}
         </div>
 

@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
 import { useForgeHistory } from "@/hooks/useForgeHistory";
 import { ForgeCategory, ForgeGeneration } from "@/types/forge";
 import { cn } from "@/lib/utils";
@@ -51,12 +52,15 @@ function HistoryLightbox({
   const params = gen.params as Record<string, string | number | undefined>;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/90 backdrop-blur-sm"
-      style={{ animation: "fadeIn 200ms ease-out" }}
+    <motion.div
+      className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-2xl bg-black/40"
+      style={{ WebkitBackdropFilter: "blur(40px)" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       onClick={onClose}
     >
-      <style>{`@keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }`}</style>
 
       <button
         onClick={onClose}
@@ -136,7 +140,7 @@ function HistoryLightbox({
           </div>
         </div>
       </div>
-    </div>,
+    </motion.div>,
     document.body,
   );
 }

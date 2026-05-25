@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, type LucideIcon,
+  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, Brain, FlaskConical, Workflow, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -23,9 +23,12 @@ const PRINCIPAL: NavItem[] = [
   { id: "creatives", label: "Criativos", icon: PenTool,     path: "/creatives" },
   { id: "products",  label: "Produtos",  icon: Box,         path: "/products" },
   { id: "forge",     label: "AI Studio", icon: Cpu,         path: "/forge" },
+  { id: "autoresearch", label: "AutoResearch", icon: FlaskConical, path: "/autoresearch" },
+  { id: "funnels",      label: "Funnels",      icon: Workflow,      path: "/funnels" },
 ];
 
 const KNOWLEDGE: NavItem[] = [
+  { id: "brain",      label: "Brain",                icon: Brain,        path: "/brain" },
   { id: "biblioteca", label: "Biblioteca",           icon: Library,      path: "/biblioteca" },
   { id: "clientes",   label: "Clientes Artificiais", icon: Fingerprint,  path: "/clientes" },
 ];
@@ -62,41 +65,51 @@ function EclipseMark() {
 export default function Sidebar() {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
-  const [ready, setReady] = useState(false);
+  const [firstLeave, setFirstLeave] = useState(true);
 
-  // Start open, then after 1.5s allow collapse
-  useEffect(() => {
-    const t = setTimeout(() => {
+  const handleMouseEnter = () => {
+    if (firstLeave) return; // still on initial state, don't toggle yet
+    setExpanded((prev) => !prev);
+  };
+
+  const handleMouseLeave = () => {
+    if (firstLeave) {
+      // First leave: collapse and unlock toggle behavior
+      setFirstLeave(false);
       setExpanded(false);
-      setReady(true);
-    }, 1500);
-    return () => clearTimeout(t);
-  }, []);
+    }
+  };
 
   return (
     <aside
       className="hidden md:flex flex-shrink-0 h-[100dvh] flex-col border-r border-white/[0.07] bg-black/40 backdrop-blur-xl overflow-hidden"
       style={{
         width: expanded ? W_OPEN : W_CLOSED,
-        transition: ready ? "width 0.3s cubic-bezier(0.16, 1, 0.3, 1)" : "none",
+        transition: firstLeave ? "none" : "width 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
       }}
-      onMouseEnter={() => ready && setExpanded(true)}
-      onMouseLeave={() => ready && setExpanded(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Logo */}
-      <Link href="/dashboard" className="flex items-center justify-center px-3.5 pt-4 pb-3 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors">
+      <Link href="/dashboard" className="flex items-center gap-2.5 px-3.5 pt-4 pb-3 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors overflow-hidden">
         <img
           src="/logo.png"
           alt="Deimos"
           className="flex-shrink-0"
-          style={{ width: expanded ? 100 : 28, height: "auto", transition: "width 0.3s cubic-bezier(0.16, 1, 0.3, 1)" }}
+          style={{ width: 28, height: "auto" }}
         />
+        <span
+          className="text-[13px] font-semibold text-text-primary tracking-wide whitespace-nowrap overflow-hidden"
+          style={{ opacity: expanded ? 1 : 0, width: expanded ? "auto" : 0, transition: "opacity 0.4s ease, width 0.4s ease" }}
+        >
+          Deimos
+        </span>
       </Link>
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-2 pt-3 pb-2 space-y-px">
-        <div className={cn("overflow-hidden whitespace-nowrap", expanded ? "opacity-100 h-auto mb-1.5" : "opacity-0 h-0 mb-0")}
-          style={{ transition: "opacity 0.2s ease, height 0.2s ease" }}
+        <div className="overflow-hidden whitespace-nowrap mb-1.5"
+          style={{ opacity: expanded ? 1 : 0, transition: "opacity 0.3s ease" }}
         >
           <p className="px-3 pb-1.5 text-[9px] uppercase tracking-[0.22em] text-text-muted/60">
             Principal
@@ -113,8 +126,7 @@ export default function Sidebar() {
               href={item.path}
               title={!expanded ? item.label : undefined}
               className={cn(
-                "flex items-center gap-2.5 rounded-lg text-[11px] transition-all duration-150",
-                expanded ? "px-3 py-[7px]" : "px-0 py-[7px] justify-center",
+                "flex items-center gap-2.5 rounded-lg text-[11px] px-3 py-[7px]",
                 isActive
                   ? "text-text-primary bg-white/[0.07] shadow-sm"
                   : "text-text-muted hover:text-text-secondary hover:bg-white/[0.04]"
@@ -129,7 +141,7 @@ export default function Sidebar() {
                 "font-medium overflow-hidden whitespace-nowrap",
                 expanded ? "opacity-100 w-auto" : "opacity-0 w-0"
               )}
-                style={{ transition: "opacity 0.2s ease" }}
+                style={{ transition: "opacity 0.3s ease" }}
               >
                 {item.label}
               </span>
@@ -141,8 +153,8 @@ export default function Sidebar() {
         })}
 
         {/* Knowledge System section */}
-        <div className={cn("overflow-hidden whitespace-nowrap pt-4", expanded ? "opacity-100 h-auto mb-1.5" : "opacity-0 h-0 mb-0")}
-          style={{ transition: "opacity 0.2s ease, height 0.2s ease" }}
+        <div className="overflow-hidden whitespace-nowrap pt-4 mb-1.5"
+          style={{ opacity: expanded ? 1 : 0, transition: "opacity 0.3s ease" }}
         >
           <p className="px-3 pb-1.5 text-[9px] uppercase tracking-[0.22em] text-text-muted/60">
             Knowledge
@@ -159,8 +171,7 @@ export default function Sidebar() {
               href={item.path}
               title={!expanded ? item.label : undefined}
               className={cn(
-                "flex items-center gap-2.5 rounded-lg text-[11px] transition-all duration-150",
-                expanded ? "px-3 py-[7px]" : "px-0 py-[7px] justify-center",
+                "flex items-center gap-2.5 rounded-lg text-[11px] px-3 py-[7px]",
                 isActive
                   ? "text-text-primary bg-white/[0.07] shadow-sm"
                   : "text-text-muted hover:text-text-secondary hover:bg-white/[0.04]"
@@ -175,7 +186,7 @@ export default function Sidebar() {
                 "font-medium overflow-hidden whitespace-nowrap",
                 expanded ? "opacity-100 w-auto" : "opacity-0 w-0"
               )}
-                style={{ transition: "opacity 0.2s ease" }}
+                style={{ transition: "opacity 0.3s ease" }}
               >
                 {item.label}
               </span>
@@ -185,15 +196,12 @@ export default function Sidebar() {
       </nav>
 
       {/* User */}
-      <div className={cn(
-        "border-t border-white/[0.06] flex items-center",
-        expanded ? "px-3 py-3 gap-2.5" : "px-0 py-3 justify-center"
-      )}>
+      <div className="border-t border-white/[0.06] flex items-center px-3 py-3 gap-2.5">
         <div className="w-7 h-7 rounded-full bg-nova/15 border border-nova/30 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(255,138,31,0.25)]">
           <span className="text-[9px] font-semibold text-nova">CA</span>
         </div>
         <div className={cn("min-w-0 overflow-hidden whitespace-nowrap", expanded ? "opacity-100 w-auto" : "opacity-0 w-0")}
-          style={{ transition: "opacity 0.2s ease" }}
+          style={{ transition: "opacity 0.3s ease" }}
         >
           <p className="text-[11px] text-text-primary truncate font-semibold leading-tight">
             Caio Andrade

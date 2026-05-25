@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import LayoutApp from "@/app/layout-app";
 import { Pencil, Plus, Loader2, MessageSquare, BookOpen, Feather, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -45,9 +46,31 @@ export default function VslStudioPage() {
           ))}</div>
         )}
 
+        <AnimatePresence>
         {showModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
-            <div className="w-full max-w-lg mx-4 bg-bg-2 border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl">
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              className="fixed inset-0 backdrop-blur-2xl bg-black/40"
+              style={{ WebkitBackdropFilter: "blur(40px)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowModal(false)}
+            />
+            <motion.div
+              className="relative w-full max-w-lg mx-4 bg-[#0B0B0C]/90 backdrop-blur-md border border-white/[0.04] rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
+              style={{ WebkitBackdropFilter: "blur(20px)" }}
+              initial={{ opacity: 0, y: 40, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.97 }}
+              transition={{ type: "spring", damping: 28, stiffness: 380, mass: 0.8 }}
+            >
               <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]"><h2 className="text-[14px] font-semibold text-text-primary">Escolha o contexto</h2><button onClick={() => setShowModal(false)} className="text-text-muted hover:text-text-secondary"><X size={16} strokeWidth={1.5} /></button></div>
               <div className="flex items-center gap-1 px-5 pt-4 pb-2">
                 <button onClick={() => setTab("copywriter")} className={cn("flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium", tab === "copywriter" ? "bg-white/[0.08] text-text-primary" : "text-text-muted")}><Feather size={12} strokeWidth={1.5} /> Copywriters</button>
@@ -70,9 +93,10 @@ export default function VslStudioPage() {
                   ))}</div>
                 )}
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         )}
+        </AnimatePresence>
       </div>
     </LayoutApp>
   );
