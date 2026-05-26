@@ -219,8 +219,8 @@ function FunnelCanvasInner({
   // Sync DB → local: only when node set changes (add/remove/data), not on position saves
   const prevNodeKeyRef = useRef("");
   useEffect(() => {
-    // Build a key from IDs + labels + types + content/metrics (but NOT positions)
-    const key = rfNodesFromDB.map((n) => `${n.id}:${n.data.type}:${n.data.label}:${JSON.stringify(n.data.children?.length ?? 0)}`).join("|");
+    // Build a key from IDs + labels + types + content (but NOT positions)
+    const key = rfNodesFromDB.map((n) => `${n.id}:${n.data.type}:${n.data.label}:${n.data.children?.length ?? 0}:${JSON.stringify(n.data.content)}`).join("|");
     if (key === prevNodeKeyRef.current) return;
     prevNodeKeyRef.current = key;
 

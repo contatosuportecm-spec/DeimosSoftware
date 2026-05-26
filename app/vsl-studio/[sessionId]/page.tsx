@@ -6,6 +6,7 @@ import { ArrowLeft, Send, Loader2, Pencil, Feather, BookOpen, X } from "lucide-r
 import { cn } from "@/lib/utils";
 import { VslSession, PersonaOffer } from "@/types";
 import { COPYWRITERS } from "@/lib/copywriters";
+import MarkdownMessage from "@/components/ui/MarkdownMessage";
 
 interface LocalMessage {
   id: string;
@@ -101,7 +102,7 @@ export default function VslChatPage() {
                 </div>
               )}
               <div className={cn("rounded-xl px-4 py-3 text-[13px] leading-relaxed", msg.role === "user" ? "bg-nova/10 border border-nova/15 text-text-primary" : "bg-bg-3 border border-white/[0.06] text-text-secondary")}>
-                <div className="whitespace-pre-wrap">{msg.content}</div>
+                <MarkdownMessage content={msg.content} />
               </div>
             </div>
           </div>

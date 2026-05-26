@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Book, PersonaOffer } from "@/types";
 import { COPYWRITERS } from "@/lib/copywriters";
 import type { Copywriter } from "@/types";
+import MarkdownMessage from "@/components/ui/MarkdownMessage";
 
 /* ───────── Types ───────── */
 
@@ -474,7 +475,7 @@ export default function BibliotecaPage() {
                             : "bg-bg-2 border border-white/[0.06] text-text-secondary"
                         )}
                       >
-                        <div className="whitespace-pre-wrap">{msg.content}</div>
+                        <MarkdownMessage content={msg.content} />
                       </div>
                     </div>
                   </div>

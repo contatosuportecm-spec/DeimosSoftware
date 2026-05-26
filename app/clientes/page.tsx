@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ClientPersona, ClientSession, PersonaOffer } from "@/types";
+import MarkdownMessage from "@/components/ui/MarkdownMessage";
 
 /* ───────── Types ───────── */
 
@@ -638,7 +639,7 @@ export default function ClientesPage() {
                           "rounded-2xl px-4 py-3 text-[12px] leading-[1.7]",
                           msg.role === "user" ? "bg-bg-3 border border-white/[0.08] text-text-primary" : "bg-bg-2/80 border border-white/[0.05] text-text-secondary"
                         )}>
-                          {report ? <ReportView r={report} /> : <div className="whitespace-pre-wrap">{msg.content}</div>}
+                          {report ? <ReportView r={report} /> : <MarkdownMessage content={msg.content} />}
                         </div>
                       </div>
                     </div>
