@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { X, Maximize2 } from "lucide-react";
+import { X, Maximize2, Plus, AlignLeft, ToggleLeft, Sliders } from "lucide-react";
 import { NODE_TYPE_META, type FunnelNode, type FunnelNodeType, type AggregatedMetrics } from "@/types/funnels";
 import { cn } from "@/lib/utils";
 
@@ -35,7 +35,7 @@ export default function NodeInspector({ node, onClose, onUpdate, onDrillDown, ag
       }
       setSaved(true);
       setTimeout(() => setSaved(false), 1200);
-    }, 800);
+    }, 300);
   }, [node, onUpdate]);
 
   if (!node) return null;
@@ -147,20 +147,7 @@ function ContentTab({ node, onChange, onDrillDown }: {
       )}
 
       {node.type === "quiz_question" && (
-        <>
-          <Field label="Pergunta" value={(content.question as string) ?? ""} onChange={(v) => onChange("question", v, "content")} type="textarea" />
-          <Field
-            label="Tipo de Resposta"
-            value={(content.question_type as string) ?? "single"}
-            onChange={(v) => onChange("question_type", v, "content")}
-            type="select"
-            options={[
-              { value: "single", label: "Unica escolha" },
-              { value: "multi", label: "Multipla escolha" },
-              { value: "open", label: "Aberta" },
-            ]}
-          />
-        </>
+        <QuizQuestionFields content={content} onChange={onChange} />
       )}
 
       {node.type === "button_answer" && (
@@ -181,6 +168,132 @@ function ContentTab({ node, onChange, onDrillDown }: {
           <Field label="Label" value={(content.label as string) ?? ""} onChange={(v) => onChange("label", v, "content")} />
           <Field label="Placeholder" value={(content.placeholder as string) ?? ""} onChange={(v) => onChange("placeholder", v, "content")} placeholder="Ex: Joao Silva" />
         </>
+      )}
+    </div>
+  );
+}
+
+/* ── Quiz Question Fields ── */
+
+const Q_TYPES = [
+  { value: "open",   label: "Aberta",  Icon: AlignLeft,  desc: "Campo de texto livre" },
+  { value: "button", label: "Botão",   Icon: ToggleLeft, desc: "Botões clicáveis, cada um conectável a um fluxo" },
+  { value: "scale",  label: "Escala",  Icon: Sliders,    desc: "Régua de medida (ex: 1 a 10)" },
+] as const;
+
+function normalizeQType(v: string): "open" | "button" | "scale" {
+  if (v === "single" || v === "multi" || v === "button") return "button";
+  if (v === "scale") return "scale";
+  return "open";
+}
+
+function QuizQuestionFields({
+  content,
+  onChange,
+}: {
+  content: Record<string, unknown>;
+  onChange: (field: string, value: unknown, nested?: string) => void;
+}) {
+  const [qType, setQType] = useState<"open" | "button" | "scale">(() =>
+    normalizeQType((content.question_type as string) ?? "open")
+  );
+
+  // Local state for options — immediate visual feedback without waiting for debounce
+  const propsOptions = (content.options as Array<{ id: string; label: string }>) ?? [];
+  const [options, setOptions] = useState<Array<{ id: string; label: string }>>(propsOptions);
+
+  // Sync when options are added/removed externally (e.g. from the card inline editor)
+  const propsIdsKey = propsOptions.map((o) => o.id).join(",");
+  useEffect(() => {
+    setOptions((content.options as Array<{ id: string; label: string }>) ?? []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propsIdsKey]);
+
+  const handleTypeChange = (v: "open" | "button" | "scale") => {
+    setQType(v);
+    onChange("question_type", v, "content");
+  };
+
+  const updateOptions = (opts: Array<{ id: string; label: string }>) => {
+    setOptions(opts); // immediate visual update
+    onChange("options", opts, "content");
+  };
+
+  return (
+    <div className="space-y-4">
+      <Field
+        label="Pergunta"
+        value={(content.question as string) ?? ""}
+        onChange={(v) => onChange("question", v, "content")}
+        type="textarea"
+      />
+
+      {/* Type selector */}
+      <div>
+        <label className="block text-[10px] uppercase tracking-[0.12em] text-text-muted mb-2">
+          Tipo de Resposta
+        </label>
+        <div className="grid grid-cols-3 gap-1.5">
+          {Q_TYPES.map(({ value, label, Icon }) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => handleTypeChange(value)}
+              className={cn(
+                "flex flex-col items-center gap-1.5 py-2.5 px-2 rounded-lg border text-center transition-all",
+                qType === value
+                  ? "border-[#C084FC]/50 bg-[#C084FC]/10 text-[#C084FC]"
+                  : "border-white/[0.06] bg-bg-3 text-text-muted hover:border-white/[0.12] hover:text-text-secondary"
+              )}
+            >
+              <Icon size={14} strokeWidth={1.5} />
+              <span className="text-[10px] font-medium">{label}</span>
+            </button>
+          ))}
+        </div>
+        <p className="text-[10px] text-text-muted mt-1.5 leading-relaxed">
+          {Q_TYPES.find((t) => t.value === qType)?.desc}
+        </p>
+      </div>
+
+      {/* Options editor (button type only) */}
+      {qType === "button" && (
+        <div className="space-y-2">
+          <label className="block text-[10px] uppercase tracking-[0.12em] text-text-muted">
+            Opções
+          </label>
+          {options.map((opt, i) => (
+            <div key={opt.id} className="flex items-center gap-2">
+              <div className="w-5 h-5 rounded-md bg-[#C084FC]/10 border border-[#C084FC]/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-[9px] font-mono text-[#C084FC]/70">{i + 1}</span>
+              </div>
+              <input
+                className="flex-1 bg-bg-3 border border-white/[0.06] rounded-lg px-2.5 py-1.5 text-[12px] text-text-primary outline-none focus:border-[#C084FC]/30 transition-colors"
+                defaultValue={opt.label}
+                placeholder={`Opção ${i + 1}`}
+                onChange={(e) => {
+                  const updated = options.map((o) => o.id === opt.id ? { ...o, label: e.target.value } : o);
+                  updateOptions(updated);
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => updateOptions(options.filter((o) => o.id !== opt.id))}
+                className="p-1 rounded text-text-muted hover:text-red-400 hover:bg-red-400/10 transition-colors flex-shrink-0"
+              >
+                <X size={12} strokeWidth={1.5} />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => updateOptions([...options, { id: crypto.randomUUID(), label: "" }])}
+            className="flex items-center gap-1.5 text-[11px] text-text-muted hover:text-[#C084FC] transition-colors py-1"
+          >
+            <Plus size={12} strokeWidth={1.5} />
+            Adicionar opção
+          </button>
+        </div>
       )}
     </div>
   );

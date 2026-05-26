@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
-import { createSSEStream, SSE_HEADERS } from "@/lib/stream";
+import { streamClaude } from "@/lib/claude";
+import { SSE_HEADERS } from "@/lib/stream";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 
@@ -86,14 +87,14 @@ export async function POST(req: NextRequest, { params }: { params: { personaId: 
       const parts: string[] = [];
 
       // Check persona_offers
-      const { data: pOffers } = await supabase.from("persona_offers").select("title, content").in("id", offer_ids);
+      const { data: pOffers } = await supabase.from("persona_offers").select("id, title, content").in("id", offer_ids);
       if (pOffers) parts.push(...pOffers.map((o) => `[${o.title}]\n${o.content}`));
 
-      // Check offer_briefings for remaining IDs
-      const foundIds = new Set(pOffers?.map((o) => o.title) || []);
-      const remainingIds = offer_ids.filter((id) => !pOffers?.some((o) => o.title === id && false));
+      // Check offer_briefings for remaining IDs (those not found in persona_offers)
+      const foundIds = new Set((pOffers || []).map((o) => o.id));
+      const remainingIds = offer_ids.filter((id) => !foundIds.has(id));
       if (remainingIds.length > 0) {
-        const { data: briefings } = await supabase.from("offer_briefings").select("offer_name, niche, promise, main_headline, target_audience, main_pains, main_desires, new_mechanism, product_name, price, guarantee, main_cta").in("id", offer_ids);
+        const { data: briefings } = await supabase.from("offer_briefings").select("offer_name, niche, promise, main_headline, target_audience, main_pains, main_desires, new_mechanism, product_name, price, guarantee, main_cta").in("id", remainingIds);
         if (briefings) {
           parts.push(...briefings.map((b) => {
             const lines = [
@@ -122,18 +123,59 @@ export async function POST(req: NextRequest, { params }: { params: { personaId: 
       ? buildTestPrompt(persona, offerCtx)
       : buildConversationPrompt(persona, offerCtx);
 
-    const { data: history } = await supabase.from("client_messages").select("role, content").eq("session_id", params.sessionId).order("created_at", { ascending: true }).limit(10);
-    const messages = [...(history || []).map((m) => ({ role: m.role as "user" | "assistant", content: m.content })), { role: "user" as const, content: message }];
+    const { data: history } = await supabase.from("client_messages").select("role, content").eq("session_id", params.sessionId).order("created_at", { ascending: true }).limit(20);
+
+    // Sanitize history: ensure alternating user/assistant roles.
+    // If the last assistant response was never saved (e.g. function killed mid-stream),
+    // history could end with a user message causing Gemini to reject the request.
+    const rawHistory = (history || []) as { role: string; content: string }[];
+    const cleanHistory: { role: "user" | "assistant"; content: string }[] = [];
+    for (const m of rawHistory) {
+      const expected = cleanHistory.length % 2 === 0 ? "user" : "assistant";
+      if (m.role === expected) cleanHistory.push({ role: m.role as "user" | "assistant", content: m.content });
+    }
+    // Drop trailing user message if unpaired (no assistant response saved)
+    if (cleanHistory.length > 0 && cleanHistory[cleanHistory.length - 1].role === "user") {
+      cleanHistory.pop();
+    }
+
+    const messages = [...cleanHistory, { role: "user" as const, content: message }];
 
     await supabase.from("client_messages").insert({ session_id: params.sessionId, role: "user", content: message });
     const { data: session } = await supabase.from("client_sessions").select("title").eq("id", params.sessionId).single();
     if (!session?.title) await supabase.from("client_sessions").update({ title: message.slice(0, 60) }).eq("id", params.sessionId);
 
-    const stream = await createSSEStream({ messages, systemPrompt });
-    const [streamForClient, streamForSave] = stream.tee();
-    const reader = streamForSave.getReader(); const decoder = new TextDecoder(); const full: string[] = [];
-    (async () => { try { while (true) { const { done, value } = await reader.read(); if (done) break; for (const l of decoder.decode(value).split("\n")) { if (!l.startsWith("data: ")) continue; const d = l.slice(6); if (d === "[DONE]") continue; try { full.push(JSON.parse(d).text); } catch {} } } if (full.length > 0) await supabase.from("client_messages").insert({ session_id: params.sessionId, role: "assistant", content: full.join("") }); } catch (e) { console.error("[save client msg]", e); } })();
+    // Stream the LLM response, buffer it, and save to DB BEFORE closing the stream.
+    // This avoids the Vercel serverless race where the function is killed after the response
+    // is sent but before a background async IIFE can complete the DB insert.
+    const encoder = new TextEncoder();
+    const llmStream = await streamClaude({ messages, systemPrompt });
+    const responseStream = new ReadableStream({
+      async start(controller) {
+        const full: string[] = [];
+        try {
+          for await (const chunk of llmStream) {
+            if (chunk.type === "content_block_delta" && chunk.delta.type === "text_delta") {
+              full.push(chunk.delta.text);
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: chunk.delta.text })}\n\n`));
+            }
+          }
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+        } catch (err) {
+          console.error("[clientes/chat stream]", err);
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify({ text: "\n\n[Erro ao gerar resposta]" })}\n\n`));
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+        } finally {
+          // Save assistant message before closing — function is still alive at this point
+          if (full.length > 0) {
+            const { error: saveErr } = await supabase.from("client_messages").insert({ session_id: params.sessionId, role: "assistant", content: full.join("") });
+            if (saveErr) console.error("[save client msg]", saveErr);
+          }
+          controller.close();
+        }
+      },
+    });
 
-    return new Response(streamForClient, { headers: SSE_HEADERS });
+    return new Response(responseStream, { headers: SSE_HEADERS });
   } catch (err) { console.error("[clientes/chat]", err); return NextResponse.json({ error: "Erro no chat" }, { status: 500 }); }
 }

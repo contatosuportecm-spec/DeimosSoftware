@@ -61,7 +61,7 @@ export const NODE_TYPE_META: Record<FunnelNodeType, NodeTypeMeta> = {
 /** Types allowed as children per parent type */
 export const ALLOWED_CHILDREN: Partial<Record<FunnelNodeType, FunnelNodeType[]>> = {
   vsl:           ["headline", "copy_block", "button"],
-  quiz:          ["quiz_question", "button_answer", "text_answer"],
+  quiz:          ["quiz_question"],
   sales_page:    ["copy_block", "button"],
   email:         ["copy_block"],
   whatsapp:      ["copy_block"],
@@ -84,7 +84,11 @@ export const ALL_NODE_TYPES = Object.keys(NODE_TYPE_META) as FunnelNodeType[];
 export interface HeadlineContent { text: string }
 export interface CopyBlockContent { body: string; role?: string }
 export interface ButtonContent { label: string; target_url?: string }
-export interface QuizQuestionContent { question: string; question_type: "single" | "multi" | "open" }
+export interface QuizQuestionContent {
+  question: string;
+  question_type: "open" | "button" | "scale";
+  options?: Array<{ id: string; label: string }>;
+}
 export interface ButtonAnswerContent { options: Array<{ id: string; label: string }> }
 export interface TextAnswerContent { label: string; placeholder?: string }
 

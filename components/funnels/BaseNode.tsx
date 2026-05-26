@@ -1,9 +1,9 @@
 // @ts-nocheck — reactflow Handle/NodeProps compat with @types/react 18.3
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
-import { Maximize2, Trash2, Type, Square, Plus, BarChart2, X } from "lucide-react";
+import { Maximize2, Trash2, Type, Square, Plus, BarChart2, X, AlignLeft, ToggleLeft, Sliders } from "lucide-react";
 import { NODE_TYPE_META, type FunnelNodeType, type AggregatedMetrics } from "@/types/funnels";
 import { cn } from "@/lib/utils";
 
@@ -221,7 +221,30 @@ function BaseNodeComponent({ data, selected, dragging }: NodeProps<BaseNodeData>
       onDoubleClick={(e) => { e.stopPropagation(); if (showDrillDown) data.onDrillDown?.(data.id); }}
     >
       {/* ── Handles ── */}
-      {data.type === "button_answer" ? (
+      {data.type === "quiz_question" ? (
+        <>
+          {/* Quiz question: target on left, per-option source handles on right for button type */}
+          <Handle id="target" type="target" position={Position.Left} className="funnel-handle !-left-[6px]" />
+          {(() => {
+            const qType = normalizeQType((data.content.question_type as string) ?? "open");
+            const opts = (data.content.options as Array<{id:string;label:string}>) ?? [];
+            if (qType === "button" && opts.length > 0) {
+              // header(56) + border+pad(13) + question-2lines(38) + type-badge(22) + gap(8) = 137
+              return opts.map((opt, i) => (
+                <Handle
+                  key={opt.id}
+                  id={`option-${opt.id}`}
+                  type="source"
+                  position={Position.Right}
+                  style={{ top: `${137 + i * 34 + 17}px` }}
+                  className="funnel-handle !-right-[6px]"
+                />
+              ));
+            }
+            return <Handle id="source" type="source" position={Position.Right} className="funnel-handle !-right-[6px]" />;
+          })()}
+        </>
+      ) : data.type === "button_answer" ? (
         <>
           {/* Button answer: target on left, dynamic option handles on right */}
           <Handle id="target" type="target" position={Position.Left} className="funnel-handle !-left-[6px]" />
@@ -438,13 +461,7 @@ function BaseNodeComponent({ data, selected, dragging }: NodeProps<BaseNodeData>
             </div>
           )}
           {data.type === "quiz_question" && (
-            data.content.question ? (
-              <p className="text-[13px] text-white/85 leading-snug line-clamp-3">
-                {String(data.content.question)}
-              </p>
-            ) : (
-              <p className="text-[12px] text-[#3a3a4a] italic">Sem pergunta definida</p>
-            )
+            <QuizQuestionBody data={data} />
           )}
           {/* ── Button Answer: options with individual handles ── */}
           {data.type === "button_answer" && (
@@ -495,12 +512,21 @@ function BaseNodeComponent({ data, selected, dragging }: NodeProps<BaseNodeData>
 /* ═══ Button Answer Body ═══ */
 
 function ButtonAnswerBody({ data }: { data: BaseNodeData }) {
-  const options = (data.content.options as Array<{ id: string; label: string }>) ?? [];
+  const propsOptions = (data.content.options as Array<{ id: string; label: string }>) ?? [];
+  const [options, setOptions] = useState<Array<{ id: string; label: string }>>(propsOptions);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editVal, setEditVal] = useState("");
 
+  // Sync when options are added/removed externally
+  const propsIdsKey = propsOptions.map((o) => o.id).join(",");
+  useEffect(() => {
+    setOptions((data.content.options as Array<{ id: string; label: string }>) ?? []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propsIdsKey]);
+
   const saveOption = (optId: string, newLabel: string) => {
     const updated = options.map((o) => o.id === optId ? { ...o, label: newLabel } : o);
+    setOptions(updated);
     data.onUpdateContent?.(data.id, { ...data.content, options: updated });
     setEditingId(null);
   };
@@ -508,6 +534,7 @@ function ButtonAnswerBody({ data }: { data: BaseNodeData }) {
   const addOption = () => {
     const id = crypto.randomUUID();
     const updated = [...options, { id, label: "" }];
+    setOptions(updated); // immediate visual update
     data.onUpdateContent?.(data.id, { ...data.content, options: updated });
     setEditingId(id);
     setEditVal("");
@@ -515,6 +542,7 @@ function ButtonAnswerBody({ data }: { data: BaseNodeData }) {
 
   const removeOption = (optId: string) => {
     const updated = options.filter((o) => o.id !== optId);
+    setOptions(updated); // immediate visual update
     data.onUpdateContent?.(data.id, { ...data.content, options: updated });
     data.onDeleteEdgesByHandle?.(data.id, `option-${optId}`);
   };
@@ -605,6 +633,141 @@ function TextAnswerBody({ data }: { data: BaseNodeData }) {
       )}
       {placeholder && (
         <p className="text-[10px] text-[#4a4a5a] px-1">placeholder: &quot;{placeholder}&quot;</p>
+      )}
+    </div>
+  );
+}
+
+/* ── normalizeQType: backward compat for old "single"/"multi" values ── */
+
+function normalizeQType(v: string): "open" | "button" | "scale" {
+  if (v === "single" || v === "multi" || v === "button") return "button";
+  if (v === "scale") return "scale";
+  return "open";
+}
+
+const Q_TYPE_META: Record<"open" | "button" | "scale", { label: string; Icon: typeof AlignLeft }> = {
+  open:   { label: "Aberta",  Icon: AlignLeft },
+  button: { label: "Botão",   Icon: ToggleLeft },
+  scale:  { label: "Escala",  Icon: Sliders },
+};
+
+/* ═══ Quiz Question Body ═══ */
+
+function QuizQuestionBody({ data }: { data: BaseNodeData }) {
+  const qType = normalizeQType((data.content.question_type as string) ?? "open");
+  const question = (data.content.question as string) ?? "";
+  const propsOptions = (data.content.options as Array<{ id: string; label: string }>) ?? [];
+  const [options, setOptions] = useState<Array<{ id: string; label: string }>>(propsOptions);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editVal, setEditVal] = useState("");
+
+  // Sync when options are added/removed externally (e.g. from the inspector)
+  const propsIdsKey = propsOptions.map((o) => o.id).join(",");
+  useEffect(() => {
+    setOptions((data.content.options as Array<{ id: string; label: string }>) ?? []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [propsIdsKey]);
+
+  const saveOption = (optId: string, newLabel: string) => {
+    const updated = options.map((o) => o.id === optId ? { ...o, label: newLabel } : o);
+    setOptions(updated);
+    data.onUpdateContent?.(data.id, { ...data.content, options: updated });
+    setEditingId(null);
+  };
+
+  const addOption = () => {
+    const id = crypto.randomUUID();
+    const updated = [...options, { id, label: "" }];
+    setOptions(updated); // immediate visual update
+    data.onUpdateContent?.(data.id, { ...data.content, options: updated });
+    setEditingId(id);
+    setEditVal("");
+  };
+
+  const removeOption = (optId: string) => {
+    const updated = options.filter((o) => o.id !== optId);
+    setOptions(updated); // immediate visual update
+    data.onUpdateContent?.(data.id, { ...data.content, options: updated });
+    data.onDeleteEdgesByHandle?.(data.id, `option-${optId}`);
+  };
+
+  const { label: typeLabel, Icon: TypeIcon } = Q_TYPE_META[qType];
+
+  return (
+    <div className="space-y-2">
+      {/* Question text */}
+      {question ? (
+        <p className="text-[13px] text-white/85 leading-snug line-clamp-2">{question}</p>
+      ) : (
+        <p className="text-[12px] text-[#3a3a4a] italic">Sem pergunta definida</p>
+      )}
+
+      {/* Type badge */}
+      <div className="flex items-center gap-1 py-0.5">
+        <TypeIcon size={10} strokeWidth={1.5} className="text-[#C084FC]/60" />
+        <span className="text-[9px] uppercase tracking-[0.12em] text-[#C084FC]/60">{typeLabel}</span>
+      </div>
+
+      {/* Button options with per-option handles */}
+      {qType === "button" && (
+        <div className="space-y-1 pt-0.5">
+          {options.length > 0 ? options.map((opt) => (
+            <div key={opt.id} className="group/opt flex items-center gap-1.5 px-1">
+              {editingId === opt.id ? (
+                <input
+                  autoFocus
+                  className="flex-1 bg-[#1a1a20] border border-[#C084FC]/30 rounded-md px-2.5 py-1.5 text-[12px] text-white outline-none"
+                  value={editVal}
+                  onChange={(e) => setEditVal(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") { e.stopPropagation(); saveOption(opt.id, editVal); }
+                    if (e.key === "Escape") { e.stopPropagation(); setEditingId(null); }
+                  }}
+                  onBlur={() => saveOption(opt.id, editVal)}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <div
+                  className="flex-1 bg-[#1a1a20] rounded-md px-2.5 py-1.5 text-[12px] text-[#c0c0cc] cursor-text hover:bg-[#1e1e28] transition-colors truncate"
+                  onClick={(e) => { e.stopPropagation(); setEditingId(opt.id); setEditVal(opt.label); }}
+                >
+                  {opt.label || <span className="text-[#3a3a4a] italic">Sem texto</span>}
+                </div>
+              )}
+              <button
+                className="p-0.5 rounded text-[#3a3a4a] hover:text-red-400 opacity-0 group-hover/opt:opacity-100 transition-opacity flex-shrink-0"
+                onClick={(e) => { e.stopPropagation(); removeOption(opt.id); }}
+              >
+                <X size={11} strokeWidth={2} />
+              </button>
+            </div>
+          )) : (
+            <p className="text-[11px] text-[#3a3a4a] italic px-1">Nenhuma opção · clique em + para adicionar</p>
+          )}
+          <button
+            className="flex items-center gap-1 px-1 py-0.5 text-[11px] text-[#5a5a6a] hover:text-[#C084FC] transition-colors"
+            onClick={(e) => { e.stopPropagation(); addOption(); }}
+          >
+            <Plus size={11} strokeWidth={2} /> adicionar opção
+          </button>
+        </div>
+      )}
+
+      {/* Open type indicator */}
+      {qType === "open" && (
+        <div className="px-2.5 py-1.5 rounded-md bg-[#1a1a20] border border-[#252a38] text-[11px] text-[#4a4a5a] italic">
+          Resposta aberta...
+        </div>
+      )}
+
+      {/* Scale type indicator */}
+      {qType === "scale" && (
+        <div className="flex items-center gap-1 px-1 py-2">
+          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+            <div key={n} className="flex-1 h-1.5 rounded-full" style={{ background: `rgba(192,132,252,${0.1 + n * 0.1})` }} />
+          ))}
+        </div>
       )}
     </div>
   );
