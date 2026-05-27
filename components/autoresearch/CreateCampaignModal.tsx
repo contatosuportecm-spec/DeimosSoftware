@@ -138,8 +138,7 @@ export default function CreateCampaignModal({
       >
         {/* Backdrop — translucent blur over entire page */}
         <motion.div
-          className="fixed inset-0 backdrop-blur-2xl bg-black/40"
-          style={{ WebkitBackdropFilter: "blur(40px)" }}
+          className="fixed inset-0 bg-black/70"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -148,8 +147,7 @@ export default function CreateCampaignModal({
 
         {/* Card — slides up with spring */}
         <motion.div
-          className="relative w-full max-w-[540px] max-h-[88vh] overflow-y-auto rounded-2xl shadow-[0_32px_80px_rgba(0,0,0,0.6)] border border-white/[0.04] bg-[#0B0B0C]/90 backdrop-blur-md"
-          style={{ WebkitBackdropFilter: "blur(20px)" }}
+          className="relative w-full max-w-[540px] max-h-[88vh] overflow-y-auto rounded-2xl shadow-[0_32px_80px_rgba(0,0,0,0.6)] border border-white/[0.04] bg-[#0B0B0C]"
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 20, scale: 0.97 }}

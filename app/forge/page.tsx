@@ -194,8 +194,7 @@ function GenLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () => vo
 
   return createPortal(
     <motion.div
-      className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-2xl bg-black/40"
-      style={{ WebkitBackdropFilter: "blur(40px)" }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

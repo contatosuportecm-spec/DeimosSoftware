@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useCallback, useEffect } from "react";
+import { useRef, useState, useCallback, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
@@ -38,26 +38,28 @@ export default function DashboardPage() {
   const { briefings } = useOfferBriefings();
 
   // Top 2 spy offers by ads count
-  const topSpy = [...offers]
+  const topSpy = useMemo(() => [...offers]
     .filter((o) => o.status !== "archived" && o.snapshots.length > 0)
     .sort((a, b) => {
       const aLast = a.snapshots[a.snapshots.length - 1]?.active_ads_count ?? 0;
       const bLast = b.snapshots[b.snapshots.length - 1]?.active_ads_count ?? 0;
       return bLast - aLast;
     })
-    .slice(0, 2);
+    .slice(0, 2), [offers]);
 
   // Active briefings
-  const activeBriefings = briefings.filter((b) => b.status === "active" || b.status === "draft").slice(0, 4);
+  const activeBriefings = useMemo(() => briefings.filter((b) => b.status === "active" || b.status === "draft").slice(0, 4), [briefings]);
 
   // Stats
-  const totalOffers = offers.filter((o) => o.status !== "archived").length;
-  const totalAds = offers.reduce((sum, o) => {
-    const last = o.snapshots[o.snapshots.length - 1]?.active_ads_count ?? 0;
-    return sum + last;
-  }, 0);
-  const totalBriefings = briefings.length;
-  const activeBriefingsCount = briefings.filter((b) => b.status === "active").length;
+  const { totalOffers, totalAds, totalBriefings, activeBriefingsCount } = useMemo(() => ({
+    totalOffers: offers.filter((o) => o.status !== "archived").length,
+    totalAds: offers.reduce((sum, o) => {
+      const last = o.snapshots[o.snapshots.length - 1]?.active_ads_count ?? 0;
+      return sum + last;
+    }, 0),
+    totalBriefings: briefings.length,
+    activeBriefingsCount: briefings.filter((b) => b.status === "active").length,
+  }), [offers, briefings]);
 
   const today = new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 
@@ -370,8 +372,7 @@ function StudioLightbox({ gen, onClose }: { gen: ForgeGeneration; onClose: () =>
 
   return createPortal(
     <motion.div
-      className="fixed inset-0 z-[9999] flex items-center justify-center backdrop-blur-2xl bg-black/40"
-      style={{ WebkitBackdropFilter: "blur(40px)" }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
