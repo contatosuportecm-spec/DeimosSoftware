@@ -50,12 +50,12 @@ export const NODE_TYPE_META: Record<FunnelNodeType, NodeTypeMeta> = {
   checkout:    { label: "Checkout",      icon: ShoppingCart,    category: "terminal",  color: "#F4C430" },
   sale:        { label: "Sale",          icon: CheckCircle2,    category: "terminal",  color: "#22C55E" },
   // Blocks
-  headline:    { label: "Headline",      icon: Heading,         category: "block",     color: "#60A5FA", cardWidth: 280 },
-  copy_block:  { label: "Copy Block",    icon: Type,            category: "block",     color: "#94A3B8" },
-  button:      { label: "Button",        icon: MousePointerClick, category: "block",   color: "#FB923C", cardWidth: 180 },
-  quiz_question: { label: "Pergunta",    icon: HelpCircle,      category: "block",     color: "#C084FC" },
-  button_answer: { label: "Resposta · Botao", icon: Square,     category: "block",     color: "#A78BFA", cardWidth: 300 },
-  text_answer:   { label: "Resposta · Texto", icon: TextCursorInput, category: "block", color: "#8B8BFA", cardWidth: 260 },
+  headline:    { label: "Headline",      icon: Heading,         category: "block",     color: "#60A5FA", cardWidth: 300 },
+  copy_block:  { label: "Copy Block",    icon: Type,            category: "block",     color: "#94A3B8", cardWidth: 280 },
+  button:      { label: "Button",        icon: MousePointerClick, category: "block",   color: "#FB923C", cardWidth: 220 },
+  quiz_question: { label: "Pergunta",    icon: HelpCircle,      category: "block",     color: "#C084FC", cardWidth: 300 },
+  button_answer: { label: "Resposta · Botao", icon: Square,     category: "block",     color: "#A78BFA", cardWidth: 320 },
+  text_answer:   { label: "Resposta · Texto", icon: TextCursorInput, category: "block", color: "#8B8BFA", cardWidth: 280 },
 };
 
 /** Types allowed as children per parent type */

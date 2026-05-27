@@ -68,16 +68,13 @@ export default function Sidebar() {
   const [firstLeave, setFirstLeave] = useState(true);
 
   const handleMouseEnter = () => {
-    if (firstLeave) return; // still on initial state, don't toggle yet
-    setExpanded((prev) => !prev);
+    if (firstLeave) return;
+    setExpanded(true);
   };
 
   const handleMouseLeave = () => {
-    if (firstLeave) {
-      // First leave: collapse and unlock toggle behavior
-      setFirstLeave(false);
-      setExpanded(false);
-    }
+    if (firstLeave) setFirstLeave(false);
+    setExpanded(false);
   };
 
   return (

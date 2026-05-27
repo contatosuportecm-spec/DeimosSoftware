@@ -2,19 +2,20 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactFlow, {
-  Background, BackgroundVariant, SelectionMode,
+  Background, BackgroundVariant, MiniMap, SelectionMode,
   type Node, type Edge, type Connection, type OnNodesChange, type OnEdgesChange,
   applyNodeChanges, applyEdgeChanges,
   useReactFlow, ReactFlowProvider, ConnectionMode,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import { MousePointer2 } from "lucide-react";
 
 import { BaseNode, type BaseNodeData } from "./BaseNode";
 import { DeletableEdge } from "./DeletableEdge";
 import FunnelBreadcrumb, { type BreadcrumbItem } from "./Breadcrumb";
 import AddNodeMenu from "./AddNodeMenu";
 import NodeInspector from "./NodeInspector";
-import { getNodesAtLevel, getEdgesAtLevel, countDescendants } from "@/hooks/useFunnels";
+import { getNodesAtLevel, getEdgesAtLevel } from "@/hooks/useFunnels";
 import { NODE_TYPE_META, type FunnelNode, type FunnelEdge, type FunnelNodeType, type AggregatedMetrics } from "@/types/funnels";
 
 const nodeTypes = { base: BaseNode };
@@ -50,11 +51,7 @@ function computeAggregatedMetrics(nodeId: string, nodeType: FunnelNodeType, allN
 
   switch (nodeType) {
     case "vsl":
-      return {
-        playrate: avg("playrate"),
-        retention_media: avg("retention"),
-        ctr_botoes: avg("ctr"),
-      };
+      return { playrate: avg("playrate"), retention_media: avg("retention"), ctr_botoes: avg("ctr") };
     case "sales_page":
       return { ctr_medio: avg("ctr") };
     case "email":
@@ -62,7 +59,6 @@ function computeAggregatedMetrics(nodeId: string, nodeType: FunnelNodeType, allN
       return { open_rate_medio: avg("open_rate"), click_rate_medio: avg("click_rate") };
     case "upsell":
     case "downsell": {
-      // Aggregate from the inner container's children
       const innerContainer = children[0];
       if (innerContainer) return computeAggregatedMetrics(innerContainer.id, innerContainer.type, allNodes);
       return {};
@@ -86,7 +82,8 @@ function FunnelCanvasInner({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const selectedNode = allNodes.find((n) => n.id === selectedNodeId) ?? null;
 
-  const posTimer = useRef<NodeJS.Timeout>();
+  // Per-node position save timers (prevents race conditions)
+  const posTimers = useRef<Map<string, NodeJS.Timeout>>(new Map());
 
   const currentParentNode = currentParentId ? allNodes.find((n) => n.id === currentParentId) : null;
 
@@ -117,6 +114,17 @@ function FunnelCanvasInner({
     return map;
   }, [levelNodes, allNodes]);
 
+  // Pre-compute parent→child count map for efficiency
+  const parentChildCountMap = useMemo(() => {
+    const map: Record<string, number> = {};
+    for (const n of allNodes) {
+      if (n.parent_node_id) {
+        map[n.parent_node_id] = (map[n.parent_node_id] ?? 0) + 1;
+      }
+    }
+    return map;
+  }, [allNodes]);
+
   // Children summaries for container cards
   const childrenMap = useMemo(() => {
     const map: Record<string, import("./BaseNode").ChildSummary[]> = {};
@@ -130,14 +138,13 @@ function FunnelCanvasInner({
           label: c.label,
           metrics: c.metrics,
           content: c.content,
-          childCount: allNodes.filter((gc) => gc.parent_node_id === c.id).length,
+          childCount: parentChildCountMap[c.id] ?? 0,
         }));
       if (kids.length > 0) map[n.id] = kids;
     }
     return map;
-  }, [levelNodes, allNodes]);
+  }, [levelNodes, allNodes, parentChildCountMap]);
 
-  // Select a child node (from sub-line click) without changing level
   const handleSelectChild = useCallback((childId: string) => {
     setSelectedNodeId(childId);
   }, []);
@@ -146,7 +153,6 @@ function FunnelCanvasInner({
   const quickAddSource = useRef<string | null>(null);
   const quickAddRef = useRef<(sourceId: string) => void>(() => {});
 
-  // Inline metric update
   const handleUpdateMetric = useCallback((nodeId: string, key: string, value: number | null) => {
     const node = allNodes.find((n) => n.id === nodeId);
     if (!node) return;
@@ -154,12 +160,10 @@ function FunnelCanvasInner({
     onUpdateNode(nodeId, { metrics: newMetrics });
   }, [allNodes, onUpdateNode]);
 
-  // Content update (for inline editing in button_answer/text_answer)
   const handleUpdateContent = useCallback((nodeId: string, content: Record<string, unknown>) => {
     onUpdateNode(nodeId, { content });
   }, [onUpdateNode]);
 
-  // Delete edges by handle (when removing a button_answer option)
   const handleDeleteEdgesByHandle = useCallback((nodeId: string, handleId: string) => {
     const toDelete = allEdges.filter((e) => e.source_node_id === nodeId && e.source_handle === handleId);
     for (const e of toDelete) {
@@ -192,7 +196,7 @@ function FunnelCanvasInner({
         parentType: currentParentNode?.type ?? null,
       },
     })),
-    [levelNodes, handleDrillDown, handleNodeDelete, handleSelectChild, handleUpdateMetric, aggregatedMetricsMap, childrenMap, currentParentNode]
+    [levelNodes, handleDrillDown, handleNodeDelete, handleSelectChild, handleUpdateMetric, handleUpdateContent, handleDeleteEdgesByHandle, aggregatedMetricsMap, childrenMap, currentParentNode]
   );
 
   const [rfNodes, setRfNodes] = useState<Node<BaseNodeData>[]>(rfNodesFromDB);
@@ -216,11 +220,12 @@ function FunnelCanvasInner({
     setContextMenu({ x: screenX, y: screenY });
   };
 
-  // Sync DB → local: only when node set changes (add/remove/data), not on position saves
+  // Sync DB → local: includes metrics + aggregated in key so inline edits trigger re-render
   const prevNodeKeyRef = useRef("");
   useEffect(() => {
-    // Build a key from IDs + labels + types + content (but NOT positions)
-    const key = rfNodesFromDB.map((n) => `${n.id}:${n.data.type}:${n.data.label}:${n.data.children?.length ?? 0}:${JSON.stringify(n.data.content)}`).join("|");
+    const key = rfNodesFromDB.map((n) =>
+      `${n.id}:${n.data.type}:${n.data.label}:${n.data.children?.length ?? 0}:${JSON.stringify(n.data.content)}:${JSON.stringify(n.data.metrics)}:${JSON.stringify(n.data.aggregatedMetrics)}`
+    ).join("|");
     if (key === prevNodeKeyRef.current) return;
     prevNodeKeyRef.current = key;
 
@@ -235,6 +240,17 @@ function FunnelCanvasInner({
       });
     });
   }, [rfNodesFromDB]);
+
+  // Build a map of node id → color for edge coloring
+  const nodeColorMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const n of allNodes) {
+      const meta = NODE_TYPE_META[n.type];
+      if (meta) map[n.id] = meta.color;
+    }
+    return map;
+  }, [allNodes]);
+
   useEffect(() => {
     setRfEdges(levelEdges.map((e) => ({
       id: e.id,
@@ -244,9 +260,9 @@ function FunnelCanvasInner({
       targetHandle: e.target_handle,
       label: e.label,
       type: "deletable",
-      data: { onDelete: onDeleteEdge },
+      data: { onDelete: onDeleteEdge, color: nodeColorMap[e.source_node_id] ?? "#6B7280" },
     })));
-  }, [levelEdges]);
+  }, [levelEdges, nodeColorMap]);
 
   // Breadcrumb
   const breadcrumbs = useMemo((): BreadcrumbItem[] => {
@@ -258,13 +274,13 @@ function FunnelCanvasInner({
     return items;
   }, [path, allNodes]);
 
-  // Fit view only on first load of a level, not on re-renders
+  // Fit view only on first load of a level
   const hasInitRef = useRef<string | null>(null);
   useEffect(() => {
     const levelKey = currentParentId ?? "__root__";
     if (hasInitRef.current !== levelKey) {
       hasInitRef.current = levelKey;
-      setTimeout(() => fitView({ padding: 0.3, duration: 0 }), 80);
+      setTimeout(() => fitView({ padding: 0.6, duration: 0 }), 80);
     }
   }, [currentParentId, fitView]);
 
@@ -282,15 +298,17 @@ function FunnelCanvasInner({
     if (allowed.length > 0) {
       setRfNodes((nds) => applyNodeChanges(allowed, nds));
     }
-    // Silent position save — no state update, just DB write
+    // Per-node position save with individual timers
     for (const change of changes) {
       if (change.type === "position" && change.position && !change.dragging) {
-        clearTimeout(posTimer.current);
         const id = change.id;
         const pos = change.position;
-        posTimer.current = setTimeout(() => {
+        const existing = posTimers.current.get(id);
+        if (existing) clearTimeout(existing);
+        posTimers.current.set(id, setTimeout(() => {
           onSavePosition(id, pos.x, pos.y);
-        }, 800);
+          posTimers.current.delete(id);
+        }, 400));
       }
     }
   }, [onSavePosition]);
@@ -304,6 +322,22 @@ function FunnelCanvasInner({
 
   const handleConnect = useCallback((connection: Connection) => {
     if (connection.source && connection.target) {
+      // Optimistic: show edge instantly before DB roundtrip
+      const tempId = `temp-${Date.now()}`;
+      const color = nodeColorMap[connection.source] ?? "#6B7280";
+      setRfEdges((eds) => [
+        ...eds,
+        {
+          id: tempId,
+          source: connection.source!,
+          target: connection.target!,
+          sourceHandle: connection.sourceHandle,
+          targetHandle: connection.targetHandle,
+          type: "deletable",
+          data: { onDelete: onDeleteEdge, color },
+        },
+      ]);
+      // Persist — real edge replaces temp on next sync
       onCreateEdge(
         connection.source,
         connection.target,
@@ -312,9 +346,8 @@ function FunnelCanvasInner({
         connection.targetHandle ?? undefined,
       );
     }
-  }, [onCreateEdge]);
+  }, [onCreateEdge, onDeleteEdge, nodeColorMap]);
 
-  // Prevent self-loops
   const isValidConnection = useCallback((connection: Connection) => {
     return connection.source !== connection.target;
   }, []);
@@ -333,15 +366,17 @@ function FunnelCanvasInner({
   const [contextMenu, setContextMenu] = useState<{ x: number; y: number } | null>(null);
   const contextFlowPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Listen for double-click on the pane only (not nodes)
+  // Double-click on pane — robust check (not relying on exact class name)
   const canvasRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = canvasRef.current;
     if (!el) return;
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      // Only trigger if clicking directly on the pane background
-      if (!target.classList.contains("react-flow__pane")) return;
+      // Don't trigger if clicking inside a node
+      if (target.closest(".react-flow__node")) return;
+      // Only accept clicks on pane/viewport area
+      if (!target.closest(".react-flow__pane") && !target.closest(".react-flow__viewport")) return;
       quickAddSource.current = null;
       const vp = getViewport();
       const bounds = el.getBoundingClientRect();
@@ -372,7 +407,6 @@ function FunnelCanvasInner({
       position_x: x,
       position_y: y,
     });
-    // Auto-connect if triggered from quick-add button
     if (quickAddSource.current) {
       await onCreateEdge(quickAddSource.current, newNode.id);
       quickAddSource.current = null;
@@ -392,9 +426,18 @@ function FunnelCanvasInner({
       }
       if (isInput) return;
 
-      if ((e.key === "Delete" || e.key === "Backspace") && selectedNodeId) {
+      if (e.key === "Delete" || e.key === "Backspace") {
         e.preventDefault();
-        handleNodeDelete(selectedNodeId);
+        // Delete all selected nodes and edges
+        const selNodes = rfNodes.filter((n) => n.selected);
+        const selEdges = rfEdges.filter((ed) => ed.selected);
+        if (selNodes.length === 0 && selEdges.length === 0 && selectedNodeId) {
+          handleNodeDelete(selectedNodeId);
+          return;
+        }
+        for (const ed of selEdges) onDeleteEdge(ed.id);
+        for (const n of selNodes) onDeleteNode(n.id);
+        setSelectedNodeId(null);
         return;
       }
       if (e.key === "f" || e.key === "F") {
@@ -413,9 +456,7 @@ function FunnelCanvasInner({
     window.history.replaceState({}, "", url.toString());
   }, [path]);
 
-  // Aggregated metrics for selected node (for inspector)
   const selectedAggregated = selectedNodeId ? aggregatedMetricsMap[selectedNodeId] : undefined;
-  // Parent type of selected node (for block metrics in inspector)
   const selectedParentType = useMemo(() => {
     if (!selectedNode) return null;
     if (selectedNode.parent_node_id) {
@@ -428,7 +469,7 @@ function FunnelCanvasInner({
   return (
     <div ref={canvasRef} className="relative w-full h-full">
       {path.length > 0 && (
-        <div className="absolute top-4 left-4 z-20 bg-[#0a0e14]/90 backdrop-blur-md rounded-xl px-4 py-2.5 border border-nova/15 shadow-[0_4px_20px_rgba(0,0,0,0.4)]">
+        <div className="absolute top-4 left-4 z-20 bg-[#0b0d14]/90 backdrop-blur-xl rounded-xl px-4 py-2.5 border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
           <FunnelBreadcrumb items={breadcrumbs} onNavigate={handleBreadcrumbNav} />
         </div>
       )}
@@ -444,31 +485,58 @@ function FunnelCanvasInner({
         isValidConnection={isValidConnection}
         onNodeClick={handleNodeClick}
         onPaneClick={handlePaneClick}
-        connectionLineStyle={{ stroke: "#FF8A1F", strokeWidth: 2, strokeDasharray: "5 5" }}
-        defaultEdgeOptions={{ type: "smoothstep" }}
+        connectionLineStyle={{ stroke: "#F4C430", strokeWidth: 2.5, strokeDasharray: "8 5", strokeLinecap: "round" }}
+        defaultEdgeOptions={{ type: "default" }}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
+        fitViewOptions={{ padding: 0.6 }}
+        minZoom={0.1}
+        maxZoom={2}
         className="funnel-canvas"
         proOptions={{ hideAttribution: true }}
         deleteKeyCode={null}
         nodesDraggable
-        nodeDragThreshold={2}
+        nodeDragThreshold={5}
         zoomOnDoubleClick={false}
         connectionMode={ConnectionMode.Loose}
-        connectionRadius={60}
+        connectionRadius={80}
+        snapToGrid
+        snapGrid={[20, 20]}
         panOnDrag
         selectionOnDrag={false}
         selectionKeyCode="Meta"
         selectionMode={SelectionMode.Partial}
+        edgesFocusable
+        elementsSelectable
         multiSelectionKeyCode="Meta"
       >
         <Background
-          variant={BackgroundVariant.Lines}
-          gap={80}
-          lineWidth={0.4}
-          color="rgba(255,138,31,0.20)"
+          variant={BackgroundVariant.Dots}
+          gap={24}
+          size={1.2}
+          color="rgba(255,255,255,0.06)"
+        />
+        <MiniMap
+          nodeColor={(node: Node) => {
+            const type = (node.data as BaseNodeData)?.type;
+            return type ? (NODE_TYPE_META[type]?.color ?? "#6B7280") : "#6B7280";
+          }}
+          maskColor="rgba(0,0,0,0.65)"
+          style={{ background: "#0B0B0C", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12 }}
+          pannable
+          zoomable
         />
       </ReactFlow>
+
+      {/* Empty state */}
+      {rfNodes.length === 0 && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-10">
+          <div className="bg-white/[0.04] border border-white/[0.06] rounded-2xl px-8 py-6 text-center backdrop-blur-sm">
+            <MousePointer2 size={28} strokeWidth={1.5} className="text-white/20 mx-auto mb-3" />
+            <p className="text-[14px] text-white/40 font-medium mb-1">Canvas vazio</p>
+            <p className="text-[12px] text-white/20">Duplo-clique ou pressione <span className="text-amber-400/50 font-medium">+</span> para criar o primeiro no</p>
+          </div>
+        </div>
+      )}
 
       <AddNodeMenu
         onAdd={handleAddNode}
