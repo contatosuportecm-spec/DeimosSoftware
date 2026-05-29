@@ -1,0 +1,198 @@
+{
+  "started_at": "2026-05-27T19:47:32.417Z",
+  "finished_at": "2026-05-27T19:59:15.365Z",
+  "total_duration_seconds": 703,
+  "total_quizzes": 19,
+  "successful": 18,
+  "total_screens_captured": 129,
+  "by_quiz": [
+    {
+      "slug": "noom",
+      "url": "https://www.noom.com/ps/main-survey/",
+      "screens": 18,
+      "exitCode": 0,
+      "durationMs": 153786,
+      "status": "ok",
+      "firstQuestion": "DEMOGRAPHIC PROFILE\n\nWhat is your weight loss goal?\nLose 1-10 kg for good\nLose 11-20 kg for good\nLose over 20 kg for good\nMaintain weight and get fit\nI haven’t decided yet\n\nCopyright ® 2026 Noom, Inc.",
+      "lastUrl": "https://www.noom.com/noom-vibe"
+    },
+    {
+      "slug": "betterme",
+      "url": "https://quiz.betterme.world/",
+      "screens": 14,
+      "exitCode": 0,
+      "durationMs": 41213,
+      "status": "ok",
+      "firstQuestion": "BETTERME PLAN\n\nLose weight, tone up and gain strength at home\n\nMale\n\nFemale\n\nBy selecting your gender and continuing you agree to our Terms of Service | Privacy Policy\nPlease review before continuing\n",
+      "lastUrl": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453"
+    },
+    {
+      "slug": "lasta",
+      "url": "https://lasta.app/quiz/en/281",
+      "screens": 5,
+      "exitCode": 0,
+      "durationMs": 20859,
+      "status": "ok",
+      "firstQuestion": "28-DAY WEIGHT LOSS CHALLENGE\nSelect your gender:\n1-minute quiz\nMale\nFemale\nEn\nBy continuing, you agree to our Terms of Use and Privacy Policy. You also consent to the use of cookies as described in ou",
+      "lastUrl": "https://lasta.app/quiz/en/281"
+    },
+    {
+      "slug": "simple",
+      "url": "https://simple.life/survey/",
+      "screens": 6,
+      "exitCode": 0,
+      "durationMs": 31394,
+      "status": "ok",
+      "firstQuestion": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39",
+      "lastUrl": "https://simple.life/survey/?step=1"
+    },
+    {
+      "slug": "weightwatchers",
+      "url": "https://www.weightwatchers.com/us/personalassessment/",
+      "screens": 9,
+      "exitCode": 0,
+      "durationMs": 108700,
+      "status": "ok",
+      "firstQuestion": "Your journey starts here\nTell us a little about yourself, and we’ll find the right WeightWatchers® membership for you.\nStart the quiz\nBy continuing, you agree to your health and other data being used ",
+      "lastUrl": "https://www.weightwatchers.com/us/personalassessment/default/agerange"
+    },
+    {
+      "slug": "found",
+      "url": "https://joinfound.com/",
+      "screens": 5,
+      "exitCode": 0,
+      "durationMs": 31079,
+      "status": "ok",
+      "firstQuestion": "Get up to $100 off your membership plan today!‡\nProven weight loss, the affordable way\nUp to 15-20% weight loss with Wegovy® and Zepbound®*\nAffordable GLP-1s, delivered fast**\nCovered by top insurance",
+      "lastUrl": "https://joinfound.com/"
+    },
+    {
+      "slug": "dofasting",
+      "url": "https://dofasting.com/",
+      "screens": 23,
+      "exitCode": 0,
+      "durationMs": 74682,
+      "status": "ok",
+      "firstQuestion": "Find out what you can achieve with our fasting assistant\n\nBecome a better you in just 3 months\n\nTo start, please select a goal:\n\nImprove my health\nLose weight\n\n*People using the app could expect to lo",
+      "lastUrl": "https://new.dofasting.com/trial/questionnaire?id=18"
+    },
+    {
+      "slug": "klinio",
+      "url": "https://funnel.klinio.com/quiz",
+      "screens": 1,
+      "exitCode": 0,
+      "durationMs": 7777,
+      "status": "ok",
+      "firstQuestion": "Seu gênero nos ajuda a determinar a ingestão de calorias e a meta de peso\n\nSeu tipo de dieta\n\nDieta para mulheres\n\nDieta para homens",
+      "lastUrl": "https://funnel.klinio.com/pt-br/quiz"
+    },
+    {
+      "slug": "unimeal",
+      "url": "https://unimeal.com/quiz/step-gender",
+      "screens": 12,
+      "exitCode": 0,
+      "durationMs": 34137,
+      "status": "ok",
+      "firstQuestion": "First, How Old Are You?\n\nYour age shapes your metabolism, hormones, and nutrient needs.\n\n18-29\n30-34\n35-44\n45-54\n55-64\n65+\nBy continuing you agree to our Terms of Service and acknowledge our Privacy P",
+      "lastUrl": "https://unimeal.com/quiz?stepId=step-height"
+    },
+    {
+      "slug": "calibrate",
+      "url": "https://www.joincalibrate.com/",
+      "screens": 6,
+      "exitCode": 0,
+      "durationMs": 17933,
+      "status": "ok",
+      "firstQuestion": "Navigated to Calibrate Weight Loss: Members Lose 19% Achieved Over 3 Years\nSkip To Main\n\nNotice: Our Terms of Use have changed [Click To Read More]\n\n×\nJoin Now\nTHE METABOLIC APPROACH TO SUSTAINABLE WE",
+      "lastUrl": "https://www.joincalibrate.com/"
+    },
+    {
+      "slug": "ro-body",
+      "url": "https://ro.co/weight-loss/",
+      "screens": 1,
+      "exitCode": 0,
+      "durationMs": 10999,
+      "status": "ok",
+      "firstQuestion": "One small step before we welcome you back.",
+      "lastUrl": "https://ro.co/weight-loss/"
+    },
+    {
+      "slug": "muscle-booster",
+      "url": "https://start.muscle-booster.io/",
+      "screens": 6,
+      "exitCode": 0,
+      "durationMs": 28750,
+      "status": "ok",
+      "firstQuestion": "Personalized workout plan according to your age\n\n1-MIN QUIZ\n\n18-25\n\n18-25\n\n26-35\n\n26-35\n\n36-45\n\n36-45\n\n46+\n\n46+\n\nBy continuing, you confirm and guarantee that you have read, understood, and agreed to ",
+      "lastUrl": "https://start.muscle-booster.io/"
+    },
+    {
+      "slug": "reverse-health",
+      "url": "https://reverse.health/",
+      "screens": 5,
+      "exitCode": 0,
+      "durationMs": 23617,
+      "status": "ok",
+      "firstQuestion": "Finally. Fitness & weight loss plans for women 40+\nTry the app\nTired of trying? We see you.\n\nIf you’re feeling stuck, it’s not your fault. Women’s bodies change dramatically in midlife, and most welln",
+      "lastUrl": "https://reverse.health/"
+    },
+    {
+      "slug": "hers-weight-loss",
+      "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+      "screens": 5,
+      "exitCode": 0,
+      "durationMs": 49808,
+      "status": "ok",
+      "firstQuestion": "www.forhers.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: ",
+      "lastUrl": "https://www.forhers.com/tools/why-cant-i-lose-weight"
+    },
+    {
+      "slug": "form-health",
+      "url": "https://www.formhealth.co/start-quiz",
+      "screens": 2,
+      "exitCode": 0,
+      "durationMs": 12228,
+      "status": "ok",
+      "firstQuestion": "Take our 3 minute quiz to see if Form Health is right for you.\n\nAnswer a few simple questions to begin your weight loss journey.\n\nTake the Quiz\nPatients\nHow it Works\nMedications\nPatient Stories\nFAQs\nB",
+      "lastUrl": "https://www.formhealth.co/quiz"
+    },
+    {
+      "slug": "nutrisystem",
+      "url": "https://www.nutrisystem.com/r/my-plan-quiz",
+      "screens": 1,
+      "exitCode": 0,
+      "durationMs": 3552,
+      "status": "ok",
+      "firstQuestion": "Access Denied\nYou don't have permission to access \"http://www.nutrisystem.com/r/my-plan-quiz\" on this server.\n\nReference #18.c841402.1779911900.7af87144\n\nhttps://errors.edgesuite.net/18.c841402.177991",
+      "lastUrl": "https://www.nutrisystem.com/r/my-plan-quiz"
+    },
+    {
+      "slug": "platejoy",
+      "url": "https://www.platejoy.com/",
+      "screens": 0,
+      "exitCode": 0,
+      "durationMs": 1280,
+      "status": "error"
+    },
+    {
+      "slug": "eat-this-much",
+      "url": "https://www.eatthismuch.com/",
+      "screens": 5,
+      "exitCode": 0,
+      "durationMs": 13893,
+      "status": "ok",
+      "firstQuestion": "Supported Diets\nPricing\nFor Professionals\nSign Up\nAlready a member? Sign in\nPut your diet on autopilot.\n\nEat This Much creates personalized meal plans based on your food preferences, budget, and sched",
+      "lastUrl": "https://www.eatthismuch.com/"
+    },
+    {
+      "slug": "lifesum",
+      "url": "https://lifesum.com/plan-quiz/",
+      "screens": 5,
+      "exitCode": 0,
+      "durationMs": 37252,
+      "status": "ok",
+      "firstQuestion": "Consent\nDetails\nAbout\nThis website uses cookies\nWe use cookies to personalise content and ads, to provide social media features and to analyse our traffic. We also share information about your use of ",
+      "lastUrl": "https://lifesum.com/plan-quiz/"
+    }
+  ]
+}

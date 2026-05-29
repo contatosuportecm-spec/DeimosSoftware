@@ -1,0 +1,16 @@
+Back
+About you
+Progress of section 1: 25%
+Progress of section 2: 0%
+Progress of section 3: 0%
+Progress of section 4: 0%
+What is your age?
+18–24
+25–34
+35–44
+45–54
+55–64
+65+
+Next
+Please make a selection
+Recaptcha

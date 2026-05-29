@@ -1,0 +1,7 @@
+3/41
+What is your biological sex?
+
+We use this to calibrate your calorie and macro needs — biological factors like muscle mass and hormones affect metabolism.
+
+Male
+Female

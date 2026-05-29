@@ -1,0 +1,26 @@
+{
+  "slug": "form-health",
+  "url": "https://www.formhealth.co/start-quiz",
+  "captured_at": "2026-05-27T19:58:19.357Z",
+  "total_screens": 2,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://www.formhealth.co/start-quiz",
+      "title": "Get Started with Form Health Medical Weight Loss | Form Health",
+      "visibleText": "Take our 3 minute quiz to see if Form Health is right for you.\n\nAnswer a few simple questions to begin your weight loss journey.\n\nTake the Quiz\nPatients\nHow it Works\nMedications\nPatient Stories\nFAQs\nBlog\nPatient Login\n\nHelp Center\n\nDownload the App\n\nCancel Membership\n\nOrganization\nEmployers\nHealth Plans\nConsultants\nHealth Providers\nContact Us\nLearning Center\nWho We Are\nAbout Us\nCareers\nPress\nResources\nPrivacy Policy\nPrivacy Practices\nTerms of Use\nInformed Consent\nAccessibility\nCalifornia Patients\nFlorida Patients\n© 2026 Form Health Inc. All rights reserved.\nAll medical services are provided by Form Health Associates (MA) P.C., Form Health Associates P.C., Healthy Life Physicians Group, P.C., and Healthy Life Physicians Group Pacific Northwest, P.C. for Form Health Inc.",
+      "htmlLength": 36215,
+      "action": "CLICKED_LINK: \"Take the Quiz\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://www.formhealth.co/quiz",
+      "title": "Form Health - Quiz",
+      "visibleText": "",
+      "htmlLength": 28969,
+      "action": "DEAD_END",
+      "optionsSeen": []
+    }
+  ]
+}

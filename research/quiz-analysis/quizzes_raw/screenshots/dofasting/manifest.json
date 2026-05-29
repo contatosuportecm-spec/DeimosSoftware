@@ -1,0 +1,215 @@
+{
+  "slug": "dofasting",
+  "url": "https://dofasting.com/",
+  "captured_at": "2026-05-27T19:55:14.086Z",
+  "total_screens": 23,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://new.dofasting.com/trial",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "Find out what you can achieve with our fasting assistant\n\nBecome a better you in just 3 months\n\nTo start, please select a goal:\n\nImprove my health\nLose weight\n\n*People using the app could expect to lose 1-2 pounds a week\n\nManage subscription\nFAQ\nGeneral Conditions\nPrivacy Policy\nAffiliates\nMedia Inquiries\nSupport\n\n*The app is not intended for use in the diagnosis, cure, mitigation, treatment, or prevention of diseases.\n\n**Based on the study with data collected from users who used DoFasting app five days or more per week. The study is available upon request at hello@dofasting.com\n\n© All Rights Reserved 2026\n\nWe inform you that your customer support request will be processed by a third-party artificial intelligence (AI) tool. The AI tool is designed to assist you in resolving your inquiries quickly and efficiently. It utilizes natural language processing and machine learning algorithms to understand and address your concerns to the best of its abilities. Rest assured, your inquiry is important to us, and we are committed to providing you with the highest level of service. If the AI tool is unable to fully resolve your request, you may escalate the issue to a human agent for further assistance. For more information please see our Privacy Policy\n\nDisclaimer: DoFasting website, app, services, and products are meant to support general health. Our products and services are not intended to diagnose, treat, cure, or prevent any disease. They should not be substituted for medical advice or medical intervention. Please consult a qualified healthcare provider when making medical decisions.",
+      "htmlLength": 329949,
+      "action": "SELECTED[0]: \"Improve my health\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=1",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "How familiar are you with Intermittent Fasting?\nI don’t know anything\nI’ve heard about it\nI’m advanced in fasting\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 339410,
+      "action": "SELECTED[0]: \"I don’t know anything\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=2",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "Select your gender\n\nGender can influence various physical aspects, such as metabolism, muscle composition, or hormone levels. This is taken into account when customising your personal program.\n\nFemale\nMale\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 337547,
+      "action": "SELECTED[0]: \"Female\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=3",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What stage of life are you currently in?\n\nYour nutritional needs are highly dependant on hormonal changes\n\nRegular cycles\nPeri-menopause\nMenopause\nPost-menopause\nPrefer to not say\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 345566,
+      "action": "SELECTED[0]: \"Regular cycles\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=4",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "Least of the benefits you can expect when fasting:\n\nIt’s a dynamic approach to eating that cycles between periods of eating and fasting. This method doesn’t focus on what you eat, but rather when you eat. By incorporating structured eating windows and fasting periods, intermittent fasting offers a flexible and sustainable way to manage weight, improve metabolic health, and boost overall well-being.\n\nSome of the benefits you can expect when fasting:\n\nLonger & healthier life\nEfficient fat burning & weight loss\nLower blood sugar\nLower cholesterol levels\n\nGot it, let’s go!\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 334036,
+      "action": "SELECTED[0]: \"Got it, let’s go!\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 5,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=5",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "How many meals do you eat daily?\n1-2\n2-3\n3-4\n4+\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 343741,
+      "action": "SELECTED[0]: \"1-2\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 6,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=6",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "How common in your diet are carb-dense foods like bread, rice, potatoes, cereal etc.?\nNot at all\nVery little\nSomewhat common\nVery often\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 344297,
+      "action": "SELECTED[0]: \"Not at all\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 7,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=7",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "Do you have any of the following bad habits?\nI eat meals while relaxing\nI’m constantly drinking soft drinks\nI indulge in a drink or two\nI get cravings late at night\nI have an uncontrollable sweet tooth\nI snack too often\nI crave salty foods\nNone of above\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 338091,
+      "action": "SELECTED[0]: \"I eat meals while relaxing\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 8,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=8",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What diets, if any, are you currently on?\nNo specific diets\nLactose-free\nVegeterian\nKeto\nPaleo diet\nFully plant-based\nLow-carb\nMediterranean diet\nOther\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 338844,
+      "action": "SELECTED[0]: \"No specific diets\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 9,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=9",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "DoFasting delivers sustainable weight loss and long-lasting results\n\nThe plan is personalized to fit your lifestyle\n\nContinue\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 335899,
+      "action": "CLICKED_CTA_ONLY: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 10,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=10",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "How well do you sleep at night?\nMy sleep is long and deep\nI sleep alright\nI keep waking up\nI struggle to get a good night’s rest\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 346164,
+      "action": "SELECTED[0]: \"My sleep is long and deep\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 11,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=11",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "Good night’s rest is incredibly important for weight loss\n\nIntermittent Fasting can play a pivotal role in promoting quality sleep. Research suggests that fasting may regulate circadian rhythms, aligning the body's internal clock and enhancing sleep patterns.\n\nUnderstood, continue\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 336387,
+      "action": "SELECTED[0]: \"Understood, continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 12,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=12",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "How much water do you typically drink in a day?\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 353077,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 13,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=13",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "How active are you?\nNot at all\nSomewhat active\nActive\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 344958,
+      "action": "SELECTED[0]: \"Not at all\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 14,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=15",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "Any areas you’d like to improve?\n\nIf you’re happy with your appearance,\nthen press Continue\n\nArms\nChest\nAbs\nGlutes\nThighs\nContinue\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 346073,
+      "action": "SELECTED[0]: \"Arms\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 15,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=16",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What is your age?\n\nWe ask this to establish if DoFasting is safe for you\n\nI’m ... years old\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 339307,
+      "action": "FILLED_35 + SELECTED[0]: \"I’m ... years old\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 16,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=17",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your height and weight?\n\nHealthy fasting weight loss is 1-2 pounds weekly. Your height and weight guide our tailored plan.\n\nlb and ft\nkg and cm\n\nft\n\nin\n\nYour current weight\n\nlb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 345836,
+      "action": "FILLED_5 + FILLED_9 + FILLED_85 + SELECTED[0]: \"lb and ft\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 17,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=18",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your weight goal?\n\nA rough estimate will do - you can always change it later.\n\nTarget weight\n\nlb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 346310,
+      "action": "FILLED_85 + SELECTED[0]: \"Target weight\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 18,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=18",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your weight goal?\n\nA rough estimate will do - you can always change it later.\n\nTarget weight\n\nlb\n\nWeight has to be between 88 lb and 551 lb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 348865,
+      "action": "SELECTED[0]: \"Target weight\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 19,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=18",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your weight goal?\n\nA rough estimate will do - you can always change it later.\n\nTarget weight\n\nlb\n\nWeight has to be between 88 lb and 551 lb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 350879,
+      "action": "SELECTED[0]: \"Target weight\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 20,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=18",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your weight goal?\n\nA rough estimate will do - you can always change it later.\n\nTarget weight\n\nlb\n\nWeight has to be between 88 lb and 551 lb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 352893,
+      "action": "SELECTED[0]: \"Target weight\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 21,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=18",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your weight goal?\n\nA rough estimate will do - you can always change it later.\n\nTarget weight\n\nlb\n\nWeight has to be between 88 lb and 551 lb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 354907,
+      "action": "SELECTED[0]: \"Target weight\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 22,
+      "url": "https://new.dofasting.com/trial/questionnaire?id=18",
+      "title": "Personalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "visibleText": "What’s your weight goal?\n\nA rough estimate will do - you can always change it later.\n\nTarget weight\n\nlb\n\nWeight has to be between 88 lb and 551 lb\n\nNext\n\nPersonalised intermittent fasting products for guided weight loss. Take our quiz to see how fast you can achieve your goal weight!",
+      "htmlLength": 356921,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}

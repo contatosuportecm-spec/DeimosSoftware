@@ -1,0 +1,62 @@
+{
+  "slug": "simple",
+  "url": "https://simple.life/survey/",
+  "captured_at": "2026-05-27T19:51:39.641Z",
+  "total_screens": 6,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://simple.life/survey/?step=1",
+      "title": "Simple: Weight Loss & Health Coaching — Create Your Account",
+      "visibleText": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39",
+      "htmlLength": 101279,
+      "action": "SELECTED[0]: \"EN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://simple.life/survey/?step=1",
+      "title": "Simple: Weight Loss & Health Coaching — Create Your Account",
+      "visibleText": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39\nSelect your language\nEnglish\n(EN)\nPortuguês\n(PT)\nAR\n(AR)\nDansk\n(DA)\nDeutsch\n(DE)\nEspañol\n(ES)\nEspañol\n(LATAM)\nFrançais\n(FR)\nItaliano\n(IT)\nJA\n(JA)\nNederlands\n(NL)\nNorsk\n(NB)\nPolski\n(PL)\nSvenska\n(SV)\nTürkçe\n(TR)",
+      "htmlLength": 116139,
+      "action": "SELECTED[0]: \"EN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://simple.life/survey/?step=1",
+      "title": "Simple: Weight Loss & Health Coaching — Create Your Account",
+      "visibleText": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39\nSelect your language\nEnglish\n(EN)\nPortuguês\n(PT)\nAR\n(AR)\nDansk\n(DA)\nDeutsch\n(DE)\nEspañol\n(ES)\nEspañol\n(LATAM)\nFrançais\n(FR)\nItaliano\n(IT)\nJA\n(JA)\nNederlands\n(NL)\nNorsk\n(NB)\nPolski\n(PL)\nSvenska\n(SV)\nTürkçe\n(TR)",
+      "htmlLength": 116139,
+      "action": "SELECTED[0]: \"EN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://simple.life/survey/?step=1",
+      "title": "Simple: Weight Loss & Health Coaching — Create Your Account",
+      "visibleText": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39\nSelect your language\nEnglish\n(EN)\nPortuguês\n(PT)\nAR\n(AR)\nDansk\n(DA)\nDeutsch\n(DE)\nEspañol\n(ES)\nEspañol\n(LATAM)\nFrançais\n(FR)\nItaliano\n(IT)\nJA\n(JA)\nNederlands\n(NL)\nNorsk\n(NB)\nPolski\n(PL)\nSvenska\n(SV)\nTürkçe\n(TR)",
+      "htmlLength": 116139,
+      "action": "SELECTED[0]: \"EN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://simple.life/survey/?step=1",
+      "title": "Simple: Weight Loss & Health Coaching — Create Your Account",
+      "visibleText": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39\nSelect your language\nEnglish\n(EN)\nPortuguês\n(PT)\nAR\n(AR)\nDansk\n(DA)\nDeutsch\n(DE)\nEspañol\n(ES)\nEspañol\n(LATAM)\nFrançais\n(FR)\nItaliano\n(IT)\nJA\n(JA)\nNederlands\n(NL)\nNorsk\n(NB)\nPolski\n(PL)\nSvenska\n(SV)\nTürkçe\n(TR)",
+      "htmlLength": 116139,
+      "action": "SELECTED[0]: \"EN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 5,
+      "url": "https://simple.life/survey/?step=1",
+      "title": "Simple: Weight Loss & Health Coaching — Create Your Account",
+      "visibleText": "EN\nHIT YOUR WEIGHT\nLOSS GOALS\nBASED ON YOUR AGE\nAge: 40–49\nAge: 50-59\nAge: 60-69\nAge: 70-80\nI'm 18-39\nSelect your language\nEnglish\n(EN)\nPortuguês\n(PT)\nAR\n(AR)\nDansk\n(DA)\nDeutsch\n(DE)\nEspañol\n(ES)\nEspañol\n(LATAM)\nFrançais\n(FR)\nItaliano\n(IT)\nJA\n(JA)\nNederlands\n(NL)\nNorsk\n(NB)\nPolski\n(PL)\nSvenska\n(SV)\nTürkçe\n(TR)",
+      "htmlLength": 116139,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}

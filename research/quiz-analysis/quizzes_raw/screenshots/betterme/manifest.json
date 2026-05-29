@@ -1,0 +1,134 @@
+{
+  "slug": "betterme",
+  "url": "https://quiz.betterme.world/",
+  "captured_at": "2026-05-27T19:50:47.383Z",
+  "total_screens": 14,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://quiz.betterme.world/first-page-brand-palette?flow=1453",
+      "title": "BetterMe Plan",
+      "visibleText": "BETTERME PLAN\n\nLose weight, tone up and gain strength at home\n\nMale\n\nFemale\n\nBy selecting your gender and continuing you agree to our Terms of Service | Privacy Policy\nPlease review before continuing\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nBetterMe Plan",
+      "htmlLength": 234821,
+      "action": "SELECTED[0]: \"Male\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nWhat’s your age?\n18 - 29\n30 - 39\n40 - 49\n50+\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 380945,
+      "action": "SELECTED[0]: \"18 - 29\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "Over 300 000 men\n\nin their 20s have already tried BetterMe\n\nCONTINUE\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 379548,
+      "action": "SELECTED[0]: \"e-Privacy Settings\" + CLICKED_CTA: \"CONTINUE\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nWhat’s your main goal?\nLose weight\nGain muscle mass\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 380717,
+      "action": "SELECTED[0]: \"Lose weight\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "We know how to make that happen!\nBetterMe doesn't believe in one-size-fits-all solutions.\nWe'll create a personalized plan to help you slim down at your own pace and with pleasure!\nCONTINUE\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 381848,
+      "action": "SELECTED[0]: \"e-Privacy Settings\" + CLICKED_CTA: \"CONTINUE\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 5,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHow would you describe your physical build?\nSlender\nMedium build\nStocky\nSignificantly overweight\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 389949,
+      "action": "SELECTED[0]: \"Slender\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 6,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nWhat's your body goal?\nA few sizes smaller\nAthletic\nRipped\nSwole\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 390535,
+      "action": "SELECTED[0]: \"A few sizes smaller\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 7,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHow does your weight typically change?\nI gain weight fast but lose it slowly\nI gain and lose weight easily\nI struggle to gain weight or muscle\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 384500,
+      "action": "SELECTED[0]: \"I gain weight fast but lose it slowly\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 8,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHow long ago were you in the best shape of your life?\nLess than a year ago\n1 to 2 years ago\nMore than 3 years ago\nNever\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 386229,
+      "action": "SELECTED[0]: \"Less than a year ago\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 9,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHave any of the following events led to weight gain in the last few years?\n\nChoose all that apply\n\nWork pressure\nBusy family life\nDivorce or breakup\nSlower metabolism due to aging\nFinancial challenges\nCovid-19 pandemic\nOther stressful events\nNone of the above\nNEXT STEP\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 392357,
+      "action": "SELECTED[0]: \"Work pressure\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 10,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHave any of the following events led to weight gain in the last few years?\n\nChoose all that apply\n\nWork pressure\nBusy family life\nDivorce or breakup\nSlower metabolism due to aging\nFinancial challenges\nCovid-19 pandemic\nOther stressful events\nNone of the above\nNEXT STEP\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 392373,
+      "action": "SELECTED[0]: \"Work pressure\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 11,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHave any of the following events led to weight gain in the last few years?\n\nChoose all that apply\n\nWork pressure\nBusy family life\nDivorce or breakup\nSlower metabolism due to aging\nFinancial challenges\nCovid-19 pandemic\nOther stressful events\nNone of the above\nNEXT STEP\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 392357,
+      "action": "SELECTED[0]: \"Work pressure\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 12,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHave any of the following events led to weight gain in the last few years?\n\nChoose all that apply\n\nWork pressure\nBusy family life\nDivorce or breakup\nSlower metabolism due to aging\nFinancial challenges\nCovid-19 pandemic\nOther stressful events\nNone of the above\nNEXT STEP\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 392373,
+      "action": "SELECTED[0]: \"Work pressure\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 13,
+      "url": "https://quiz.betterme.world/generated-questionary-brand-palette?flow=1453",
+      "title": "Quiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "visibleText": "My Profile\n\nHave any of the following events led to weight gain in the last few years?\n\nChoose all that apply\n\nWork pressure\nBusy family life\nDivorce or breakup\nSlower metabolism due to aging\nFinancial challenges\nCovid-19 pandemic\nOther stressful events\nNone of the above\nNEXT STEP\n\nDocs\n\nFAQ\n\nTerms and Conditions of use\n\nPrivacy Policy\n\nSubscription Policy\n\nMoney-Back Policy\n\ne-Privacy Settings\n\nWe will be glad to assist you via email. Please send your questions and feedback here or to support@betterme.world\n\nQuiz: Which Diet and Workout Plan is Best for You? | BetterMe",
+      "htmlLength": 392357,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "slug": "unimeal",
+  "url": "https://unimeal.com/quiz/step-gender",
+  "captured_at": "2026-05-27T19:55:56.012Z",
+  "total_screens": 12,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://unimeal.com/quiz/step-gender",
+      "title": "Weight loss management app",
+      "visibleText": "First, How Old Are You?\n\nYour age shapes your metabolism, hormones, and nutrient needs.\n\n18-29\n30-34\n35-44\n45-54\n55-64\n65+\nBy continuing you agree to our Terms of Service and acknowledge our Privacy Policy and Cookie Policy\n\nAmoApps Limited (reg. No. HE 450507, Nicosia, Cyprus)\n\nMy Account\nBlog\nAbout Us\nContact Us\nSupport\nTerms & Policies\nLanguage",
+      "htmlLength": 1058591,
+      "action": "SELECTED[0]: \"18-29\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://unimeal.com/quiz?stepId=step-gender-new",
+      "title": "Weight loss management app",
+      "visibleText": "3/41\nWhat is your biological sex?\n\nWe use this to calibrate your calorie and macro needs — biological factors like muscle mass and hormones affect metabolism.\n\nMale\nFemale",
+      "htmlLength": 1051410,
+      "action": "SELECTED[0]: \"Male\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://unimeal.com/quiz?stepId=step-goal",
+      "title": "Weight loss management app",
+      "visibleText": "4/41\nWhat is your primary goal?\n\nPick the one that matters most right now.\n\nLose weight\nBuild muscle\nBuild healthy habits\nBoost energy",
+      "htmlLength": 1070570,
+      "action": "SELECTED[0]: \"Lose weight\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://unimeal.com/quiz?stepId=step-social",
+      "title": "Weight loss management app",
+      "visibleText": "Over 35 000 men in their 20s built their plan with Unimeal\n\nStarting young means you're ahead — your metabolism is on your side, but busy schedules and junk-food defaults aren't. We'll build around both.\n\nContinue",
+      "htmlLength": 1055026,
+      "action": "CLICKED_CTA_ONLY: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://unimeal.com/quiz?stepId=step-health-data",
+      "title": "Weight loss management app",
+      "visibleText": "Let’s personalize your plan\n\nTo provide personalized plans and app features, we need your consent to process your health data.\n\nWithout this, we cannot offer our services.\n\nPrivacy Policy\nI agree",
+      "htmlLength": 1053651,
+      "action": "SELECTED[0]: \"I agree\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 5,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (cm)\n0 cm\nContinue",
+      "htmlLength": 1055845,
+      "action": "FILLED_175 + SELECTED[0]: \"ft\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 6,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (ft, in)\n0 ft, 0 in\nContinue",
+      "htmlLength": 1055945,
+      "action": "FILLED_175 + SELECTED[0]: \"ft\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 7,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (ft, in)\n1 ft 75 in\nHeight must be greater than or equal to 3 ft\nContinue",
+      "htmlLength": 1057235,
+      "action": "SELECTED[0]: \"ft\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 8,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (ft, in)\n1 ft 75 in\nHeight must be greater than or equal to 3 ft\nContinue",
+      "htmlLength": 1058148,
+      "action": "SELECTED[0]: \"ft\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 9,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (ft, in)\n1 ft 75 in\nHeight must be greater than or equal to 3 ft\nContinue",
+      "htmlLength": 1059061,
+      "action": "SELECTED[0]: \"ft\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 10,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (ft, in)\n1 ft 75 in\nHeight must be greater than or equal to 3 ft\nContinue",
+      "htmlLength": 1059974,
+      "action": "SELECTED[0]: \"ft\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 11,
+      "url": "https://unimeal.com/quiz?stepId=step-height",
+      "title": "Weight loss management app",
+      "visibleText": "5/41\nWhat is your height?\nft\ncm\nHeight (ft, in)\n1 ft 75 in\nHeight must be greater than or equal to 3 ft\nContinue",
+      "htmlLength": 1060887,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}

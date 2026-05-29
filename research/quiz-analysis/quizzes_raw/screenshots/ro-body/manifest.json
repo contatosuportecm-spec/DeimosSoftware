@@ -1,0 +1,17 @@
+{
+  "slug": "ro-body",
+  "url": "https://ro.co/weight-loss/",
+  "captured_at": "2026-05-27T19:56:24.950Z",
+  "total_screens": 1,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://ro.co/weight-loss/",
+      "title": "Just a moment...",
+      "visibleText": "One small step before we welcome you back.",
+      "htmlLength": 189685,
+      "action": "DEAD_END",
+      "optionsSeen": []
+    }
+  ]
+}

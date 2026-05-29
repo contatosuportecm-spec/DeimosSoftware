@@ -1,0 +1,746 @@
+{
+  "slug": "noom",
+  "url": "https://www.noom.com/ps/main-survey/",
+  "captured_at": "2026-05-28T13:45:11.909Z",
+  "total_screens": 82,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://www.noom.com/survey/weightLossGoal",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nWhat is your weight loss goal?\nLose 1-10 kg for good\nLose 11-20 kg for good\nLose over 20 kg for good\nMaintain weight and get fit\nI haven’t decided yet\n\nCopyright ® 2026 Noom, Inc. All Rights Reserved\n\nAbout UsContact UsReviewsLoginCookie PolicyHIPAA NoticeTerms and ConditionsPrivacy PolicyAccessibilitySupport\nOne Palmer Square, Suite 441, Princeton, NJ 08452\n(888) 266-5071",
+      "htmlLength": 35204,
+      "action": "SELECTED[0]: \"Lose 1-10 kg for good\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://www.noom.com/survey/sex",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nHormones impact how our bodies metabolize food.\nWhat sex were you assigned at birth?\nMale\nFemale\nIntersex",
+      "htmlLength": 31802,
+      "action": "SELECTED[0]: \"Male\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://www.noom.com/survey/gender",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nPeople may identify themselves with more than just sex and hormones.\nWhat is your gender identity?\nMan\nWoman\nNon-binary\nI use a different term\nPrefer not to say\nNext",
+      "htmlLength": 33532,
+      "action": "SELECTED[0]: \"Man\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://www.noom.com/survey/ageRange",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nWhat is your age?\n20s\n30s\n40s\n50s\n60s\n70s\n80s+",
+      "htmlLength": 34254,
+      "action": "SELECTED[0]: \"20s\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://www.noom.com/survey/basicHeight",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nWhat's your height?\ncm\ncm\nNext",
+      "htmlLength": 35390,
+      "action": "FILLED_175 + SELECTED[0]: \"cm\ncm\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 5,
+      "url": "https://www.noom.com/survey/basicWeight",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nWhat’s your current weight?\nWe don't mean to pry, we just need to know so we can build a plan that's right for you.\nkg\nkg\nNext",
+      "htmlLength": 38434,
+      "action": "FILLED_85 + SELECTED[0]: \"kg\nkg\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 6,
+      "url": "https://www.noom.com/survey/currentHealthRiskMale",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nDo you have any of the following conditions?\nTestosterone deficiency\nHeart Disease or Stroke\nHigh Blood Pressure\nHigh Cholesterol\nDepression\nOther\nNone\nNext",
+      "htmlLength": 41001,
+      "action": "SELECTED[6]: \"None\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 7,
+      "url": "https://www.noom.com/survey/diabetesDiagnosis",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nHave you ever been diagnosed with diabetes?\nWe ask this question to tailor your program with the right support.\nYes\nNo",
+      "htmlLength": 40894,
+      "action": "SELECTED[1]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 8,
+      "url": "https://www.noom.com/survey/eatingDisorderPreConfirmation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "DEMOGRAPHIC PROFILE\n\nDo you have an active diagnosis of an eating disorder (e.g. bulimia, anorexia, or similar diagnosis)?\nYes\nNo",
+      "htmlLength": 41936,
+      "action": "SELECTED[1]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 9,
+      "url": "https://www.noom.com/survey/infoMap",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "You're in trusted hands\n\nYou're not alone, we’ve helped 3,627,436 people lose weight!*\n\n*Noom subscribers who lost at least 2% of their original weight as of October 2021.\nContinue\n*Noom subscribers who lost at least 2% of their original weight as of October 2021.",
+      "htmlLength": 41000,
+      "action": "CLICKED_CTA_ONLY: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 10,
+      "url": "https://www.noom.com/survey/idealWeight",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "WEIGHT LOSS GOALS\n\nWhat is your ideal weight that you want to reach?\nkg\nkg\nRecommended weight range:\n62 kg - 77 kg\nNext\nUsing data from real Noom users, we'll predict when you'll hit your target weight if you follow your custom plan and adopt a healthy lifestyle. The results of this survey are not guaranteed and Noom users typically lose 0.5 - 1 kg per week.",
+      "htmlLength": 45673,
+      "action": "FILLED_70 + SELECTED[0]: \"kg\nkg\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 11,
+      "url": "https://www.noom.com/survey/info",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "Noom creates long-term results through habit and behavior change, not restrictive dieting\nScientific Reports - 78% of participants using Noom lost weight over a 6 month study\nGot it!",
+      "htmlLength": 96208,
+      "action": "SELECTED[0]: \"Got it!\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 12,
+      "url": "https://www.noom.com/survey/focusInPlan",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "WEIGHT LOSS GOALS\n\nWhat area do you want to focus on in your plan?\nNutrition\nPhysical activity\nBuilding good habits\nOther\nNext",
+      "htmlLength": 48499,
+      "action": "SELECTED[0]: \"Nutrition\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 13,
+      "url": "https://www.noom.com/survey/importantDateDetails",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "WEIGHT LOSS GOALS\n\nHaving something to look forward to can be a big motivator to stick to your plan.\nDo you have an important event coming up?\nVacation\nWedding\nHoliday\nSummer\nReunion\nBirthday\nOther\nNo, I don't have an event",
+      "htmlLength": 49647,
+      "action": "SELECTED[0]: \"Vacation\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 14,
+      "url": "https://www.noom.com/survey/importantDateTime",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "WEIGHT LOSS GOALS\n\nExciting! We'll keep this important event in mind for your journey.\nWhen is the vacation?\nSelect a date\nNext\nSkip",
+      "htmlLength": 52291,
+      "action": "CLICKED_SKIP: \"Skip\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 15,
+      "url": "https://www.noom.com/survey/pace",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "WEIGHT LOSS GOALS\n\nThis is your plan, designed to work at your pace. So knowing you, as only you can, which pace would you prefer?\nAs fast as possible\nSlow and steady wins the race\nSomewhere in between the two",
+      "htmlLength": 51134,
+      "action": "SELECTED[0]: \"As fast as possible\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 16,
+      "url": "https://www.noom.com/survey/build",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "Sticking to a plan can be hard. Noom makes it easy.\n“Noom changed the way I think about portion control. It changed my relationship with food.”\n–Mike\n\n*Noom users that also adopt a healthy lifestyle typically lose 0.5-1 kgs per week\n\n\nGot it!",
+      "htmlLength": 49882,
+      "action": "SELECTED[0]: \"Got it!\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 17,
+      "url": "https://www.noom.com/survey/building",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "Lose twice as much weight with Noom vs. trying on your own\nBased on a study over 12 weeks of active Noom users.\nPREPARING RESULTS ...\n69%\nPreparing results",
+      "htmlLength": 75176,
+      "action": "LOADING_DETECTED + URL_CHANGED_AFTER_5s",
+      "optionsSeen": []
+    },
+    {
+      "index": 18,
+      "url": "https://www.noom.com/survey/email",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "Enter your email to see when Noom can help you reach 70 kg\nEmail\n\nWe'll email you a copy of your results for convenient access.\n\nSee My Result\n\nBy clicking \"See My Result\" above you acknowledge that you have read, understood, and accepted the Terms of Use and Privacy Policy. You may receive emails from Noom and can unsubscribe at any time.",
+      "htmlLength": 52776,
+      "action": "FILLED_EMAIL + SELECTED[0]: \"Email\" + CLICKED_CTA: \"See My Result\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 19,
+      "url": "https://www.noom.com/survey/choosePlan",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "THE LAST WEIGHT LOSS PROGRAM\nYOU'LL EVER NEED\n\nWE PREDICT YOU'LL BE\n\n70 kg\n by \n2\n1\n Dec\nDec\n\nGreat news! Based on Noom users like you, we predict you’ll be able to conservatively hit your weight loss goal by December 2.\n\nNext, tell us a bit about your habits and behavior so we can determine if you can reach your goal sooner.\n\nYou've set a good goal for yourself\nContinue\n\n\"I've lost 9 kg to date and I think Noom is going to change my life forever.\"\n\n- Genia\n\n*Results are not guaranteed. People who use Noom can expect to lose 1-2 pounds per week.\n*Results are not guaranteed. People who use Noom can expect to lose 1-2 pounds per week.\nAs featured in",
+      "htmlLength": 84750,
+      "action": "CLICKED_CTA_ONLY: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 20,
+      "url": "https://www.noom.com/payment/survey/firstName",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA+QUIZ@INSTITUTOPANAPANA.ORG.BR\nP\n\nWEIGHT LOSS PROFILE\n\nWhat is your preferred first name?\nPreferred first name\nNext",
+      "htmlLength": 32504,
+      "action": "FILLED_NAME + SELECTED[0]: \"Preferred first name\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 21,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuizIntro",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nBehavioral Profile Quiz\n\nNext, let's find out what kind of weight loss approach will work best for you!\n\nYour behavioral profile will help us better understand how you're thinking about your weight loss journey.\n\nStart Your Quiz",
+      "htmlLength": 32386,
+      "action": "SELECTED[0]: \"Start Your Quiz\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 22,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz1",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (1/10)\nI want to...\nReach a lower weight\nor\nChange my lifestyle to a healthier one\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nDrag the slider towards the statement\nyou agree with most.\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 41280,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 23,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz2",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (2/10)\nAchieving my weight goal...\nIs important for progress in other areas of my life\nor\nDoesn’t affect other areas of my life\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 37875,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 24,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz3",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (3/10)\nI would love my body...\nThe same no matter my weight\nor\nMore if I were to achieve my weight goal\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 40624,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 25,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz4",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (4/10)\nI think about my weight...\nAll the time\nor\nOnly when prompted by something else\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 43380,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 26,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz5",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (5/10)\nThe biggest barriers to achieving my weight goals are...\nExternal (e.g., temptations around me)\nor\nInternal (e.g., bad habits, low energy)\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 46212,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 27,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz6",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (6/10)\nWeight loss/management is...\nMy ultimate goal\nor\nA means to a different health goal (e.g., lower blood pressure, less joint pain, etc.)\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 48982,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 28,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz7",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (7/10)\nWhen it comes to working toward my weight goal…\nI feel constantly motivated\nor\nMy motivation goes up and down\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 51729,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 29,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz8",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (8/10)\nGood health is...\nHaving energy / vitality\nor\nNot having health problems / issues\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 54474,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 30,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz9",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (9/10)\nA weight loss program...\nCould teach me something new\nor\nProbably wouldn't teach me anything new about how to lose or maintain my weight\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 57303,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 31,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileQuiz10",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "BEHAVIORAL PROFILE QUIZ (10/10)\nWhen it comes to weight loss programs...\nI need one to reach my weight goals\nor\nI don’t need one and can figure out how to achieve my weight goals on my own\nAgree most\nAgree a little more\nAgree a little more\nAgree most\nIf both fit, choose one you agree with more. If neither fit, choose the one you're closest to agreeing with.",
+      "htmlLength": 58461,
+      "action": "SLIDER_MOVED_LEFT + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 32,
+      "url": "https://www.noom.com/payment/survey/behavioralProfileResult",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nYOUR BEHAVIORAL PROFILE\nMotivated Self-Improver\n\nDriven, knowledgeable and looking for the next edge. Adding a healthy baseline of psychology could help prevent you from burning out on your weight loss journey.\n\nNext steps\n\nWe’ll build on your behavioral profile by understanding what a happy weight might look like for you.\n\nNext",
+      "htmlLength": 68991,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 33,
+      "url": "https://www.noom.com/payment/survey/social",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWEIGHT LOSS PROFILE\n\nDo you relate to the statement below?\n\n“My weight has affected my ability to socialize or engage with friends and family.”\n\nNo\nYes",
+      "htmlLength": 64922,
+      "action": "SELECTED[0]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 34,
+      "url": "https://www.noom.com/payment/survey/convenience",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWEIGHT LOSS PROFILE\n\nDo you relate to the statement below?\n\n“I have been thinking about weight loss for a while, but life is so busy I find myself putting convenience first.”\n\nNo\nYes",
+      "htmlLength": 66049,
+      "action": "SELECTED[0]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 35,
+      "url": "https://www.noom.com/payment/survey/myLifestyle",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWEIGHT LOSS PROFILE\n\nDo you relate to the statement below?\n\n“I know what I should be doing to lose weight, but I need a way to do it that fits into MY life.”\n\nNo\nYes",
+      "htmlLength": 67128,
+      "action": "SELECTED[0]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 36,
+      "url": "https://www.noom.com/payment/survey/lessonTiming",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWEIGHT LOSS PROFILE\n\nOne trick to create a habit is decreasing the decision-making around it.\nThe most successful Noomers spend 5 minutes a day reading our lessons. When will you read your daily lesson?\nIn the morning\nAround lunch time\nAfter dinner\nBefore bed",
+      "htmlLength": 67823,
+      "action": "SELECTED[0]: \"In the morning\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 37,
+      "url": "https://www.noom.com/payment/survey/firstUpdateGraph",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWE PREDICT YOU'LL BE\n\n70 kg\n by \n3\n1\n Nov\nDec\nYou'll already lose 6 kg by Jul.\n\nBased on your answers, we predict you can hit your weight loss goal a little sooner! Let's keep going to incorporate information about your eating and nutrition habits.\n\nNext",
+      "htmlLength": 64046,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 38,
+      "url": "https://www.noom.com/payment/survey/dietaryRestricitionsOrAllergies",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nDo you have any dietary restrictions or food allergies?\nYes\nNo",
+      "htmlLength": 69975,
+      "action": "SELECTED[0]: \"Yes\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 39,
+      "url": "https://www.noom.com/payment/survey/multitaskingEating",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nDo you relate to the following statement?\n\n“I am usually multitasking while I eat (like watching tv or scrolling on my phone).”\n\nNo\nYes",
+      "htmlLength": 71976,
+      "action": "SELECTED[0]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 40,
+      "url": "https://www.noom.com/payment/survey/eatingServing",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nDo you relate to the following statement?\n\n“I usually clear my plate even if I’m already feeling full.”\n\nNo\nYes",
+      "htmlLength": 73060,
+      "action": "SELECTED[0]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 41,
+      "url": "https://www.noom.com/payment/survey/shortTermSuccess",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nDo you relate to the following statement?\n\n“I’ve been able to eat healthier or exercise for a week or two but then I fall back to my old habits.”\n\nNo\nYes",
+      "htmlLength": 74371,
+      "action": "SELECTED[0]: \"No\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 42,
+      "url": "https://www.noom.com/payment/survey/infoDiets",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nRestrictive diets often fail, creating a “yo-yo” effect.\n\nTraditional restrictive diets can help you lose weight in short bursts (aka the “yo-yo” effect), but ultimately don’t help you keep the weight off.\n\nNoom can help you create long-term results through habit and behavior change, not restrictive dieting.\n\nNext",
+      "htmlLength": 158465,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 43,
+      "url": "https://www.noom.com/payment/survey/foodColorYellow",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nNoom doesn’t follow a “one-diet-fits-all” approach, and what you're already eating can likely be adapted to your weight loss goals.\n\nIn the last week, which of these foods have you eaten?\nAvocado\nChicken\nWhite Rice\nEggs\nNone of the above\nNext",
+      "htmlLength": 76728,
+      "action": "SELECTED[0]: \"Avocado\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 44,
+      "url": "https://www.noom.com/payment/survey/foodColorYellowConfirmation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nGoing back to the concept of caloric density, all the foods previously shown are considered medium caloric density. Noom calls these “yellow foods”.\n\nCALORIC\nDENSITY\n=\nCALORIES\nFOOD WEIGHT\n\nStudies have proven that caloric density (not calories) determines how full you feel. And how full you feel dictates how you eat, and how you lose weight.\n\nWe’ll help you closely measure caloric density to stay full on less calories!\n\nNext",
+      "htmlLength": 73098,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 45,
+      "url": "https://www.noom.com/payment/survey/foodColorOrange",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nDo you crave or enjoy any of the following?\nCheese\nHoney\nWine\nBacon\nNone of the above\nNext",
+      "htmlLength": 78826,
+      "action": "SELECTED[0]: \"Cheese\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 46,
+      "url": "https://www.noom.com/payment/survey/foodColorOrangeConfirmation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nThere's room for those and more with Noom!\n\nWe label them “orange foods” for simplicity, but none of these foods are \"bad foods\". They do have higher caloric density though, meaning they’ll keep you less full.\n\nAs a result, we need to be mindful about how much orange we’re eating. But we don’t need to cut them out altogether - giving up treats forever is neither sustainable nor yummy!\n\nNext",
+      "htmlLength": 75060,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 47,
+      "url": "https://www.noom.com/payment/survey/foodColorGreen",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nEATING AND NUTRITION\n\nLastly, which of these are foods you would eat?\nTomatoes\nCucumbers\nBananas\nSalad Greens\nNone of the above\nNext",
+      "htmlLength": 81112,
+      "action": "SELECTED[0]: \"Tomatoes\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 48,
+      "url": "https://www.noom.com/payment/survey/foodColorGreenConfirmation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nLastly, these are \"green foods\", or foods with the lowest caloric density.\n\nNoom's Food Philosophy is simple: eat more food with a low caloric density.\n\nWhile it's ideal to eat “green foods”, we know it's hard to just eat leaves (we're not rabbits). Noom will help you find balance to eat the foods you love and still lose weight!\n\nNext",
+      "htmlLength": 77261,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 49,
+      "url": "https://www.noom.com/payment/survey/foodColorSummary",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nFor sustainable weight loss, it’s not about cutting any foods out. Instead, it’s about managing how much we eat of each.\n\nIn your program, we’ll dive more into the best ways to feel full on less calories!\n\nNext",
+      "htmlLength": 89979,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 50,
+      "url": "https://www.noom.com/payment/survey/personalizing",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWHY NOOM IS DIFFERENT\n\nOur weight loss\n\nprogram is based on\n\nbehavior change\n\nBUILDING PLAN...\n\nWHY NOOM IS DIFFERENT\n\nChange your\n\nrelationship with food in\n\nonly 10 minutes a day\n\nBUILDING PLAN...\n\nNoom is based on real psychology\nOur weight loss program is based on behavior change",
+      "htmlLength": 78744,
+      "action": "LOADING_DETECTED + URL_CHANGED_AFTER_26s",
+      "optionsSeen": []
+    },
+    {
+      "index": 51,
+      "url": "https://www.noom.com/payment/survey/physicalLimitations",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nHEALTH AND FITNESS\n\nDo you have any physical limitations?\nYes\nNo",
+      "htmlLength": 85188,
+      "action": "SELECTED[0]: \"Yes\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 52,
+      "url": "https://www.noom.com/payment/survey/secondUpdateGraph",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWE PREDICT YOU'LL BE\n\n70 kg\n by \n26\n2\n Oct\nNov\nYou have planned when you'll read your daily lesson\n\nNice! We think you can hit your goal a little earlier now AND still keep a healthy pace.\n\nNext",
+      "htmlLength": 80738,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 53,
+      "url": "https://www.noom.com/payment/survey/nm-bundle/cognitiveExplore",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nHOLISTIC HEALTH & WEIGHT LOSS\n\nAs we build your weight loss plan, what else do you want to explore?\nHealthy aging\nChanges in metabolism\nDigestion\nImproving sleep\nReducing stress\nIncreasing energy\nEmotional wellbeing\nRest and recovery\nOther\nNext",
+      "htmlLength": 35122,
+      "action": "SELECTED[0]: \"Healthy aging\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 54,
+      "url": "https://www.noom.com/payment/survey/cognitiveMotivation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nUnderstanding how your emotions change over time helps us customize your program. How has your motivation to lose weight changed over time?\nIt stays consistent\nIt ebbs and flows\nI'm still finding it",
+      "htmlLength": 33289,
+      "action": "SELECTED[0]: \"It stays consistent\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 55,
+      "url": "https://www.noom.com/payment/survey/outsideMotivation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nDo you relate to the statement below?\n“I need some outside motivation. When I am feeling overwhelmed, it can be easy to give up.”\nYes\nSometimes\nNo",
+      "htmlLength": 34386,
+      "action": "SELECTED[0]: \"Yes\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 56,
+      "url": "https://www.noom.com/payment/survey/outsideMotivationConfirmation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nNo one is perfect. (Except maybe Beyonce.)\n\nNoom's tools and curriculum give you motivation when you need it, and forgiveness when you start trying to blame yourself.\n\nNext",
+      "htmlLength": 29481,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 57,
+      "url": "https://www.noom.com/payment/survey/weightMotivation",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nLet’s better understand your current state of mind. At this moment, how motivated are you to reach your target weight?\nI'm ready\nFeeling hopeful\nI'm cautious\nTaking it easy",
+      "htmlLength": 36838,
+      "action": "SELECTED[0]: \"I'm ready\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 58,
+      "url": "https://www.noom.com/payment/survey/settingGoals",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nA goal without a plan is just a wish.\n\nDid you know…\n\nSetting small goals allows for more frequent wins.\n\nReaching these goals keeps you motivated.\n\nStaying motivated helps you crush more goals.\n\nSo let’s do this, Pesquisa\n\nSet My First Goal",
+      "htmlLength": 31884,
+      "action": "SELECTED[0]: \"Set My First Goal\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 59,
+      "url": "https://www.noom.com/payment/survey/firstGoal",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nIn addition to your weight loss goal, what’s a goal you would like to achieve with your program?\nRun a race (5k, marathon, etc)\nFeel comfortable and confident in my body\nFeel healthier\nBe able to do outdoor activities\nFit in my clothes better\nOther\nNext",
+      "htmlLength": 39982,
+      "action": "SELECTED[0]: \"Run a race (5k, marathon, etc)\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 60,
+      "url": "https://www.noom.com/payment/survey/quizStart",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nNoom’s psychology based approach is based on identifying thought patterns and building new habits.\n\nIn this next section, we want to understand how you already think about weight loss so we can better personalize your course.\n\nNext",
+      "htmlLength": 34936,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 61,
+      "url": "https://www.noom.com/payment/survey/quizHealthySnack",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nLet’s say you’re reaching for a snack. Which is the healthier choice?\nGrapes\nRaisins",
+      "htmlLength": 41909,
+      "action": "SELECTED[0]: \"Grapes\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 62,
+      "url": "https://www.noom.com/payment/survey/quizHealthySnackCorrect",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nYou’re right!\n\nGrapes are the smarter snack. But wait, aren’t raisins just dried grapes?\n\nWell that’s exactly it. Juicy grapes are 81% water. And because of that, it’ll help you feel full faster.\n\nThis life hack is explained by the principles of caloric density. We’ll teach you more about that soon, including how you can use it to eat healthier without cutting out all your favorite foods.\n\nNext",
+      "htmlLength": 59253,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 63,
+      "url": "https://www.noom.com/payment/survey/quizMindfulEating",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nHow can mindful eating help you?\nLose more weight\nIncrease your self-awareness\nBoth",
+      "htmlLength": 44492,
+      "action": "SELECTED[0]: \"Lose more weight\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 64,
+      "url": "https://www.noom.com/payment/survey/quizMindfulEatingWrong",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nBest Answer: Both\n\nMindful eating is the practice of eating with Intention and Attention.\n\nIntention means actively deciding what you're eating (and not just reaching for the food that's in front of you).\nAttention means focusing on the meal while you eat (not distracted by today's to-do list).\n\nMindful eating slows you down and increases your self-awareness. This way you eat fewer calories and make healthier food choices!\n\nNext",
+      "htmlLength": 39929,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 65,
+      "url": "https://www.noom.com/payment/survey/quizWeighIn",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nUNDERSTANDING BEHAVIOR CHANGE\n\nScientific studies have shown that daily weigh-ins promote long-term weight loss. When is the best time to weigh yourself?\nFirst thing after you wake - before you've consumed anything\nOnce you've eaten your last meal of the day",
+      "htmlLength": 46754,
+      "action": "SELECTED[0]: \"First thing after you wake - before you've consume\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 66,
+      "url": "https://www.noom.com/payment/survey/quizWeighInCorrect",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nYou’re right!\n\nWeight can fluctuate daily based on the food we eat. It's best to weigh yourself at the same time, on the same scale, every day on an empty stomach.\n\nThe International Journal of Behavioral Nutrition and Physical Activity reported that frequent self-weighing can lead to weight loss and better weight maintenance. A daily weigh-in schedule creates self-awareness & helps you make healthy choices!\n\nNext",
+      "htmlLength": 63950,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 67,
+      "url": "https://www.noom.com/payment/survey/quizFinal",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nGreat job, Pesquisa!\n\nYou have a strong foundation, and we'll continue to build upon this in your personalized program!\n\nNext",
+      "htmlLength": 83671,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 68,
+      "url": "https://www.noom.com/payment/survey/whereDidYouHear",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nWhere did you hear about us?\nReddit\nRadio\nPodcast\nZumba\nPinterest\nFacebook\nSnapchat\nLoyalty and Points program\nTV\nOnline TV or Streaming TV\nFriend or Family\nCo-promotion from another brand\nBlog Post or Review on a Website\nYoutube\nInstagram\nDiscount and Deal site\nDirect Mail or Package Insert\nSearch Engine (Google, Bing, etc.)\nTikTok\nPrint, Magazine, Poster or Billboard\nInfluencer\nOther\nNext",
+      "htmlLength": 47748,
+      "action": "SELECTED[0]: \"Reddit\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 69,
+      "url": "https://www.noom.com/payment/survey/buildPlan",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nIs there a history of heart disease or diabetes in your extended family?\n\nYES\nNO\nAnalyzing Demographic Profile\nDEMOGRAPHIC PROFILE\n73%\nWEIGHT LOSS GOALS\n0%\nWEIGHT LOSS HISTORY\n0%\nEATING & NUTRITION\n0%\nFITNESS & HEALTH\n0%\nHOLISTIC HEALTH CONNECTION\n0%\nUNDERSTANDING BEHAVIOR CHANGE\n0%\n\nSit tight! We're building your perfect plan based on millions of data points from successful Noom users\n\nAnalyzing Demographic Profile",
+      "htmlLength": 56021,
+      "action": "SELECTED[0]: \"YES\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 70,
+      "url": "https://www.noom.com/payment/survey/buildPlan",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nDo you eat at roughly the same time for each meal everyday?\n\nYES\nNO\nMatching Behavior Trends.\nDEMOGRAPHIC PROFILE\n100%\nWEIGHT LOSS GOALS\n100%\nWEIGHT LOSS HISTORY\n83%\nEATING & NUTRITION\n0%\nFITNESS & HEALTH\n0%\nHOLISTIC HEALTH CONNECTION\n0%\nUNDERSTANDING BEHAVIOR CHANGE\n0%\n\nSit tight! We're building your perfect plan based on millions of data points from successful Noom users\n\nMatching Behavior Trends",
+      "htmlLength": 57556,
+      "action": "SELECTED[0]: \"YES\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 71,
+      "url": "https://www.noom.com/payment/survey/buildPlan",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nAre you typically on your feet or sitting for most of the day?\n\nACTIVE\nSEATED\nCharting Best Fit Plan..\nDEMOGRAPHIC PROFILE\n100%\nWEIGHT LOSS GOALS\n100%\nWEIGHT LOSS HISTORY\n100%\nEATING & NUTRITION\n100%\nFITNESS & HEALTH\n79%\nHOLISTIC HEALTH CONNECTION\n0%\nUNDERSTANDING BEHAVIOR CHANGE\n0%\n\nSit tight! We're building your perfect plan based on millions of data points from successful Noom users\n\nCharting Best Fit Plan",
+      "htmlLength": 55871,
+      "action": "SELECTED[0]: \"ACTIVE\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 72,
+      "url": "https://www.noom.com/payment/survey/buildPlan",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nPredicting Future Results...\nDEMOGRAPHIC PROFILE\n100%\nWEIGHT LOSS GOALS\n100%\nWEIGHT LOSS HISTORY\n100%\nEATING & NUTRITION\n100%\nFITNESS & HEALTH\n100%\nHOLISTIC HEALTH CONNECTION\n100%\nUNDERSTANDING BEHAVIOR CHANGE\n90%\n\nSit tight! We're building your perfect plan based on millions of data points from successful Noom users\n\nPredicting Future Results",
+      "htmlLength": 50330,
+      "action": "SELECTED[0]: \"DEMOGRAPHIC PROFILE\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 73,
+      "url": "https://www.noom.com/payment/results/welcomeToNoom",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "WELCOME TO\nBased on your answers, Pesquisa…\nwe've created a\npersonalized plan\ndesigned to get you\nto 70 kg\nby September 29\nand build healthy habits.\nLet's get started.\nWelcome to Noom Weight",
+      "htmlLength": 26644,
+      "action": "LOADING_DETECTED + URL_CHANGED_AFTER_17s",
+      "optionsSeen": []
+    },
+    {
+      "index": 74,
+      "url": "https://www.noom.com/payment/results/finalUpdateGraph",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\n\nWE PREDICT YOU'LL BE\n\n70 kg\n by \n29\n25\n Sep\nOct\nNext",
+      "htmlLength": 26740,
+      "action": "CLICKED_CTA_ONLY: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 75,
+      "url": "https://www.noom.com/payment/chooseTrialPrice",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nTry Noom for 2 weeks.\n\nMoney shouldn’t stand in the way of finding a plan that finally works.\n\nIt costs us approximately $10* to offer a 14-day trial. Please pick an amount that’s reasonable for you.\n\n*Cost of trial as of Sept 2021\nChoose a price for your 14-day trial.\n$0.50\n$3\n$10\n$18.37\n\nThis option will help us support those who need to select the lowest trial prices!\n\nContinue\n\n*Cost of trial as of Sept 2021",
+      "htmlLength": 27589,
+      "action": "SELECTED[0]: \"$0.50\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 76,
+      "url": "https://www.noom.com/purchase/en/option_e_20221201_Ex1084var1email/?route=_direct#/checkout",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nStart Your 14-Day Trial\n1\nVIEW PERSONALIZED PLAN\nLose 15 kg by September 29\nContinue developing healthy habits to keep the weight off after reaching your goal\nLive a healthier life\nGREAT JOB!\nWe know losing weight is hard, but you're on the right track! Only 1 out of 8 people make it this far! Continue your weight loss journey by signing up for Noom today!\nHIGHLIGHTS OF YOUR CUSTOMIZED PLAN\nFocusing on healthy weight loss\nPaced to reach your goal and maintain weight loss\nWith customizations for physical limitations\nAdjustments for dietary restrictions\nWith 24/7 Personalized Support\nPRICE TODAY\n14-day trial with FULL access\n\n$0.50\n\nUpdate\n\nYou’ll have 2 weeks to see how Noom uses psychology to create lasting results.\n\nPRICE AFTER TRIAL\nNoom Weight 4-Month Plan\n\n$169*\n\n$42.25/month · Includes VAT\n\n* Billed on Jun 12 unless cancelled beforehand.\nDo you have a promotion code? Click here\nContinue\n2\nPAYMENT INFORMATION\n\nYou will be charged only $0.50 today for your 14-day trial.\n\nSELECT PAYMENT METHOD\n3\nFINALIZE YOUR ACCOUNT\nName\nEmail\nPassword\nConfirm Password\nContinue\n4\nREVIEW & START TRIAL\n\n14-day trial for only $0.50\n\nCancel any time in the app\n\nThis is an autorenewing subscription.\nIf I don't cancel during my 14-day trial, Noom will charge me $169 after the trial ends on June 12, 2026.\nNoom will charge my payment method on file $169 automatically every 4 months thereafter until I cancel. Tax charged at renewal is subject to change based on applicable tax rates.\nVAT charged at any renewal period is subject to change based on any changes to applicable tax rates.\nI can cancel using the cancel button in my account page, accessible on Noom’s website or through the settings section in the app.\nIf I cancel before the end of a subscription period, I understand that Noom will not provide a partial refund.\nThis subscription is bound to Noom's Terms and Conditions, Privacy Policy and Research Policy\nLet's go\nIn order to use the Noom app you'll need an iPhone or Android smartphone\nOne Palmer Square, Suite 441, Princeton, NJ 08452\nHave a question? Reach our friendly support team here.\n\nThis site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.\n\nPersonalized plan reserved",
+      "htmlLength": 68916,
+      "action": "FILLED_EMAIL + SELECTED[0]: \"1\nVIEW PERSONALIZED PLAN\" + CLICKED_CTA: \"Continue\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 77,
+      "url": "https://www.noom.com/purchase/en/option_e_20221201_Ex1084var1email/?route=_direct#/checkout",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nStart Your 14-Day Trial\nVIEW PERSONALIZED PLAN\nLose 15 kg by September 29\nContinue developing healthy habits to keep the weight off after reaching your goal\nLive a healthier life\nGREAT JOB!\nWe know losing weight is hard, but you're on the right track! Only 1 out of 8 people make it this far! Continue your weight loss journey by signing up for Noom today!\nHIGHLIGHTS OF YOUR CUSTOMIZED PLAN\nFocusing on healthy weight loss\nPaced to reach your goal and maintain weight loss\nWith customizations for physical limitations\nAdjustments for dietary restrictions\nWith 24/7 Personalized Support\nPRICE TODAY\n14-day trial with FULL access\n\n$0.50\n\nUpdate\n\nYou’ll have 2 weeks to see how Noom uses psychology to create lasting results.\n\nPRICE AFTER TRIAL\nNoom Weight 4-Month Plan\n\n$169*\n\n$42.25/month · Includes VAT\n\n* Billed on Jun 12 unless cancelled beforehand.\nDo you have a promotion code? Click here\n2\nPAYMENT INFORMATION\n\nYou will be charged only $0.50 today for your 14-day trial.\n\nSELECT PAYMENT METHOD\n3\nFINALIZE YOUR ACCOUNT\nName\nEmail\nPassword\nConfirm Password\nContinue\n4\nREVIEW & START TRIAL\n\n14-day trial for only $0.50\n\nCancel any time in the app\n\nThis is an autorenewing subscription.\nIf I don't cancel during my 14-day trial, Noom will charge me $169 after the trial ends on June 12, 2026.\nNoom will charge my payment method on file $169 automatically every 4 months thereafter until I cancel. Tax charged at renewal is subject to change based on applicable tax rates.\nVAT charged at any renewal period is subject to change based on any changes to applicable tax rates.\nI can cancel using the cancel button in my account page, accessible on Noom’s website or through the settings section in the app.\nIf I cancel before the end of a subscription period, I understand that Noom will not provide a partial refund.\nThis subscription is bound to Noom's Terms and Conditions, Privacy Policy and Research Policy\nLet's go\nIn order to use the Noom app you'll need an iPhone or Android smartphone\nOne Palmer Square, Suite 441, Princeton, NJ 08452\nHave a question? Reach our friendly support team here.\n\nThis site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.\n\nPersonalized plan reserved",
+      "htmlLength": 69759,
+      "action": "FILLED_EMAIL + SELECTED[0]: \"VIEW PERSONALIZED PLAN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 78,
+      "url": "https://www.noom.com/purchase/en/option_e_20221201_Ex1084var1email/?route=_direct#/checkout",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nStart Your 14-Day Trial\nVIEW PERSONALIZED PLAN\nLose 15 kg by September 29\nContinue developing healthy habits to keep the weight off after reaching your goal\nLive a healthier life\nGREAT JOB!\nWe know losing weight is hard, but you're on the right track! Only 1 out of 8 people make it this far! Continue your weight loss journey by signing up for Noom today!\nHIGHLIGHTS OF YOUR CUSTOMIZED PLAN\nFocusing on healthy weight loss\nPaced to reach your goal and maintain weight loss\nWith customizations for physical limitations\nAdjustments for dietary restrictions\nWith 24/7 Personalized Support\nPRICE TODAY\n14-day trial with FULL access\n\n$0.50\n\nUpdate\n\nYou’ll have 2 weeks to see how Noom uses psychology to create lasting results.\n\nPRICE AFTER TRIAL\nNoom Weight 4-Month Plan\n\n$169*\n\n$42.25/month · Includes VAT\n\n* Billed on Jun 12 unless cancelled beforehand.\nDo you have a promotion code? Click here\n2\nPAYMENT INFORMATION\n\nYou will be charged only $0.50 today for your 14-day trial.\n\nSELECT PAYMENT METHOD\n3\nFINALIZE YOUR ACCOUNT\nName\nEmail\nPassword\nConfirm Password\nContinue\n4\nREVIEW & START TRIAL\n\n14-day trial for only $0.50\n\nCancel any time in the app\n\nThis is an autorenewing subscription.\nIf I don't cancel during my 14-day trial, Noom will charge me $169 after the trial ends on June 12, 2026.\nNoom will charge my payment method on file $169 automatically every 4 months thereafter until I cancel. Tax charged at renewal is subject to change based on applicable tax rates.\nVAT charged at any renewal period is subject to change based on any changes to applicable tax rates.\nI can cancel using the cancel button in my account page, accessible on Noom’s website or through the settings section in the app.\nIf I cancel before the end of a subscription period, I understand that Noom will not provide a partial refund.\nThis subscription is bound to Noom's Terms and Conditions, Privacy Policy and Research Policy\nLet's go\nIn order to use the Noom app you'll need an iPhone or Android smartphone\nOne Palmer Square, Suite 441, Princeton, NJ 08452\nHave a question? Reach our friendly support team here.\n\nThis site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.\n\nPersonalized plan reserved",
+      "htmlLength": 69759,
+      "action": "FILLED_EMAIL + SELECTED[0]: \"VIEW PERSONALIZED PLAN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 79,
+      "url": "https://www.noom.com/purchase/en/option_e_20221201_Ex1084var1email/?route=_direct#/checkout",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nStart Your 14-Day Trial\nVIEW PERSONALIZED PLAN\nLose 15 kg by September 29\nContinue developing healthy habits to keep the weight off after reaching your goal\nLive a healthier life\nGREAT JOB!\nWe know losing weight is hard, but you're on the right track! Only 1 out of 8 people make it this far! Continue your weight loss journey by signing up for Noom today!\nHIGHLIGHTS OF YOUR CUSTOMIZED PLAN\nFocusing on healthy weight loss\nPaced to reach your goal and maintain weight loss\nWith customizations for physical limitations\nAdjustments for dietary restrictions\nWith 24/7 Personalized Support\nPRICE TODAY\n14-day trial with FULL access\n\n$0.50\n\nUpdate\n\nYou’ll have 2 weeks to see how Noom uses psychology to create lasting results.\n\nPRICE AFTER TRIAL\nNoom Weight 4-Month Plan\n\n$169*\n\n$42.25/month · Includes VAT\n\n* Billed on Jun 12 unless cancelled beforehand.\nDo you have a promotion code? Click here\n2\nPAYMENT INFORMATION\n\nYou will be charged only $0.50 today for your 14-day trial.\n\nSELECT PAYMENT METHOD\n3\nFINALIZE YOUR ACCOUNT\nName\nEmail\nPassword\nConfirm Password\nContinue\n4\nREVIEW & START TRIAL\n\n14-day trial for only $0.50\n\nCancel any time in the app\n\nThis is an autorenewing subscription.\nIf I don't cancel during my 14-day trial, Noom will charge me $169 after the trial ends on June 12, 2026.\nNoom will charge my payment method on file $169 automatically every 4 months thereafter until I cancel. Tax charged at renewal is subject to change based on applicable tax rates.\nVAT charged at any renewal period is subject to change based on any changes to applicable tax rates.\nI can cancel using the cancel button in my account page, accessible on Noom’s website or through the settings section in the app.\nIf I cancel before the end of a subscription period, I understand that Noom will not provide a partial refund.\nThis subscription is bound to Noom's Terms and Conditions, Privacy Policy and Research Policy\nLet's go\nIn order to use the Noom app you'll need an iPhone or Android smartphone\nOne Palmer Square, Suite 441, Princeton, NJ 08452\nHave a question? Reach our friendly support team here.\n\nThis site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.\n\nPersonalized plan reserved",
+      "htmlLength": 69759,
+      "action": "FILLED_EMAIL + SELECTED[0]: \"VIEW PERSONALIZED PLAN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 80,
+      "url": "https://www.noom.com/purchase/en/option_e_20221201_Ex1084var1email/?route=_direct#/checkout",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nStart Your 14-Day Trial\nVIEW PERSONALIZED PLAN\nLose 15 kg by September 29\nContinue developing healthy habits to keep the weight off after reaching your goal\nLive a healthier life\nGREAT JOB!\nWe know losing weight is hard, but you're on the right track! Only 1 out of 8 people make it this far! Continue your weight loss journey by signing up for Noom today!\nHIGHLIGHTS OF YOUR CUSTOMIZED PLAN\nFocusing on healthy weight loss\nPaced to reach your goal and maintain weight loss\nWith customizations for physical limitations\nAdjustments for dietary restrictions\nWith 24/7 Personalized Support\nPRICE TODAY\n14-day trial with FULL access\n\n$0.50\n\nUpdate\n\nYou’ll have 2 weeks to see how Noom uses psychology to create lasting results.\n\nPRICE AFTER TRIAL\nNoom Weight 4-Month Plan\n\n$169*\n\n$42.25/month · Includes VAT\n\n* Billed on Jun 12 unless cancelled beforehand.\nDo you have a promotion code? Click here\n2\nPAYMENT INFORMATION\n\nYou will be charged only $0.50 today for your 14-day trial.\n\nSELECT PAYMENT METHOD\n3\nFINALIZE YOUR ACCOUNT\nName\nEmail\nPassword\nConfirm Password\nContinue\n4\nREVIEW & START TRIAL\n\n14-day trial for only $0.50\n\nCancel any time in the app\n\nThis is an autorenewing subscription.\nIf I don't cancel during my 14-day trial, Noom will charge me $169 after the trial ends on June 12, 2026.\nNoom will charge my payment method on file $169 automatically every 4 months thereafter until I cancel. Tax charged at renewal is subject to change based on applicable tax rates.\nVAT charged at any renewal period is subject to change based on any changes to applicable tax rates.\nI can cancel using the cancel button in my account page, accessible on Noom’s website or through the settings section in the app.\nIf I cancel before the end of a subscription period, I understand that Noom will not provide a partial refund.\nThis subscription is bound to Noom's Terms and Conditions, Privacy Policy and Research Policy\nLet's go\nIn order to use the Noom app you'll need an iPhone or Android smartphone\nOne Palmer Square, Suite 441, Princeton, NJ 08452\nHave a question? Reach our friendly support team here.\n\nThis site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.\n\nPersonalized plan reserved",
+      "htmlLength": 69759,
+      "action": "FILLED_EMAIL + SELECTED[0]: \"VIEW PERSONALIZED PLAN\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 81,
+      "url": "https://www.noom.com/purchase/en/option_e_20221201_Ex1084var1email/?route=_direct#/checkout",
+      "title": "Noom: Stop dieting. Get lifelong results.",
+      "visibleText": "PESQUISA\nP\nStart Your 14-Day Trial\nVIEW PERSONALIZED PLAN\nLose 15 kg by September 29\nContinue developing healthy habits to keep the weight off after reaching your goal\nLive a healthier life\nGREAT JOB!\nWe know losing weight is hard, but you're on the right track! Only 1 out of 8 people make it this far! Continue your weight loss journey by signing up for Noom today!\nHIGHLIGHTS OF YOUR CUSTOMIZED PLAN\nFocusing on healthy weight loss\nPaced to reach your goal and maintain weight loss\nWith customizations for physical limitations\nAdjustments for dietary restrictions\nWith 24/7 Personalized Support\nPRICE TODAY\n14-day trial with FULL access\n\n$0.50\n\nUpdate\n\nYou’ll have 2 weeks to see how Noom uses psychology to create lasting results.\n\nPRICE AFTER TRIAL\nNoom Weight 4-Month Plan\n\n$169*\n\n$42.25/month · Includes VAT\n\n* Billed on Jun 12 unless cancelled beforehand.\nDo you have a promotion code? Click here\n2\nPAYMENT INFORMATION\n\nYou will be charged only $0.50 today for your 14-day trial.\n\nSELECT PAYMENT METHOD\n3\nFINALIZE YOUR ACCOUNT\nName\nEmail\nPassword\nConfirm Password\nContinue\n4\nREVIEW & START TRIAL\n\n14-day trial for only $0.50\n\nCancel any time in the app\n\nThis is an autorenewing subscription.\nIf I don't cancel during my 14-day trial, Noom will charge me $169 after the trial ends on June 12, 2026.\nNoom will charge my payment method on file $169 automatically every 4 months thereafter until I cancel. Tax charged at renewal is subject to change based on applicable tax rates.\nVAT charged at any renewal period is subject to change based on any changes to applicable tax rates.\nI can cancel using the cancel button in my account page, accessible on Noom’s website or through the settings section in the app.\nIf I cancel before the end of a subscription period, I understand that Noom will not provide a partial refund.\nThis subscription is bound to Noom's Terms and Conditions, Privacy Policy and Research Policy\nLet's go\nIn order to use the Noom app you'll need an iPhone or Android smartphone\nOne Palmer Square, Suite 441, Princeton, NJ 08452\nHave a question? Reach our friendly support team here.\n\nThis site is protected by reCAPTCHA and the Google Privacy Policy and Terms of Service apply.\n\nPersonalized plan reserved",
+      "htmlLength": 69759,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}

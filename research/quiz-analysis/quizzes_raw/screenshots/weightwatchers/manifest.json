@@ -1,0 +1,89 @@
+{
+  "slug": "weightwatchers",
+  "url": "https://www.weightwatchers.com/us/personalassessment/",
+  "captured_at": "2026-05-27T19:53:28.329Z",
+  "total_screens": 9,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/welcome",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Your journey starts here\nTell us a little about yourself, and we’ll find the right WeightWatchers® membership for you.\nStart the quiz\nBy continuing, you agree to your health and other data being used by us for this assessment and marketing purposes. This data may be shared with our third-party providers. See Privacy Policy for details.\nRecaptcha",
+      "htmlLength": 281435,
+      "action": "SELECTED[0]: \"Start the quiz\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/profile-member",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nBefore we dive in, have you tried WW before?\nYes\nNo\nNext\nPlease make a selection\nRecaptcha",
+      "htmlLength": 318915,
+      "action": "SELECTED[0]: \"Yes\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/profile-member",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nBefore we dive in, have you tried WW before?\nYes\nNo\nNext\nRecaptcha",
+      "htmlLength": 319613,
+      "action": "SELECTED[0]: \"Yes\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/welcomeback",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nWelcome back! We’re so happy you’re here.\nLet’s get reacquainted with a few questions about you and your goals.\nNext\nRecaptcha",
+      "htmlLength": 358437,
+      "action": "SELECTED[0]: \"Recaptcha\" + CLICKED_CTA: \"Next\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/agerange",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nAbout you\nProgress of section 1: 25%\nProgress of section 2: 0%\nProgress of section 3: 0%\nProgress of section 4: 0%\nWhat is your age?\n18–24\n25–34\n35–44\n45–54\n55–64\n65+\nNext\nPlease make a selection\nRecaptcha",
+      "htmlLength": 397171,
+      "action": "SELECTED[0]: \"Progress of section 1: 25%\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 5,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/agerange",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nAbout you\nProgress of section 1: 25%\nProgress of section 2: 0%\nProgress of section 3: 0%\nProgress of section 4: 0%\nWhat is your age?\n18–24\n25–34\n35–44\n45–54\n55–64\n65+\nNext\nPlease make a selection\nRecaptcha",
+      "htmlLength": 396455,
+      "action": "SELECTED[0]: \"Progress of section 1: 25%\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 6,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/agerange",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nAbout you\nProgress of section 1: 25%\nProgress of section 2: 0%\nProgress of section 3: 0%\nProgress of section 4: 0%\nWhat is your age?\n18–24\n25–34\n35–44\n45–54\n55–64\n65+\nNext\nPlease make a selection\nRecaptcha",
+      "htmlLength": 395552,
+      "action": "SELECTED[0]: \"Progress of section 1: 25%\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 7,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/agerange",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nAbout you\nProgress of section 1: 25%\nProgress of section 2: 0%\nProgress of section 3: 0%\nProgress of section 4: 0%\nWhat is your age?\n18–24\n25–34\n35–44\n45–54\n55–64\n65+\nNext\nPlease make a selection\nRecaptcha",
+      "htmlLength": 395552,
+      "action": "SELECTED[0]: \"Progress of section 1: 25%\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 8,
+      "url": "https://www.weightwatchers.com/us/personalassessment/default/agerange",
+      "title": "WW Personal Assessment: A Custom Weight Loss Plan | WW USA",
+      "visibleText": "Back\nAbout you\nProgress of section 1: 25%\nProgress of section 2: 0%\nProgress of section 3: 0%\nProgress of section 4: 0%\nWhat is your age?\n18–24\n25–34\n35–44\n45–54\n55–64\n65+\nNext\nPlease make a selection\nRecaptcha",
+      "htmlLength": 395552,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}

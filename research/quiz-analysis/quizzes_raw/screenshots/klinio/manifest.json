@@ -1,0 +1,17 @@
+{
+  "slug": "klinio",
+  "url": "https://funnel.klinio.com/quiz",
+  "captured_at": "2026-05-27T19:55:21.882Z",
+  "total_screens": 1,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://funnel.klinio.com/pt-br/quiz",
+      "title": "Assistente para perda de peso | MyBody",
+      "visibleText": "Seu gênero nos ajuda a determinar a ingestão de calorias e a meta de peso\n\nSeu tipo de dieta\n\nDieta para mulheres\n\nDieta para homens",
+      "htmlLength": 388413,
+      "action": "DEAD_END",
+      "optionsSeen": []
+    }
+  ]
+}

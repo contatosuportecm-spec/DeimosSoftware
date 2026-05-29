@@ -1,0 +1,17 @@
+{
+  "slug": "nutrisystem",
+  "url": "https://www.nutrisystem.com/r/my-plan-quiz",
+  "captured_at": "2026-05-27T19:58:22.914Z",
+  "total_screens": 1,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://www.nutrisystem.com/r/my-plan-quiz",
+      "title": "Access Denied",
+      "visibleText": "Access Denied\nYou don't have permission to access \"http://www.nutrisystem.com/r/my-plan-quiz\" on this server.\n\nReference #18.c841402.1779911900.7af87144\n\nhttps://errors.edgesuite.net/18.c841402.1779911900.7af87144",
+      "htmlLength": 309,
+      "action": "DEAD_END",
+      "optionsSeen": []
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "slug": "hers-weight-loss",
+  "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+  "captured_at": "2026-05-27T19:58:07.086Z",
+  "total_screens": 5,
+  "screens": [
+    {
+      "index": 0,
+      "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+      "title": "Just a moment...",
+      "visibleText": "www.forhers.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a02796812b00e003\nPerformance and Security by Cloudflare\nPrivacy",
+      "htmlLength": 31903,
+      "action": "CLICKED_LINK: \"Cloudflare\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 1,
+      "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+      "title": "Just a moment...",
+      "visibleText": "www.forhers.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a02796812b00e003\nPerformance and Security by Cloudflare\nPrivacy",
+      "htmlLength": 31912,
+      "action": "CLICKED_LINK: \"Cloudflare\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 2,
+      "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+      "title": "Just a moment...",
+      "visibleText": "www.forhers.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a02796812b00e003\nPerformance and Security by Cloudflare\nPrivacy",
+      "htmlLength": 31912,
+      "action": "CLICKED_LINK: \"Cloudflare\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 3,
+      "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+      "title": "Just a moment...",
+      "visibleText": "www.forhers.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a02796812b00e003\nPerformance and Security by Cloudflare\nPrivacy",
+      "htmlLength": 31912,
+      "action": "CLICKED_LINK: \"Cloudflare\"",
+      "optionsSeen": []
+    },
+    {
+      "index": 4,
+      "url": "https://www.forhers.com/tools/why-cant-i-lose-weight",
+      "title": "Just a moment...",
+      "visibleText": "www.forhers.com\nPerforming security verification\n\nThis website uses a security service to protect against malicious bots. This page is displayed while the website verifies you are not a bot.\n\nRay ID: a02796812b00e003\nPerformance and Security by Cloudflare\nPrivacy",
+      "htmlLength": 31912,
+      "action": "PENDING",
+      "optionsSeen": []
+    }
+  ]
+}
