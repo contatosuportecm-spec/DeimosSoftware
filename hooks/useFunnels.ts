@@ -213,8 +213,10 @@ export function useFunnelDetail(funnelId: string) {
     if (error) console.error("Update node error:", error);
   }, []);
 
-  // Silent position save — writes to DB without touching allNodes state (no re-render)
+  // Position save — updates allNodes so the position survives drilling out/in
+  // without a page reload (called once on drag stop, so no re-render storm).
   const savePosition = useCallback(async (nodeId: string, x: number, y: number) => {
+    setAllNodes((prev) => prev.map((n) => n.id === nodeId ? { ...n, position_x: x, position_y: y } : n));
     const { error } = await getSupabase()
       .from(TBL_NODES)
       .update({ position_x: x, position_y: y } as never)
