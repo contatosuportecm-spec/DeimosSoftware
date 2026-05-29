@@ -171,7 +171,7 @@ async function main() {
         await lm.tap().catch((e) => console.log("tap erro:", e.message));
         await page.waitForTimeout(5000);
         console.log("URL após tap:", page.url());
-        console.log("Texto:", (await page.evaluate(GET_BODY_TEXT)).slice(0, 300));
+        console.log("Texto:", ((await page.evaluate(GET_BODY_TEXT)) as string).slice(0, 300));
       }
     }
     await context.close();
@@ -212,7 +212,7 @@ async function main() {
       try {
         await page.goto(u, { waitUntil: "domcontentloaded", timeout: 10000 });
         await page.waitForTimeout(2000);
-        const txt = (await page.evaluate(GET_BODY_TEXT)).slice(0, 200);
+        const txt = ((await page.evaluate(GET_BODY_TEXT)) as string).slice(0, 200);
         const final = page.url();
         const ok = !txt.includes("Whoops") && !txt.includes("couldn't find");
         console.log(
