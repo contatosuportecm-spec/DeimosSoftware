@@ -8,13 +8,14 @@ import ReactFlow, {
   useReactFlow, ReactFlowProvider, ConnectionMode,
 } from "reactflow";
 import "reactflow/dist/style.css";
-import { MousePointer2 } from "lucide-react";
+import { MousePointer2, Sparkles } from "lucide-react";
 
 import { BaseNode, type BaseNodeData } from "./BaseNode";
 import { DeletableEdge } from "./DeletableEdge";
 import FunnelBreadcrumb, { type BreadcrumbItem } from "./Breadcrumb";
 import AddNodeMenu from "./AddNodeMenu";
 import NodeInspector from "./NodeInspector";
+import QuizGenerateModal from "./QuizGenerateModal";
 import { getNodesAtLevel, getEdgesAtLevel } from "@/hooks/useFunnels";
 import { NODE_TYPE_META, type FunnelNode, type FunnelEdge, type FunnelNodeType, type AggregatedMetrics } from "@/types/funnels";
 
@@ -30,6 +31,7 @@ interface FunnelCanvasProps {
     label: string;
     position_x: number;
     position_y: number;
+    content?: Record<string, unknown>;
   }) => Promise<FunnelNode>;
   onUpdateNode: (nodeId: string, patch: Record<string, unknown>) => void;
   onSavePosition: (nodeId: string, x: number, y: number) => void;
@@ -416,6 +418,48 @@ function FunnelCanvasInner({
     }
   }, [currentParentId, onCreateNode, onCreateEdge, getViewport, allNodes]);
 
+  // AI quiz generation — paste text, create one quiz_question node per generated question
+  const [genOpen, setGenOpen] = useState(false);
+  const handleGenerateQuiz = useCallback(async (text: string): Promise<number> => {
+    const res = await fetch("/api/funnels/generate-quiz", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error ?? "Falha ao gerar perguntas");
+    const questions = data.questions as Array<{ question: string; question_type: string; options: string[] }>;
+
+    const siblings = allNodes.filter((n) => n.parent_node_id === currentParentId);
+    let num = siblings
+      .filter((n) => n.type === "quiz_question")
+      .reduce((max, n) => {
+        const m = /^Pergunta\s+(\d+)$/.exec(n.label);
+        return m ? Math.max(max, parseInt(m[1], 10)) : max;
+      }, 0);
+
+    // Lay out generated questions in a horizontal row, to the right of existing nodes
+    const startX = siblings.length > 0 ? Math.max(...siblings.map((n) => n.position_x)) + 360 : 0;
+    const y = siblings.length > 0 ? siblings[0].position_y : 0;
+
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      num++;
+      const options = q.question_type === "button"
+        ? q.options.map((label) => ({ id: crypto.randomUUID(), label }))
+        : [];
+      await onCreateNode({
+        parent_node_id: currentParentId,
+        type: "quiz_question",
+        label: `Pergunta ${num}`,
+        position_x: startX + i * 360,
+        position_y: y,
+        content: { question: q.question, question_type: q.question_type, options },
+      });
+    }
+    return questions.length;
+  }, [allNodes, currentParentId, onCreateNode]);
+
   // Keyboard shortcuts
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -475,6 +519,16 @@ function FunnelCanvasInner({
         <div className="absolute top-4 left-4 z-20 bg-[#0b0d14]/90 backdrop-blur-xl rounded-xl px-4 py-2.5 border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
           <FunnelBreadcrumb items={breadcrumbs} onNavigate={handleBreadcrumbNav} />
         </div>
+      )}
+
+      {currentParentNode?.type === "quiz" && (
+        <button
+          onClick={() => setGenOpen(true)}
+          className="absolute top-4 right-4 z-20 flex items-center gap-2 rounded-xl px-4 py-2.5 text-[12px] font-semibold text-black bg-[#FF8A1F] hover:bg-[#E5740F] transition-colors shadow-[0_4px_24px_rgba(255,138,31,0.35)]"
+        >
+          <Sparkles size={14} strokeWidth={2} />
+          Gerar com IA
+        </button>
       )}
 
       <ReactFlow
@@ -560,6 +614,12 @@ function FunnelCanvasInner({
           parentType={selectedParentType ?? currentParentNode?.type ?? null}
         />
       )}
+
+      <QuizGenerateModal
+        open={genOpen}
+        onClose={() => setGenOpen(false)}
+        onGenerate={handleGenerateQuiz}
+      />
     </div>
   );
 }

@@ -182,8 +182,10 @@ export function useFunnelDetail(funnelId: string) {
     label: string;
     position_x: number;
     position_y: number;
+    content?: Record<string, unknown>;
   }): Promise<FunnelNode> => {
-    const payload = { funnel_id: funnelId, ...node, content: {}, metrics: {}, order_index: 0 };
+    const { content, ...rest } = node;
+    const payload = { funnel_id: funnelId, ...rest, content: content ?? {}, metrics: {}, order_index: 0 };
     const { data, error } = await getSupabase()
       .from(TBL_NODES)
       .insert(payload as never)
