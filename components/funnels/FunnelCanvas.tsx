@@ -82,9 +82,6 @@ function FunnelCanvasInner({
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const selectedNode = allNodes.find((n) => n.id === selectedNodeId) ?? null;
 
-  // Per-node position save timers (prevents race conditions)
-  const posTimers = useRef<Map<string, NodeJS.Timeout>>(new Map());
-
   const currentParentNode = currentParentId ? allNodes.find((n) => n.id === currentParentId) : null;
 
   const levelNodes = useMemo(() => getNodesAtLevel(allNodes, currentParentId), [allNodes, currentParentId]);
@@ -298,18 +295,13 @@ function FunnelCanvasInner({
     if (allowed.length > 0) {
       setRfNodes((nds) => applyNodeChanges(allowed, nds));
     }
-    // Per-node position save with individual timers
-    for (const change of changes) {
-      if (change.type === "position" && change.position && !change.dragging) {
-        const id = change.id;
-        const pos = change.position;
-        const existing = posTimers.current.get(id);
-        if (existing) clearTimeout(existing);
-        posTimers.current.set(id, setTimeout(() => {
-          onSavePosition(id, pos.x, pos.y);
-          posTimers.current.delete(id);
-        }, 400));
-      }
+  }, []);
+
+  // Reliable position save: onNodeDragStop always provides the final position
+  const handleNodeDragStop = useCallback((_: React.MouseEvent, node: Node, nodes: Node[]) => {
+    const dragged = nodes.length > 0 ? nodes : [node];
+    for (const n of dragged) {
+      onSavePosition(n.id, n.position.x, n.position.y);
     }
   }, [onSavePosition]);
 
@@ -400,10 +392,21 @@ function FunnelCanvasInner({
       x = (-vp.x + window.innerWidth / 2) / vp.zoom - 110;
       y = (-vp.y + window.innerHeight / 2) / vp.zoom - 40;
     }
+    // Quiz questions get auto-incrementing labels: "Pergunta 1", "Pergunta 2", ...
+    let label = NODE_TYPE_META[type].label;
+    if (type === "quiz_question") {
+      const maxNum = allNodes
+        .filter((n) => n.parent_node_id === currentParentId && n.type === "quiz_question")
+        .reduce((max, n) => {
+          const m = /^Pergunta\s+(\d+)$/.exec(n.label);
+          return m ? Math.max(max, parseInt(m[1], 10)) : max;
+        }, 0);
+      label = `Pergunta ${maxNum + 1}`;
+    }
     const newNode = await onCreateNode({
       parent_node_id: currentParentId,
       type,
-      label: NODE_TYPE_META[type].label,
+      label,
       position_x: x,
       position_y: y,
     });
@@ -411,7 +414,7 @@ function FunnelCanvasInner({
       await onCreateEdge(quickAddSource.current, newNode.id);
       quickAddSource.current = null;
     }
-  }, [currentParentId, onCreateNode, onCreateEdge, getViewport]);
+  }, [currentParentId, onCreateNode, onCreateEdge, getViewport, allNodes]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -480,6 +483,7 @@ function FunnelCanvasInner({
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         onNodesChange={handleNodesChange}
+        onNodeDragStop={handleNodeDragStop}
         onEdgesChange={handleEdgesChange}
         onConnect={handleConnect}
         isValidConnection={isValidConnection}
