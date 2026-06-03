@@ -2,10 +2,11 @@
 
 import { useRef, useState, useEffect } from "react";
 import { TrendingDown, TrendingUp, Clock, ChevronDown, ArrowUpDown, X, Flame } from "lucide-react";
-import { Niche } from "@/types";
+import { Niche, OfferTag } from "@/types";
 import { cn } from "@/lib/utils";
+import { TAG_META, TAG_ORDER } from "./tagMeta";
 
-export type StatusFilterKey = "all" | "scaling" | "lateral" | "dying" | "new";
+export type TagFilterKey = "all" | OfferTag;
 
 export type ActiveSort =
   | { type: "default" }
@@ -14,18 +15,15 @@ export type ActiveSort =
   | { type: "time_desc" }
   | { type: "delta_desc" };
 
-const STATUS_CHIPS: { key: StatusFilterKey; label: string; dot?: string }[] = [
-  { key: "all",     label: "Todas" },
-  { key: "scaling", label: "Em Alta",  dot: "#34D399" },
-  { key: "lateral", label: "Lateral",  dot: "#F4C430" },
-  { key: "dying",   label: "Morrendo", dot: "#F87171" },
-  { key: "new",     label: "Nova",     dot: "#6B6B73" },
+const TAG_CHIPS: { key: TagFilterKey; label: string; dot?: string }[] = [
+  { key: "all", label: "Todas" },
+  ...TAG_ORDER.map((t) => ({ key: t, label: TAG_META[t].label, dot: TAG_META[t].color })),
 ];
 
 interface OffersFilterBarProps {
-  status: StatusFilterKey;
-  onStatusChange: (k: StatusFilterKey) => void;
-  statusCount: (k: StatusFilterKey) => number;
+  tag: TagFilterKey;
+  onTagChange: (k: TagFilterKey) => void;
+  tagCount: (k: TagFilterKey) => number;
 
   sort: ActiveSort;
   onSortChange: (s: ActiveSort) => void;
@@ -36,7 +34,7 @@ interface OffersFilterBarProps {
 }
 
 export default function OffersFilterBar({
-  status, onStatusChange, statusCount,
+  tag, onTagChange, tagCount,
   sort, onSortChange, niches,
   showArchived, onToggleArchived,
 }: OffersFilterBarProps) {
@@ -73,15 +71,15 @@ export default function OffersFilterBar({
   return (
     <div className="border-b border-border flex-shrink-0">
 
-      {/* ── Linha 1: Status ── */}
+      {/* ── Linha 1: Tags ── */}
       <div className="flex items-center gap-1 px-6 py-3">
-        {STATUS_CHIPS.map((s) => {
-          const count    = statusCount(s.key);
-          const isActive = status === s.key;
+        {TAG_CHIPS.map((s) => {
+          const count    = tagCount(s.key);
+          const isActive = tag === s.key;
           return (
             <button
               key={s.key}
-              onClick={() => onStatusChange(s.key)}
+              onClick={() => onTagChange(s.key)}
               className={cn(
                 "flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[11px] font-medium transition-all duration-150 border",
                 isActive

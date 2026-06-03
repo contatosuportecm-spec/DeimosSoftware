@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
 import { extractPageId, scrapeAndSaveSnapshot } from "@/lib/meta";
-import { Country, OfferWithSnapshots, OfferSnapshot } from "@/types";
+import { Country, OfferWithSnapshots, OfferSnapshot, OfferTag } from "@/types";
 
 export const dynamic = "force-dynamic";
 
@@ -63,9 +63,10 @@ export async function POST(req: NextRequest) {
       library_url: string;
       country: Country;
       niche?: string;
+      tag?: OfferTag | null;
     };
 
-    const { name, library_url, country, niche = "geral" } = body;
+    const { name, library_url, country, niche = "geral", tag = null } = body;
 
     if (!name || !library_url || !country) {
       return NextResponse.json({ error: "name, library_url e country são obrigatórios" }, { status: 400 });
@@ -93,6 +94,7 @@ export async function POST(req: NextRequest) {
         niche,
         source: "meta_library",
         status: "new",
+        ...(tag ? { tag } : {}),
       })
       .select()
       .single();

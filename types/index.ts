@@ -6,6 +6,7 @@ export type ChatRole = "user" | "assistant" | "system";
 
 export type ScalingPattern = "lateral" | "vertical" | "budget" | "creative_flood" | "mixed" | "unknown";
 export type OfferDecision = "test" | "keep_watching" | "archive";
+export type OfferTag = "atencao" | "interessante" | "acompanhar";
 
 export interface Offer {
   id: string;
@@ -16,6 +17,7 @@ export interface Offer {
   page_url?: string;
   vsl_url?: string;
   status: OfferStatus;
+  tag?: OfferTag | null;
   score: number;
   notes?: string;
   country: string;

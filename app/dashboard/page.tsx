@@ -89,14 +89,14 @@ export default function DashboardPage() {
             <StatCard icon={<CircleDot size={20} strokeWidth={1.5} />} value={String(activeBriefingsCount)} label="Ofertas ativas" color="#34D399" />
           </div>
 
-          {/* ── Spy em Alta ── */}
+          {/* ── Spy — maior volume ── */}
           {topSpy.length > 0 && (
             <section className="space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
                   <Radar size={16} strokeWidth={1.5} className="text-nova" />
                   <div>
-                    <h2 className="text-[15px] font-bold text-white">Spy em alta</h2>
+                    <h2 className="text-[15px] font-bold text-white">Spy — maior volume</h2>
                     <p className="text-[12px] text-text-secondary mt-0.5">Ofertas com mais anuncios ativos hoje</p>
                   </div>
                 </div>
