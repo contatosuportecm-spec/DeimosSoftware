@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import MiniChart from "./MiniChart";
-import { OfferWithSnapshots, Niche } from "@/types";
+import TagControl from "./TagControl";
+import { OfferWithSnapshots, Niche, OfferTag } from "@/types";
 import { formatNumber } from "@/lib/utils";
 import { tierColor } from "@/lib/spy-utils";
 import { Crown, ExternalLink, Pencil } from "lucide-react";
@@ -11,6 +12,7 @@ interface SpyHeroCardProps {
   offer: OfferWithSnapshots;
   niche?: Niche;
   onManualValue: (id: string, value: number) => void;
+  onSetTag: (id: string, tag: OfferTag | null) => void;
 }
 
 function formatChartDate(dateStr: string): string {
@@ -29,7 +31,7 @@ function formatChartDate(dateStr: string): string {
   return `${day} ${months[d.getMonth()]}`;
 }
 
-export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCardProps) {
+export default function SpyHeroCard({ offer, niche, onManualValue, onSetTag }: SpyHeroCardProps) {
   const snaps = offer.snapshots;
   const todayCount = snaps.length > 0 ? snaps[snaps.length - 1].active_ads_count : 0;
   const yesterdayCount = snaps.length > 1 ? snaps[snaps.length - 2].active_ads_count : 0;
@@ -72,7 +74,7 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
 
   return (
     <div
-      className="rounded-xl p-6"
+      className="group relative rounded-xl p-6"
       style={{
         background: `linear-gradient(135deg, ${color}06 0%, #0F0F11 60%)`,
         border: "1px solid rgba(255,255,255,0.06)",
@@ -85,6 +87,15 @@ export default function SpyHeroCard({ offer, niche, onManualValue }: SpyHeroCard
         e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
       }}
     >
+      {/* Tag no canto superior direito */}
+      <div className="absolute top-5 right-5 z-10">
+        <TagControl
+          tag={offer.tag ?? null}
+          onChange={(t) => onSetTag(offer.id, t)}
+          size="md"
+        />
+      </div>
+
       <div className="flex flex-col lg:flex-row lg:items-start gap-6">
         {/* Left: Top offer info */}
         <div className="flex-shrink-0 lg:min-w-[200px]">

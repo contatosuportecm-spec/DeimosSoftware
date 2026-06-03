@@ -3,9 +3,9 @@
 import { useMemo, useState, useCallback } from "react";
 import OfferCard from "./OfferCard";
 import SpyHeroCard from "./SpyHeroCard";
-import OffersFilterBar, { StatusFilterKey, ActiveSort } from "./OffersFilterBar";
+import OffersFilterBar, { TagFilterKey, ActiveSort } from "./OffersFilterBar";
 import EmptyState from "@/components/ui/EmptyState";
-import { OfferWithSnapshots, Niche } from "@/types";
+import { OfferWithSnapshots, Niche, OfferTag } from "@/types";
 
 function lastAdsCount(o: OfferWithSnapshots): number {
   return o.snapshots.length > 0 ? o.snapshots[o.snapshots.length - 1].active_ads_count : 0;
@@ -20,10 +20,9 @@ function deltaPct(o: OfferWithSnapshots): number {
   return ((last - prev) / prev) * 100;
 }
 
-function matchesStatus(o: OfferWithSnapshots, key: StatusFilterKey): boolean {
+function matchesTag(o: OfferWithSnapshots, key: TagFilterKey): boolean {
   if (key === "all") return true;
-  if (key === "lateral") return o.status === "stable" || o.status === "monitoring";
-  return o.status === key;
+  return o.tag === key;
 }
 
 interface OfertasTabProps {
@@ -35,6 +34,7 @@ interface OfertasTabProps {
   onScrapeNow: (id: string) => void;
   onArchive: (id: string) => void;
   onManualValue: (id: string, value: number) => void;
+  onSetTag: (id: string, tag: OfferTag | null) => void;
   onAddOffer: () => void;
 }
 
@@ -47,9 +47,10 @@ export default function OfertasTab({
   onScrapeNow,
   onArchive,
   onManualValue,
+  onSetTag,
   onAddOffer,
 }: OfertasTabProps) {
-  const [statusFilter, setStatusFilter] = useState<StatusFilterKey>("all");
+  const [tagFilter, setTagFilter] = useState<TagFilterKey>("all");
   const [sort, setSort] = useState<ActiveSort>({ type: "default" });
   const [showArchived, setShowArchived] = useState(false);
 
@@ -62,17 +63,17 @@ export default function OfertasTab({
   const nonArchived = useMemo(() => offers.filter((o) => o.status !== "archived"), [offers]);
   const archived = useMemo(() => offers.filter((o) => o.status === "archived"), [offers]);
 
-  const statusCount = useCallback((key: StatusFilterKey): number => {
+  const tagCount = useCallback((key: TagFilterKey): number => {
     if (key === "all") return nonArchived.length;
-    return nonArchived.filter((o) => matchesStatus(o, key)).length;
+    return nonArchived.filter((o) => matchesTag(o, key)).length;
   }, [nonArchived]);
 
   const visible = useMemo(() => {
     let list = showArchived ? [...nonArchived, ...archived] : [...nonArchived];
 
-    // Status filter
-    if (statusFilter !== "all") {
-      list = list.filter((o) => matchesStatus(o, statusFilter));
+    // Tag filter
+    if (tagFilter !== "all") {
+      list = list.filter((o) => matchesTag(o, tagFilter));
     }
 
     // Niche filter
@@ -92,7 +93,7 @@ export default function OfertasTab({
     }
 
     return list;
-  }, [offers, nonArchived, archived, statusFilter, sort, showArchived]);
+  }, [offers, nonArchived, archived, tagFilter, sort, showArchived]);
 
   const topOffer = visible[0] ?? null;
   const gridOffers = topOffer ? visible.slice(1) : [];
@@ -100,9 +101,9 @@ export default function OfertasTab({
   return (
     <div className="flex-1 overflow-auto flex flex-col">
       <OffersFilterBar
-        status={statusFilter}
-        onStatusChange={setStatusFilter}
-        statusCount={statusCount}
+        tag={tagFilter}
+        onTagChange={setTagFilter}
+        tagCount={tagCount}
         sort={sort}
         onSortChange={setSort}
         niches={niches}
@@ -130,6 +131,7 @@ export default function OfertasTab({
                 offer={topOffer}
                 niche={nicheById.get(topOffer.niche)}
                 onManualValue={onManualValue}
+                onSetTag={onSetTag}
               />
             )}
 
@@ -143,6 +145,7 @@ export default function OfertasTab({
                     onScrapeNow={onScrapeNow}
                     onArchive={onArchive}
                     onManualValue={onManualValue}
+                    onSetTag={onSetTag}
                     scraping={scrapingId === offer.id}
                   />
                 ))}

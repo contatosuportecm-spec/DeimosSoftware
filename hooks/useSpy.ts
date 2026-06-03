@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Country, OfferWithSnapshots } from "@/types";
+import { Country, OfferWithSnapshots, OfferTag } from "@/types";
 
 export function useSpy() {
   const [offers, setOffers]     = useState<OfferWithSnapshots[]>([]);
@@ -33,11 +33,12 @@ export function useSpy() {
     libraryUrl: string,
     country: Country,
     niche: string,
+    tag: OfferTag | null = null,
   ): Promise<void> => {
     const res = await fetch("/api/spy/offers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, library_url: libraryUrl, country, niche }),
+      body: JSON.stringify({ name, library_url: libraryUrl, country, niche, tag }),
     });
 
     if (!res.ok) {
@@ -117,10 +118,27 @@ export function useSpy() {
     );
   }, []);
 
+  const setOfferTag = useCallback(async (
+    offerId: string,
+    tag: OfferTag | null,
+  ): Promise<void> => {
+    // Atualização otimista
+    setOffers((prev) => prev.map((o) => (o.id === offerId ? { ...o, tag } : o)));
+    const res = await fetch(`/api/spy/offers/${offerId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tag }),
+    });
+    if (!res.ok) {
+      // Reverte buscando estado real do servidor
+      await fetchOffers();
+      throw new Error("Erro ao salvar tag");
+    }
+  }, [fetchOffers]);
+
   // Stats resumidas
   const stats = {
     total:    offers.filter((o) => o.status !== "archived").length,
-    scaling:  offers.filter((o) => o.status === "scaling").length,
     dying:    offers.filter((o) => o.status === "dying").length,
     new:      offers.filter((o) => o.status === "new").length,
   };
@@ -137,6 +155,7 @@ export function useSpy() {
     scrapingAll,
     addManualSnapshot,
     archiveOffer,
+    setOfferTag,
     refetch: fetchOffers,
   };
 }

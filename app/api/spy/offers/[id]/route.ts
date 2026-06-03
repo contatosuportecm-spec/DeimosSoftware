@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@/lib/supabase";
-import { OfferStatus } from "@/types";
+import { OfferStatus, OfferTag } from "@/types";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,7 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const body = await req.json() as { status?: OfferStatus };
+    const body = await req.json() as { status?: OfferStatus; tag?: OfferTag | null };
     const supabase = createServerClient();
 
     const { data, error } = await supabase

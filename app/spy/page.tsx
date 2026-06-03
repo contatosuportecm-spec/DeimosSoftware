@@ -32,7 +32,7 @@ function SpyPageContent() {
   const {
     offers, loading, error, scrapingId,
     addOffer, scrapeNow, scrapeAll, scrapingAll,
-    addManualSnapshot, archiveOffer, refetch,
+    addManualSnapshot, archiveOffer, setOfferTag, refetch,
   } = useSpy();
   const { niches } = useNiches();
 
@@ -102,6 +102,7 @@ function SpyPageContent() {
             onScrapeNow={scrapeNow}
             onArchive={archiveOffer}
             onManualValue={addManualSnapshot}
+            onSetTag={setOfferTag}
             onAddOffer={() => setModalOpen(true)}
           />
         ) : (

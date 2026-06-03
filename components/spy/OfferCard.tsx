@@ -4,18 +4,10 @@ import { useState, useRef, useEffect } from "react";
 import { ExternalLink, RefreshCw, Archive, Pencil, Library } from "lucide-react";
 import Link from "next/link";
 import MiniChart from "./MiniChart";
-import { OfferWithSnapshots, Niche } from "@/types";
+import TagControl from "./TagControl";
+import { OfferWithSnapshots, Niche, OfferTag } from "@/types";
 import { formatNumber, cn } from "@/lib/utils";
 import { tierColor } from "@/lib/spy-utils";
-
-const STATUS_DOT: Record<string, { color: string; label: string }> = {
-  scaling:    { color: "#34D399", label: "Ativo" },
-  stable:     { color: "#F4C430", label: "Ativo" },
-  monitoring: { color: "#34D399", label: "Ativo" },
-  new:        { color: "#6B6B73", label: "Nova" },
-  dying:      { color: "#F87171", label: "Morrendo" },
-  archived:   { color: "#52525B", label: "Arquivada" },
-};
 
 function formatChartDate(dateStr: string): string {
   const d = new Date(dateStr + "T12:00:00");
@@ -39,6 +31,7 @@ interface OfferCardProps {
   onScrapeNow: (id: string) => void;
   onArchive: (id: string) => void;
   onManualValue: (id: string, value: number) => void;
+  onSetTag: (id: string, tag: OfferTag | null) => void;
   scraping?: boolean;
 }
 
@@ -48,9 +41,9 @@ export default function OfferCard({
   onScrapeNow,
   onArchive,
   onManualValue,
+  onSetTag,
   scraping,
 }: OfferCardProps) {
-  const status = STATUS_DOT[offer.status] ?? STATUS_DOT.new;
   const isArchived = offer.status === "archived";
   const snaps = offer.snapshots;
   const todayCount = snaps.length > 0 ? snaps[snaps.length - 1].active_ads_count : 0;
@@ -118,13 +111,10 @@ export default function OfferCard({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-1.5 flex-shrink-0">
-          <span
-            className="w-[6px] h-[6px] rounded-full"
-            style={{ backgroundColor: status.color }}
-          />
-          <span className="text-[10px] text-[#9B9BA5]">{status.label}</span>
-        </div>
+        <TagControl
+          tag={offer.tag ?? null}
+          onChange={(t) => onSetTag(offer.id, t)}
+        />
       </div>
 
       {/* Body: count + chart */}

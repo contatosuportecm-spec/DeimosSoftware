@@ -4,14 +4,15 @@ import { useState } from "react";
 import Modal from "@/components/ui/Modal";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { Country } from "@/types";
+import { Country, OfferTag } from "@/types";
 import { useNiches } from "@/hooks/useNiches";
 import { cn } from "@/lib/utils";
+import { TAG_META, TAG_ORDER } from "./tagMeta";
 
 interface AddOfferModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (name: string, libraryUrl: string, country: Country, niche: string) => Promise<void>;
+  onAdd: (name: string, libraryUrl: string, country: Country, niche: string, tag: OfferTag | null) => Promise<void>;
 }
 
 const COUNTRIES: { value: Country; label: string; flag: string }[] = [
@@ -27,6 +28,7 @@ export default function AddOfferModal({ open, onClose, onAdd }: AddOfferModalPro
   const [libraryUrl, setLibraryUrl] = useState("");
   const [country, setCountry]     = useState<Country>("BR");
   const [niche, setNiche]         = useState<string>("");
+  const [tag, setTag]             = useState<OfferTag | null>(null);
   const [loading, setLoading]     = useState(false);
   const [error, setError]         = useState<string | null>(null);
 
@@ -38,11 +40,12 @@ export default function AddOfferModal({ open, onClose, onAdd }: AddOfferModalPro
     setError(null);
 
     try {
-      await onAdd(name.trim(), libraryUrl.trim(), country, niche);
+      await onAdd(name.trim(), libraryUrl.trim(), country, niche, tag);
       setName("");
       setLibraryUrl("");
       setCountry("BR");
       setNiche("");
+      setTag(null);
       onClose();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao adicionar oferta");
@@ -132,6 +135,42 @@ export default function AddOfferModal({ open, onClose, onAdd }: AddOfferModalPro
                 <span>{c.label}</span>
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Seletor de tag (opcional) */}
+        <div className="flex flex-col gap-1.5">
+          <span className="text-[10px] uppercase tracking-[0.15em] text-text-muted font-medium">
+            Tag <span className="normal-case tracking-normal text-text-muted/60">(opcional)</span>
+          </span>
+          <div className="flex flex-wrap gap-2">
+            {TAG_ORDER.map((t) => {
+              const m = TAG_META[t];
+              const Icon = m.icon;
+              const selected = tag === t;
+              return (
+                <button
+                  key={t}
+                  type="button"
+                  onClick={() => setTag(selected ? null : t)}
+                  disabled={loading}
+                  className={cn(
+                    "flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs transition-all",
+                    selected
+                      ? ""
+                      : "border-border bg-bg-4 text-text-secondary hover:border-border-strong",
+                  )}
+                  style={selected ? {
+                    borderColor: `${m.color}66`,
+                    backgroundColor: `${m.color}14`,
+                    color: m.color,
+                  } : undefined}
+                >
+                  <Icon size={13} strokeWidth={1.5} />
+                  <span>{m.label}</span>
+                </button>
+              );
+            })}
           </div>
         </div>
 

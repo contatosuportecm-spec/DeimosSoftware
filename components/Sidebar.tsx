@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, Brain, FlaskConical, Workflow, type LucideIcon,
+  LayoutGrid, Radar, Briefcase, PenTool, Box, Cpu, Library, Fingerprint, Brain, FlaskConical, Workflow, PanelLeft, type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -65,43 +65,54 @@ function EclipseMark() {
 export default function Sidebar() {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
-  const [firstLeave, setFirstLeave] = useState(true);
-
-  const handleMouseEnter = () => {
-    if (firstLeave) return;
-    setExpanded(true);
-  };
-
-  const handleMouseLeave = () => {
-    if (firstLeave) setFirstLeave(false);
-    setExpanded(false);
-  };
 
   return (
     <aside
       className="hidden md:flex flex-shrink-0 h-[100dvh] flex-col border-r border-white/[0.07] bg-black/40 backdrop-blur-xl overflow-hidden"
       style={{
         width: expanded ? W_OPEN : W_CLOSED,
-        transition: firstLeave ? "none" : "width 0.5s cubic-bezier(0.22, 1, 0.36, 1)",
+        transition: "width 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
-      {/* Logo */}
-      <Link href="/dashboard" className="flex items-center gap-2.5 px-3.5 pt-4 pb-3 border-b border-white/[0.06] hover:bg-white/[0.02] transition-colors overflow-hidden">
-        <img
-          src="/logo.png"
-          alt="Deimos"
-          className="flex-shrink-0"
-          style={{ width: 28, height: "auto" }}
-        />
-        <span
-          className="text-[13px] font-semibold text-text-primary tracking-wide whitespace-nowrap overflow-hidden"
-          style={{ opacity: expanded ? 1 : 0, width: expanded ? "auto" : 0, transition: "opacity 0.4s ease, width 0.4s ease" }}
+      {/* Header: logo + toggle button */}
+      <div
+        className={cn(
+          "flex items-center h-[57px] border-b border-white/[0.06] overflow-hidden",
+          expanded ? "px-3.5 gap-2.5" : "px-2 justify-center"
+        )}
+      >
+        <Link
+          href="/dashboard"
+          className={cn(
+            "flex items-center gap-2.5 min-w-0 hover:opacity-80 transition-opacity",
+            !expanded && "hidden"
+          )}
         >
-          Deimos
-        </span>
-      </Link>
+          <img
+            src="/logo.png"
+            alt="Deimos"
+            className="flex-shrink-0"
+            style={{ width: 28, height: "auto" }}
+          />
+          <span className="text-[13px] font-semibold text-text-primary tracking-wide whitespace-nowrap overflow-hidden">
+            Deimos
+          </span>
+        </Link>
+
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          title={expanded ? "Fechar menu" : "Abrir menu"}
+          aria-label={expanded ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={expanded}
+          className={cn(
+            "flex items-center justify-center w-8 h-8 rounded-lg flex-shrink-0 text-text-muted hover:text-text-secondary hover:bg-white/[0.05] transition-colors",
+            expanded && "ml-auto"
+          )}
+        >
+          <PanelLeft size={16} strokeWidth={1.5} />
+        </button>
+      </div>
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-2 pt-3 pb-2 space-y-px">
