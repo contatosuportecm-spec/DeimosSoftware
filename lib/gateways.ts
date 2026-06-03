@@ -21,6 +21,8 @@ export const RECLAME_AQUI_GATEWAYS: ReclameAquiGateway[] = [
   { slug: "ticto",                                            name: "Ticto",       initials: "TC", color: "#F4C430", logo: "/gateways/ticto.ico" },
   { slug: "ggcheckout",                                       name: "GG Checkout", initials: "GG", color: "#60A5FA", logo: "/gateways/ggcheckout-gfv.png" },
   { slug: "ironpay-tecnologia-servicos-e-pagamentos-ltda",    name: "IronPay",     initials: "IP", color: "#94A3B8", logo: "/gateways/ironpay.png" },
+  { slug: "wiapy",                                            name: "Wiapy",       initials: "WP", color: "#16A34A", logo: "/gateways/wiapy.png" },
+  { slug: "lowify-tecnologia",                                name: "Lowify",      initials: "LW", color: "#2563EB", logo: "/gateways/lowify.png" },
 ];
 
 export function reclameAquiUrl(slug: string): string {
