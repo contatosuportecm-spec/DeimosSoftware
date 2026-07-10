@@ -1,0 +1,214 @@
+================================================================================
+MINI-PRD — MÓDULO DE INTELIGÊNCIA DE OFERTAS
+================================================================================
+Versão: 1.0
+Data: 24/03/2026
+Status: Rascunho
+
+================================================================================
+1. VISÃO GERAL
+================================================================================
+
+Objetivo
+--------
+Criar um sistema que transforma anúncios brutos em inteligência acionável,
+permitindo identificar rapidamente quais ofertas têm maior potencial de escala
+em tráfego direto — sem análise manual e sem desperdício de tokens de IA.
+
+Princípio Central
+-----------------
+  "A IA não deve ser usada para analisar tudo,
+   mas apenas onde há sinal real de valor."
+
+================================================================================
+2. PROBLEMA
+================================================================================
+
+A identificação de boas ofertas hoje é:
+
+  - Manual e lenta (análise oferta por oferta)
+  - Cara em uso de IA (tokens sem priorização)
+  - Sem histórico ou organização estruturada
+  - Sem critérios objetivos de priorização
+  - Impossível de acompanhar em escala ao longo do tempo
+
+O módulo resolve isso ao:
+
+  [1] Organizar anúncios em ofertas estruturadas
+  [2] Identificar padrões de escala automaticamente
+  [3] Priorizar oportunidades com base em dados objetivos
+  [4] Acompanhar a evolução das ofertas ao longo do tempo
+  [5] Usar IA apenas onde há sinal real de valor
+
+================================================================================
+3. ENTRADAS DO SISTEMA
+================================================================================
+
+3.1 Lista de Palavras-chave
+  - Termos usados para busca de anúncios
+  - Organizados por categoria: nicho, mecanismo, dor, promessa, etc.
+  - Atributos: prioridade e status por keyword
+
+3.2 Base Histórica de Ofertas (Excel)
+  - Mais de 400 ofertas já mapeadas
+  - Usada como referência, comparação e detecção de padrões
+  - Base de aprendizado para o sistema de scoring
+
+3.3 Anúncios Coletados
+  Cada anúncio deve conter:
+  - Texto principal
+  - Headline
+  - CTA (chamada para ação)
+  - URL da landing page
+  - Domínio do anunciante
+  - Criativo (imagem ou vídeo)
+  - Nome do anunciante
+  - Formato do anúncio
+  - Data de captura
+  - Keyword de origem
+
+================================================================================
+4. SAÍDAS DO SISTEMA
+================================================================================
+
+4.1 Ranking de Ofertas
+  - Lista priorizada por potencial de escala
+  - Gerada a partir do score final consolidado de cada oferta
+
+4.2 Score por Oferta
+  Cada oferta recebe 4 dimensões de avaliação + score final:
+
+  ┌─────────────────────────────────────────────────────────┐
+  │ Dimensão             │ Tipo         │ Método           │
+  ├─────────────────────────────────────────────────────────┤
+  │ Escalabilidade       │ Objetivo+IA  │ Dados + análise  │
+  │ Clareza              │ Subjetivo    │ IA               │
+  │ Saturação            │ Objetivo     │ Dados            │
+  │ Maturidade           │ Objetivo+IA  │ Dados + análise  │
+  │ Score Final          │ Consolidado  │ Ponderação       │
+  └─────────────────────────────────────────────────────────┘
+
+4.3 Histórico da Oferta
+  - Primeira vez vista
+  - Última vez vista
+  - Frequência de aparição
+  - Número de variações
+  - Linha do tempo de mudanças
+
+4.4 Alertas Inteligentes
+  - Nova oferta com sinais promissores
+  - Aumento de recorrência de oferta existente
+  - Surgimento de novas variações
+  - Mudanças relevantes no copy ou criativo
+  - Padrão semelhante a ofertas vencedoras conhecidas
+
+================================================================================
+5. CRITÉRIOS DE AVALIAÇÃO
+================================================================================
+
+5.1 Definição de "Boa Oferta"
+  Uma oferta é considerada boa quando apresenta:
+
+  □ Promessa clara e compreensível em poucos segundos
+  □ Dor relevante e reconhecível pelo público-alvo
+  □ Mecanismo convincente (mesmo que não seja real)
+  □ Apelo emocional forte
+  □ Estrutura de copy funcional (direct response)
+  □ Potencial de chamar atenção em tráfego frio
+
+5.2 Definição de "Oferta Escalável"
+  Uma oferta é escalável quando demonstra:
+
+  □ Recorrência (aparece em múltiplos dias)
+  □ Múltiplas variações de copy e/ou criativo
+  □ Consistência de mensagem ao longo do tempo
+  □ Estrutura de funil clara e identificável
+  □ Adaptação de ângulos (mesma oferta, abordagens diferentes)
+  □ Domínio próprio ou estrutura profissional de landing
+  □ Presença contínua e progressiva no mercado
+
+================================================================================
+6. SINAIS PARA AVALIAÇÃO
+================================================================================
+
+6.1 Sinais Objetivos (sem IA — extração automática por dados)
+  - Frequência de aparição nos dados coletados
+  - Número de variações de anúncio identificadas
+  - Tempo ativo (quantidade de dias rodando)
+  - Repetição da mesma promessa
+  - Quantidade de anúncios similares no mesmo período
+  - Uso de domínio próprio (vs domínio compartilhado/redirect)
+  - Presença de landing page estruturada
+  - Diversidade de formatos de criativo
+
+6.2 Sinais Subjetivos (com IA — acionado apenas após triagem objetiva)
+  - Clareza da promessa principal
+  - Força percebida do mecanismo
+  - Nível de apelo emocional
+  - Facilidade de compreensão em leitura rápida
+  - Potencial de viralização
+  - Potencial de escala em tráfego frio
+  - Originalidade versus saturação do ângulo
+  - Nível de maturidade da oferta
+
+================================================================================
+7. LÓGICA DE PRIORIZAÇÃO
+================================================================================
+
+Fluxo de processamento:
+
+  [1] Coletar anúncios via keywords
+        ↓
+  [2] Agrupar anúncios por oferta (domínio + promise fingerprint)
+        ↓
+  [3] Calcular sinais objetivos automaticamente
+        ↓
+  [4] Triagem: ofertas com score objetivo acima do threshold
+        ↓
+  [5] Acionar IA apenas nas ofertas triadas (redução de custo)
+        ↓
+  [6] Gerar score final consolidado
+        ↓
+  [7] Publicar ranking + alertas
+
+Composição do Score Final:
+
+  Score Final = (Peso_Objetivo × Score_Objetivo)
+              + (Peso_IA       × Score_Subjetivo)
+
+  Pesos sugeridos (a calibrar):
+    - Sinais objetivos: 60%
+    - Sinais subjetivos (IA): 40%
+
+================================================================================
+8. RESULTADOS ESPERADOS
+================================================================================
+
+  ✓ Identificar rapidamente ofertas promissoras sem análise manual
+  ✓ Reduzir drasticamente o uso de IA desnecessária
+  ✓ Transformar dados brutos em decisões claras e priorizadas
+  ✓ Priorizar testes com maior probabilidade de retorno
+  ✓ Acompanhar a evolução do mercado em tempo real
+
+================================================================================
+9. FORA DO ESCOPO (v1)
+================================================================================
+
+  - Integração direta com plataformas de tráfego (Meta Ads, Google Ads)
+  - Criação automática de anúncios ou copies
+  - Análise de performance pós-lançamento (conversões, ROAS)
+  - CRM ou gestão de clientes
+
+================================================================================
+10. ABERTO PARA DEFINIÇÃO
+================================================================================
+
+  [ ] Threshold mínimo de score objetivo para acionar IA
+  [ ] Frequência de atualização do ranking (diária, semanal, por upload?)
+  [ ] Formato de entrega dos alertas (e-mail, dashboard, planilha?)
+  [ ] Fonte de coleta dos anúncios (manual, scraper, ferramenta externa?)
+  [ ] Stack tecnológica do sistema (planilha avançada, app, API?)
+
+================================================================================
+FIM DO DOCUMENTO
+================================================================================

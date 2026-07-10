@@ -1,0 +1,25 @@
+{
+  "name": "deimos",
+  "version": "1.0.0",
+  "description": "Módulo de Inteligência de Ofertas",
+  "type": "commonjs",
+  "main": "dist/run-import.js",
+  "scripts": {
+    "import": "ts-node --esm src/run-import.ts",
+    "import:dry": "ts-node --esm src/run-import.ts --dry-run",
+    "build": "tsc",
+    "start:import": "node dist/run-import.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.80.0",
+    "dotenv": "^16.4.7",
+    "exceljs": "^4.4.0",
+    "pg": "^8.13.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/pg": "^8.11.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0"
+  }
+}
