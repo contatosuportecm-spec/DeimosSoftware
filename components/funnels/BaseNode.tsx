@@ -4,7 +4,6 @@
 import { memo, useState, useEffect } from "react";
 import { Handle, Position, type NodeProps } from "reactflow";
 import { Maximize2, Trash2, Plus, X, AlignLeft, ToggleLeft, Sliders } from "lucide-react";
-import { motion } from "framer-motion";
 import { NODE_TYPE_META, type FunnelNodeType, type AggregatedMetrics } from "@/types/funnels";
 import { cn } from "@/lib/utils";
 
@@ -222,12 +221,9 @@ function BaseNodeComponent({ data, selected, dragging }: NodeProps<BaseNodeData>
     (data.type === "quiz_question" && normalizeQType((data.content.question_type as string) ?? "open") === "button");
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
+    <div
       className={cn(
-        "group relative rounded-xl",
+        "group relative rounded-xl animate-fade-in-scale",
         "border",
         dragging
           ? "shadow-[0_16px_48px_rgba(0,0,0,0.25)] cursor-grabbing"
@@ -465,7 +461,7 @@ function BaseNodeComponent({ data, selected, dragging }: NodeProps<BaseNodeData>
           )}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 

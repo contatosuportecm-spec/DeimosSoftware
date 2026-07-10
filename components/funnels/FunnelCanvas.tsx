@@ -516,7 +516,7 @@ function FunnelCanvasInner({
   return (
     <div ref={canvasRef} className="relative w-full h-full">
       {path.length > 0 && (
-        <div className="absolute top-4 left-4 z-20 bg-[#0b0d14]/90 backdrop-blur-xl rounded-xl px-4 py-2.5 border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
+        <div className="absolute top-4 left-4 z-20 bg-[#0b0d14] rounded-xl px-4 py-2.5 border border-white/[0.06] shadow-[0_4px_24px_rgba(0,0,0,0.5)]">
           <FunnelBreadcrumb items={breadcrumbs} onNavigate={handleBreadcrumbNav} />
         </div>
       )}
