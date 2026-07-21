@@ -1,6 +1,8 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   render.js — Cria o DOM a partir dos dados + liga eventos ao QuizEngine.
-   Nenhuma string de pergunta mora aqui: tudo vem de window.QUIZ (via engine).
+   render.js — Monta o DOM a partir dos dados. Layout espelha o mockup da
+   marca: logo no topo, progresso gold com %, cards em grid com ícone,
+   botão gold "Continuar →", link "Voltar", loading em anel.
+   Nenhuma string de pergunta mora aqui.
    ═══════════════════════════════════════════════════════════════════════ */
 
 (function () {
@@ -8,274 +10,280 @@
 
   const E = window.QuizEngine;
   const QUIZ = window.QUIZ;
+  const A = window.ASSETS;
 
   const el = {
+    logo: document.getElementById("logo"),
+    progressRow: document.getElementById("progress-row"),
     progress: document.getElementById("progress-bar"),
+    pct: document.getElementById("progress-pct"),
     stage: document.getElementById("stage"),
     back: document.getElementById("back-btn"),
-    kicker: document.getElementById("act-kicker"),
   };
 
-  /* util: cria elemento */
   function h(tag, attrs, children) {
-    const node = document.createElement(tag);
+    const n = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach((k) => {
-      if (k === "class") node.className = attrs[k];
-      else if (k === "dataset") Object.assign(node.dataset, attrs[k]);
-      else if (k.startsWith("on") && typeof attrs[k] === "function")
-        node.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
-      else if (attrs[k] != null) node.setAttribute(k, attrs[k]);
+      if (k === "class") n.className = attrs[k];
+      else if (k === "html") n.innerHTML = attrs[k];
+      else if (k.startsWith("on") && typeof attrs[k] === "function") n.addEventListener(k.slice(2).toLowerCase(), attrs[k]);
+      else if (attrs[k] != null) n.setAttribute(k, attrs[k]);
     });
-    (children || []).forEach((c) => {
-      if (c == null) return;
-      node.appendChild(typeof c === "string" ? document.createTextNode(c) : c);
-    });
-    return node;
+    (children || []).forEach((c) => { if (c != null) n.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return n;
   }
 
-  function interpolate(str) {
-    if (!str) return str;
-    return str.replace(/\{socialProofCount\}/g, QUIZ.config.socialProofCount);
+  function tokens(str) {
+    return String(str || "").replace(/\{socialProofCount\}/g, QUIZ.config.socialProofCount);
+  }
+  /* **destaque** → <span class="hi"> (escapa o resto) */
+  function titleHTML(str) {
+    const esc = tokens(str).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+    return esc.replace(/\*\*(.+?)\*\*/g, '<span class="hi">$1</span>');
   }
 
-  /* ── Erro de validação (acessível) ── */
-  function showError(container, msg) {
-    let box = container.querySelector(".q-error");
-    if (!box) {
-      box = h("p", { class: "q-error", role: "alert", "aria-live": "assertive" });
-      container.appendChild(box);
-    }
-    box.textContent = msg;
-    box.classList.add("is-shown");
+  function showError(card, msg) {
+    let box = card.querySelector(".q-error");
+    if (!box) { box = h("p", { class: "q-error", role: "alert", "aria-live": "assertive" }); card.appendChild(box); }
+    box.textContent = msg; box.classList.add("is-shown");
   }
-  function clearError(container) {
-    const box = container.querySelector(".q-error");
-    if (box) box.classList.remove("is-shown");
+  function clearError(card) { const b = card.querySelector(".q-error"); if (b) b.classList.remove("is-shown"); }
+
+  /* rodapé: CTA gold + voltar */
+  function footer(step) {
+    const kids = [
+      h("button", { class: "btn btn-primary", type: "button", onClick: advance }, [
+        step.cta || "CONTINUAR", h("span", { class: "arrow", "aria-hidden": "true" }, ["→"]),
+      ]),
+    ];
+    if (E.canBack()) kids.push(h("button", { class: "link-back", type: "button", onClick: goBack }, ["Voltar"]));
+    return h("div", { class: "q-footer" }, kids);
   }
 
-  /* ── Rodapé com botão avançar ── */
-  function footer(label, onClick) {
-    return h("div", { class: "q-footer" }, [
-      h("button", { class: "btn btn-primary", type: "button", onClick: onClick }, [label || "CONTINUAR"]),
-    ]);
+  function titleBlock(step) {
+    const f = document.createDocumentFragment();
+    f.appendChild(h("h1", { class: "q-title", html: titleHTML(step.question) }));
+    if (step.microcopy) f.appendChild(h("p", { class: "q-microcopy" }, [tokens(step.microcopy)]));
+    return f;
   }
 
-  /* ── Renderizadores por tipo ── */
+  function iconNode(opt) {
+    if (opt.image) return h("img", { class: "opt-img", src: opt.image, alt: "" });
+    if (opt.body && A.body[opt.body]) return h("span", { class: "opt-ic body-ic", html: A.body[opt.body] });
+    if (opt.icon && A.icons[opt.icon]) return h("span", { class: "opt-ic", html: A.icons[opt.icon] });
+    return null;
+  }
+  function hasVisuals(step) {
+    return (step.options || []).some((o) => o.icon || o.body || o.image);
+  }
+
   const renderers = {
     statement(step, card) {
-      if (step.signature) card.classList.add("card--signature");
-      card.appendChild(h("h1", { class: "q-title q-title--lg" }, [interpolate(step.question)]));
-      if (step.body) card.appendChild(h("p", { class: "q-body" }, [interpolate(step.body)]));
-      if (step.proof) card.appendChild(h("p", { class: "q-proof" }, [interpolate(step.proof)]));
-      card.appendChild(footer(step.cta, advance));
+      if (step.center) card.classList.add("card--center");
+      if (step.hero) card.appendChild(h("div", { class: "hero" }, [h("span", { class: "cup-illus", html: A.cup })]));
+      card.appendChild(h("h1", { class: "q-title q-title--lg", html: titleHTML(step.question) }));
+      if (step.body) card.appendChild(h("p", { class: "q-body" }, [tokens(step.body)]));
+      if (step.benefits) {
+        const ul = h("ul", { class: "benefits" });
+        step.benefits.forEach((b) => ul.appendChild(h("li", null, [b])));
+        card.appendChild(ul);
+      }
+      if (step.reassure) card.appendChild(h("p", { class: "reassure" }, [tokens(step.reassure)]));
+      if (step.estimatedTime)
+        card.appendChild(h("p", { class: "est-time" }, ["⏱ Tempo estimado: ", h("b", null, [step.estimatedTime])]));
+      card.appendChild(footer(step));
     },
 
     single(step, card) {
       card.appendChild(titleBlock(step));
-      const group = h("div", { class: "opt-group", role: "radiogroup", "aria-label": step.question });
-      const selected = E.state.answers[step.id];
+      const grid = step.layout === "grid" || hasVisuals(step);
+      const box = h("div", { class: grid ? "opt-grid" : "opt-list", role: "radiogroup", "aria-label": tokens(step.question) });
+      const sel = E.state.answers[step.id];
       step.options.forEach((opt) => {
-        const active = selected === opt.id;
-        group.appendChild(h("button", {
-          class: "opt" + (active ? " is-selected" : ""),
-          type: "button", role: "radio", "aria-checked": active ? "true" : "false",
+        const on = sel === opt.id;
+        const kids = grid
+          ? [iconNode(opt), h("span", { class: "opt-label" }, [opt.label]), h("span", { class: "opt-check", "aria-hidden": "true" })]
+          : [h("span", { class: "opt-radio", "aria-hidden": "true" }), h("span", { class: "opt-label" }, [opt.label])];
+        const b = h("button", {
+          class: (grid ? "opt-card" : "opt-row") + (on ? " is-selected" : ""),
+          type: "button", role: "radio", "aria-checked": on ? "true" : "false",
           onClick: () => {
-            E.setAnswer(step.id, opt.id);
-            clearError(card);
-            // seleção única avança automaticamente (ritmo das referências)
-            advance();
+            E.setAnswer(step.id, opt.id); clearError(card);
+            box.querySelectorAll("[role=radio]").forEach((x) => { x.classList.remove("is-selected"); x.setAttribute("aria-checked", "false"); });
+            b.classList.add("is-selected"); b.setAttribute("aria-checked", "true");
           },
-        }, [h("span", { class: "opt-label" }, [opt.label])]));
+        }, kids.filter(Boolean));
+        box.appendChild(b);
       });
-      card.appendChild(group);
+      card.appendChild(box);
+      card.appendChild(footer(step));
     },
 
     multi(step, card) {
       card.appendChild(titleBlock(step));
+      const grid = step.layout === "grid" || hasVisuals(step);
       const chosen = new Set(Array.isArray(E.state.answers[step.id]) ? E.state.answers[step.id] : []);
-      const group = h("div", { class: "opt-group", role: "group", "aria-label": step.question });
+      const box = h("div", { class: grid ? "opt-grid" : "opt-list", role: "group", "aria-label": tokens(step.question) });
       step.options.forEach((opt) => {
-        const btn = h("button", {
-          class: "opt opt--multi" + (chosen.has(opt.id) ? " is-selected" : ""),
-          type: "button", "aria-pressed": chosen.has(opt.id) ? "true" : "false",
+        const on = chosen.has(opt.id);
+        const kids = grid
+          ? [iconNode(opt), h("span", { class: "opt-label" }, [opt.label]), h("span", { class: "opt-check", "aria-hidden": "true" })]
+          : [h("span", { class: "opt-radio", "aria-hidden": "true" }), h("span", { class: "opt-label" }, [opt.label])];
+        const b = h("button", {
+          class: (grid ? "opt-card" : "opt-row opt--multi") + (on ? " is-selected" : ""),
+          type: "button", "aria-pressed": on ? "true" : "false",
           onClick: () => {
             if (chosen.has(opt.id)) chosen.delete(opt.id); else chosen.add(opt.id);
-            btn.classList.toggle("is-selected");
-            btn.setAttribute("aria-pressed", chosen.has(opt.id) ? "true" : "false");
-            E.setAnswer(step.id, Array.from(chosen));
-            clearError(card);
+            b.classList.toggle("is-selected");
+            b.setAttribute("aria-pressed", chosen.has(opt.id) ? "true" : "false");
+            E.setAnswer(step.id, Array.from(chosen)); clearError(card);
           },
-        }, [h("span", { class: "opt-check", "aria-hidden": "true" }), h("span", { class: "opt-label" }, [opt.label])]);
-        group.appendChild(btn);
+        }, kids.filter(Boolean));
+        box.appendChild(b);
       });
-      card.appendChild(group);
-      card.appendChild(footer(step.cta || "CONTINUAR", advance));
+      card.appendChild(box);
+      card.appendChild(footer(step));
     },
 
     scale(step, card) {
       card.appendChild(titleBlock(step));
-      const current = Number(E.state.answers[step.id]);
-      const scale = h("div", { class: "scale", role: "radiogroup", "aria-label": step.question });
+      const cur = Number(E.state.answers[step.id]);
+      const row = h("div", { class: "scale", role: "radiogroup", "aria-label": tokens(step.question) });
       for (let n = step.scale.min; n <= step.scale.max; n++) {
-        const active = current === n;
-        scale.appendChild(h("button", {
-          class: "scale-dot" + (active ? " is-selected" : ""),
-          type: "button", role: "radio", "aria-checked": active ? "true" : "false",
-          "aria-label": String(n), dataset: { val: n },
+        const on = cur === n;
+        const b = h("button", {
+          class: "scale-dot" + (on ? " is-selected" : ""), type: "button", role: "radio",
+          "aria-checked": on ? "true" : "false", "aria-label": String(n),
           onClick: () => {
-            E.setAnswer(step.id, n);
-            clearError(card);
-            advance();
+            E.setAnswer(step.id, n); clearError(card);
+            row.querySelectorAll("[role=radio]").forEach((x) => { x.classList.remove("is-selected"); x.setAttribute("aria-checked", "false"); });
+            b.classList.add("is-selected"); b.setAttribute("aria-checked", "true");
           },
-        }, [String(n)]));
+        }, [String(n)]);
+        row.appendChild(b);
       }
-      card.appendChild(scale);
+      card.appendChild(row);
       card.appendChild(h("div", { class: "scale-legend" }, [
-        h("span", null, [step.scale.minLabel]),
-        h("span", null, [step.scale.maxLabel]),
+        h("span", null, [step.scale.minLabel]), h("span", null, [step.scale.maxLabel]),
       ]));
+      card.appendChild(footer(step));
     },
 
     open(step, card) {
       card.appendChild(titleBlock(step));
       const inp = step.input || {};
-      const wrap = h("div", { class: "field" });
+      const field = h("div", { class: "field" });
       const input = h("input", {
-        class: "field-input", type: inp.type === "number" ? "number" : "text",
-        inputmode: inp.type === "number" ? "decimal" : "text",
-        placeholder: inp.placeholder || "", id: "field-" + step.id,
-        min: inp.min, max: inp.max, step: inp.step || "any",
+        class: "field-input", type: "number", inputmode: "decimal",
+        placeholder: inp.placeholder || "", min: inp.min, max: inp.max, step: inp.step || "any",
         value: E.state.answers[step.id] != null ? E.state.answers[step.id] : "",
         oninput: (ev) => { E.setAnswer(step.id, ev.target.value); clearError(card); },
         onkeydown: (ev) => { if (ev.key === "Enter") { ev.preventDefault(); advance(); } },
       });
-      wrap.appendChild(input);
-      if (inp.unit) wrap.appendChild(h("span", { class: "field-unit" }, [inp.unit]));
-      card.appendChild(wrap);
-      card.appendChild(footer(step.cta || "CONTINUAR", advance));
-      setTimeout(() => input.focus(), 60);
+      field.appendChild(input);
+      if (inp.unit) field.appendChild(h("span", { class: "field-unit" }, [inp.unit]));
+      card.appendChild(field);
+      card.appendChild(footer(step));
+      setTimeout(() => input.focus(), 80);
     },
 
     email(step, card) {
-      card.appendChild(h("h1", { class: "q-title" }, [interpolate(step.question)]));
-      if (step.body) card.appendChild(h("p", { class: "q-body" }, [interpolate(step.body)]));
-      const wrap = h("div", { class: "field" });
+      if (step.center) card.classList.add("card--center");
+      card.appendChild(h("h1", { class: "q-title", html: titleHTML(step.question) }));
+      if (step.body) card.appendChild(h("p", { class: "q-body" }, [tokens(step.body)]));
+      const field = h("div", { class: "field" });
       const input = h("input", {
-        class: "field-input", type: "email", placeholder: step.input.placeholder,
-        autocomplete: "email", id: "field-" + step.id,
+        class: "field-input", type: "email", placeholder: step.input.placeholder, autocomplete: "email",
         value: E.state.answers[step.id] != null ? E.state.answers[step.id] : "",
         oninput: (ev) => { E.setAnswer(step.id, ev.target.value); clearError(card); },
         onkeydown: (ev) => { if (ev.key === "Enter") { ev.preventDefault(); advance(); } },
       });
-      wrap.appendChild(input);
-      card.appendChild(wrap);
+      field.appendChild(input);
+      card.appendChild(field);
       if (step.optIn) {
-        const optId = "optin-" + step.id;
-        card.appendChild(h("label", { class: "optin", for: optId }, [
-          h("input", {
-            type: "checkbox", id: optId,
-            onchange: (ev) => E.setAnswer("_optin", ev.target.checked),
-          }),
+        const id = "optin-" + step.id;
+        card.appendChild(h("label", { class: "optin", for: id }, [
+          h("input", { type: "checkbox", id: id, onchange: (ev) => E.setAnswer("_optin", ev.target.checked) }),
           h("span", null, [step.optIn]),
         ]));
       }
-      card.appendChild(footer(step.cta || "CONTINUAR", advance));
-      setTimeout(() => input.focus(), 60);
+      card.appendChild(footer(step));
+      setTimeout(() => input.focus(), 80);
     },
 
     loading(step, card) {
       card.classList.add("card--loading");
-      card.appendChild(h("div", { class: "loader", "aria-hidden": "true" }, [h("span"), h("span"), h("span")]));
-      const line = h("p", { class: "loading-line", "aria-live": "polite" }, [step.question]);
-      card.appendChild(line);
-      const bar = h("div", { class: "loading-track" }, [h("div", { class: "loading-fill" })]);
-      card.appendChild(bar);
-      const fill = bar.querySelector(".loading-fill");
+      const ring = h("div", { class: "ring" }, [h("span", { class: "cup-illus", html: A.cup })]);
+      const pct = h("p", { class: "loading-pct" }, ["0%"]);
+      const line = h("p", { class: "loading-line", "aria-live": "polite" }, [tokens(step.question).replace(/\*\*/g, "")]);
+      card.appendChild(ring); card.appendChild(pct); card.appendChild(line);
+      if (step.foot) card.appendChild(h("p", { class: "reassure" }, [step.foot]));
+      card.appendChild(h("p", { class: "loading-heart" }, ["♥"]));
 
       const frames = step.frames || [];
-      const per = step.durationMs || 3500;
-      const total = per * (frames.length + 1);
+      const per = step.durationMs || 3000;
       let i = 0;
-      // anima a barra
-      requestAnimationFrame(() => { fill.style.transitionDuration = total + "ms"; fill.style.width = "100%"; });
-      const tick = () => {
-        if (i < frames.length) { line.textContent = frames[i]; i++; loadingTimer = setTimeout(tick, per); }
+      const total = per * frames.length;
+      const t0 = Date.now();
+      const tickPct = () => {
+        const p = Math.min(100, Math.round(((Date.now() - t0) / total) * 100));
+        ring.style.setProperty("--pct", p); pct.textContent = p + "%";
+        if (p < 100) pctTimer = setTimeout(tickPct, 80);
+      };
+      tickPct();
+      const nextFrame = () => {
+        if (i < frames.length) { line.textContent = frames[i]; i++; loadingTimer = setTimeout(nextFrame, per); }
         else { advance(); }
       };
-      loadingTimer = setTimeout(tick, per);
+      loadingTimer = setTimeout(nextFrame, per);
     },
 
-    result(step, card) {
-      // Delegado ao módulo de resultado (cálculo de perfil + CTA).
-      window.QuizResult.render(step, card, { h: h, restart: restart });
-    },
+    result(step, card) { window.QuizResult.render(step, card, { h: h, restart: restart, titleHTML: titleHTML }); },
   };
 
-  function titleBlock(step) {
-    const frag = document.createDocumentFragment();
-    frag.appendChild(h("h1", { class: "q-title" }, [interpolate(step.question)]));
-    if (step.microcopy) frag.appendChild(h("p", { class: "q-microcopy" }, [interpolate(step.microcopy)]));
-    return frag;
+  let loadingTimer = null, pctTimer = null;
+  function clearTimers() {
+    if (loadingTimer) { clearTimeout(loadingTimer); loadingTimer = null; }
+    if (pctTimer) { clearTimeout(pctTimer); pctTimer = null; }
   }
 
-  /* ── Avançar (com validação) ── */
-  let loadingTimer = null;
   function advance() {
-    const card = el.stage.querySelector(".card");
+    const card = el.stage.querySelector(".card:not(.card--out):not(.card--out-back)");
     const res = E.goNext();
     if (!res.ok) { if (card) showError(card, res.msg); return; }
     paint("forward");
   }
+  function goBack() { if (E.goBack()) paint("back"); }
+  function restart() { E.reset(); E.track("quiz_start", { restart: true }); paint("forward"); }
 
-  function restart() {
-    E.reset();
-    E.track("quiz_start", { restart: true });
-    paint("forward");
-  }
-
-  /* ── Pintura de tela com transição ── */
-  function paint(direction) {
-    if (loadingTimer) { clearTimeout(loadingTimer); loadingTimer = null; }
+  function paint(dir) {
+    clearTimers();
     const step = E.current();
+    const isChrome = step.kind !== "result" && step.id !== "intro" && step.kind !== "loading";
 
-    // progresso (esconde na abertura e no resultado)
-    const showProgress = step.kind !== "result" && step.id !== "intro";
-    el.progress.parentElement.style.visibility = showProgress ? "visible" : "hidden";
-    el.progress.style.width = Math.round(E.progress() * 100) + "%";
+    el.progressRow.style.visibility = isChrome ? "visible" : "hidden";
+    const p = Math.round(E.progress() * 100);
+    el.progress.style.width = p + "%";
+    el.pct.textContent = p + "%";
+    el.back.style.visibility = E.canBack() && isChrome ? "visible" : "hidden";
 
-    // kicker do ato
-    el.kicker.textContent = step.act || "";
-    el.kicker.style.visibility = (step.kind === "result" || step.kind === "loading") ? "hidden" : "visible";
-
-    // botão voltar
-    const canBack = E.canBack() && step.kind !== "loading" && step.kind !== "result";
-    el.back.style.visibility = canBack ? "visible" : "hidden";
-    el.back.disabled = !canBack;
-
-    // monta card
     const card = h("div", { class: "card", tabindex: "-1" });
     (renderers[step.kind] || renderers.statement)(step, card);
 
-    // transição
-    const outgoing = el.stage.querySelector(".card");
-    if (outgoing) {
-      outgoing.classList.add(direction === "back" ? "card--out-back" : "card--out");
-      outgoing.addEventListener("animationend", () => outgoing.remove(), { once: true });
-      setTimeout(() => { if (outgoing.parentElement) outgoing.remove(); }, 500);
+    const out = el.stage.querySelector(".card");
+    if (out) {
+      out.classList.add(dir === "back" ? "card--out-back" : "card--out");
+      setTimeout(() => { if (out.parentElement) out.remove(); }, 320);
     }
-    card.classList.add(direction === "back" ? "card--in-back" : "card--in");
+    card.classList.add(dir === "back" ? "card--in-back" : "card--in");
     el.stage.appendChild(card);
-
-    // acessibilidade: foco no novo card + aria-live
-    el.stage.setAttribute("aria-busy", "false");
     setTimeout(() => card.focus(), 40);
   }
 
-  /* ── Voltar ── */
-  el.back.addEventListener("click", () => { if (E.goBack()) paint("back"); });
+  el.back.addEventListener("click", goBack);
 
-  /* ── Boot ── */
   function boot() {
+    el.logo.innerHTML = A.logo;
     const resumed = E.restore();
     E.track(resumed ? "quiz_resume" : "quiz_start", { resumed: resumed });
     paint("forward");

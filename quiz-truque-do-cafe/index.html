@@ -3,48 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000" />
-  <title>Diagnóstico — Truque do Café</title>
-  <meta name="description" content="Descubra o que está travando seu corpo e o ritual matinal para desinflamar e emagrecer." />
+  <meta name="theme-color" content="#F3E6DA" />
+  <title>Truque do Café — Descubra o seu ritual ideal</title>
+  <meta name="description" content="Um ritual de cuidado que transforma de dentro para fora. Descubra o que trava o seu corpo." />
 
-  <!-- Fontes da identidade (Poppins / Playfair Display / DM Mono). Sem build step. -->
+  <!-- Poppins (identidade oficial da marca) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@500;600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="css/tokens.css" />
   <link rel="stylesheet" href="css/quiz.css" />
 </head>
 <body>
-  <main class="quiz-shell" aria-label="Quiz Truque do Café">
-    <!-- Topbar: marca + voltar + progresso -->
+  <main class="quiz-shell">
     <header class="topbar">
-      <button id="back-btn" class="back-btn" type="button" aria-label="Voltar para a pergunta anterior">&larr;</button>
-      <div class="progress-wrap" role="progressbar" aria-label="Progresso do quiz" aria-valuemin="0" aria-valuemax="100">
-        <div id="progress-bar" class="progress-bar"></div>
+      <!-- Logo da marca (SVG injetado por assets.js) -->
+      <div class="logo" id="logo" aria-label="Truque do Café"></div>
+
+      <div class="progress-row" id="progress-row">
+        <button id="back-btn" class="back-btn" type="button" aria-label="Voltar">&larr;</button>
+        <div class="progress-wrap" role="progressbar" aria-label="Progresso" aria-valuemin="0" aria-valuemax="100">
+          <div id="progress-bar" class="progress-bar"></div>
+        </div>
+        <span id="progress-pct" class="progress-pct">0%</span>
       </div>
-      <span class="brand">TRUQUE DO CAFÉ</span>
     </header>
 
-    <!-- Kicker do ato atual -->
-    <p id="act-kicker" class="act-kicker" aria-hidden="true"></p>
-
-    <!-- Palco onde cada tela é montada dinamicamente (aria-live: troca de pergunta) -->
-    <section id="stage" class="stage" aria-live="polite" aria-busy="true"></section>
+    <!-- Cada tela é montada aqui -->
+    <section id="stage" class="stage" aria-live="polite"></section>
   </main>
 
-  <!-- Ordem de dependência: dados → engine → result → render → boot -->
   <script src="js/quiz-data.js"></script>
+  <script src="js/assets.js"></script>
   <script src="js/engine.js"></script>
   <script src="js/result.js"></script>
   <script src="js/render.js"></script>
   <script>
-    // Boot: quando o DOM estiver pronto.
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", function () { window.QuizRender.boot(); });
-    } else {
-      window.QuizRender.boot();
-    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { window.QuizRender.boot(); });
+    else window.QuizRender.boot();
   </script>
 </body>
 </html>
