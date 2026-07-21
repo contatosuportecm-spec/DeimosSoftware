@@ -1,81 +1,152 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   tokens.css — ÚNICO lugar com valores literais da identidade visual.
-   Identidade OFICIAL "Truque do Café" (pasta "Identidade visual/"):
-   paleta Espresso/Mocha/Blush/Nude/Gold · Poppins · ritual de cuidado.
-   Layout espelha o mockup do quiz fornecido pela marca (4 telas).
+   tokens.css — ÚNICO arquivo com valores literais (cores, fontes, px).
+   quiz.css consome apenas var(--token).
+
+   Paleta oficial "Truque do Café" (fixa): Espresso · Mocha · Blush ·
+   Nude · Gold · Poppins.
+   Geometria vinda do spec de referência (228 screenshots): margem 20px,
+   card 76px, indicador 22px, calha de ícone 40px, CTA 52px, header 55px,
+   progresso 6px.
    ═══════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ── Paleta oficial da marca ── */
-  --espresso: #2B1F1A;   /* texto forte / headline / app icon */
-  --mocha:    #5A4036;   /* texto secundário / marca */
-  --blush:    #EBC7C2;   /* rosa suave — seleção/acento/coração */
-  --nude:     #F3E6DA;   /* fundo quente / cards alt */
-  --gold:     #C7A66B;   /* CTA / progresso / seleção / detalhes */
+  /* ── Paleta oficial da marca (não alterar) ── */
+  --espresso: #2B1F1A;
+  --mocha:    #5A4036;
+  --blush:    #EBC7C2;
+  --nude:     #F3E6DA;
+  --gold:     #C7A66B;
 
-  /* ── Derivados (tons da mesma paleta) ── */
-  --gold-hover: #B8975C;
-  --gold-soft:  #E8DAC2;   /* trilho de progresso */
-  --blush-soft: #F7E4E1;   /* fundo de card selecionado */
-  --nude-2:     #FBF3EB;   /* fundo da página (nude clareado) */
-  --line:       #E7D9C9;   /* bordas/divisores */
-
-  /* ── Superfícies ── */
-  --bg:      var(--nude-2);
-  --surface: #FFFFFF;
+  /* ── Derivados (tons da mesma família) ── */
+  --espresso-soft: #3B2B23;
+  --gold-hover:    #B8975C;
+  --gold-soft:     #EBDFC9;   /* trilho da barra de progresso */
+  --gold-wash:     #F2E8D3;   /* highlight sólido da headline */
+  --blush-soft:    #F7E4E1;
+  --blush-deep:    #B97E74;   /* dor / problema */
+  --page:          #FBF3EB;   /* fundo da página (nude clareado, nunca branco) */
+  --surface:       #FFFFFF;   /* cards de escolha "flutuam" sobre o fundo */
+  --line:          #E7D9C9;
 
   /* ── Texto ── */
-  --ink:    var(--espresso);
-  --ink-2:  var(--mocha);
-  --ink-3:  #9A8574;      /* legendas/footnotes */
-  --on-gold: #FFFFFF;     /* texto sobre botão gold */
+  --ink:   var(--espresso);
+  --ink-2: var(--mocha);
+  --ink-3: #9A8574;
 
-  /* ── CTA (gold, conforme o mockup) ── */
-  --cta:       var(--gold);
-  --cta-hover: var(--gold-hover);
-  --cta-ink:   #FFFFFF;
+  /* ── Ação: progresso, seleção e CTA de fluxo (espresso) ── */
+  --action:              var(--espresso);
+  --action-hover:        var(--espresso-soft);
+  --action-ink:          #FFFFFF;
+  --action-disabled:     #D9C9B9;   /* cinza-morno quente: "falta pouco" */
+  --action-disabled-ink: #FFFFFF;
 
-  /* ── Sucesso / check ── */
-  --check: var(--gold);
+  /* ── Compra: ruptura cromática — só o CTA final usa ── */
+  --buy:       #2E7D5A;
+  --buy-hover: #266A4C;
+  --buy-ink:   #FFFFFF;
 
-  /* ── Erro ── */
-  --error:    #C0492F;
-  --error-bg: #F7E7E2;
+  --error: #C0492F;
 
-  /* ── Tipografia (Poppins — Modern & Clean) ── */
-  --font-sans:  "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  /* ── Tipografia (Poppins) ── */
+  --font-sans: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
   --weight-body:  400;
   --weight-med:   500;
   --weight-semi:  600;
   --weight-bold:  700;
   --weight-black: 800;
 
-  /* ── Raios (cantos suaves, premium) ── */
+  --fs-title:     28px;   /* título de pergunta */
+  --fs-body:      17px;   /* corpo de interstitial */
+  --fs-option:    16px;   /* label de opção */
+  --fs-cta:       16px;
+  --fs-microcopy: 16px;
+  --fs-field:     18px;
+  --fs-small:     14px;
+  --fs-tiny:      12px;
+  --fs-chapter:   11px;   /* rótulo de capítulo */
+  --fs-back:      20px;
+  --fs-num:       34px;   /* números da projeção */
+  --fs-price:     32px;
+  --fs-offer:     22px;
+  --fs-pct:       22px;   /* % do loading */
+  --lh-title: 1.15;
+  --lh-body:  1.45;
+
+  /* ── Geometria (spec) ── */
+  --page-pad:    20px;
+  --content-max: 430px;
+  --header-h:    55px;
+  --gap-header-title: 40px;
+  --gap-title-options: 40px;
+
+  --opt-min-h:  76px;
+  --opt-gap:    12px;
+  --opt-radius: 16px;
+  --opt-pad-x:  16px;
+
+  --indicator-size: 22px;
+  --indicator-dot:  8px;
+  --icon-gutter: 40px;
+  --icon-size:   26px;
+  --icon-body-h: 56px;
+  --photo-size:  40px;
+
+  --cta-h:      52px;
+  --progress-h: 6px;
+  --seg-gap:    4px;
+  --tap-min:    44px;
+  --back-size:  44px;
+  --logo-size:  38px;
+  --field-h:    60px;
+  --scale-h:    56px;
+
+  --ring-size:  150px;
+  --ring-inset: 12px;
+  --ring-cup:   56px;
+  --hero-h:     170px;
+  --hero-cup:   104px;
+
+  --border-w:        1.5px;
+  --border-w-strong: 2px;
+  --motion-shift:    14px;
+
+  /* ── Raios ── */
+  --radius-xs:   6px;
   --radius-sm:   10px;
-  --radius-md:   16px;
   --radius-lg:   22px;
-  --radius-xl:   28px;
   --radius-pill: 999px;
 
   /* ── Espaçamento (8pt) ── */
   --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
   --space-5: 20px; --space-6: 28px; --space-7: 40px; --space-8: 56px;
 
-  /* ── Layout mobile-first ── */
-  --content-max: 460px;
-  --progress-height: 8px;
-  --tap-min: 56px;
-
-  /* ── Motion (suave, "leveza") ── */
+  /* ── Motion ── */
   --dur-fast: 140ms;
-  --dur-base: 300ms;
+  --dur-base: 320ms;
   --dur-slow: 500ms;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 
-  /* ── Sombras (quentes, sutis) ── */
-  --shadow-1: 0 1px 3px rgba(43, 31, 26, 0.06);
-  --shadow-2: 0 8px 24px rgba(43, 31, 26, 0.10);
-  --shadow-card: 0 2px 10px rgba(43, 31, 26, 0.06);
-  --shadow-cta: 0 10px 22px rgba(199, 166, 107, 0.35);
-  --focus-ring: 0 0 0 3px var(--bg), 0 0 0 6px var(--gold);
+  /* ── Sombras ── */
+  --shadow-card: 0 1px 4px rgba(43, 31, 26, 0.06);
+  --shadow-pop:  0 8px 24px rgba(43, 31, 26, 0.10);
+  --shadow-cta:  0 8px 18px rgba(43, 31, 26, 0.20);
+  --shadow-buy:  0 10px 22px rgba(46, 125, 90, 0.30);
+  --focus-ring:  0 0 0 3px var(--page), 0 0 0 6px var(--gold);
+}
+
+/* ── Overrides responsivos dos tokens (mantém quiz.css 100% em var()) ── */
+@media (max-width: 380px) {
+  :root {
+    --fs-title: 24px;
+    --gap-header-title: 28px;
+    --gap-title-options: 28px;
+    --page-pad: 16px;
+    --opt-min-h: 68px;
+  }
+}
+@media (min-width: 768px) {
+  :root {
+    --content-max: 460px;
+    --gap-header-title: 48px;
+  }
 }

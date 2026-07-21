@@ -1,25 +1,22 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   assets.js — Logo + ícones + ilustrações em SVG (inline, escaláveis).
+   assets.js — Logo + ícones + ilustrações em SVG inline (escaláveis).
    Todos usam `currentColor` / classe .lg → cor vem do CSS (tokens), zero hex.
-   ►► Trocáveis por foto: no quiz-data, um step pode usar `image: "img/xxx.png"`
-      em vez de `icon:` — o render prioriza a foto quando existe. ◄◄
+   ESTE é o único conteúdo autorizado a passar por injeção de HTML
+   (dom.trustedSvg) — nunca dados de usuária/quiz-data.
+   ►► Para trocar um ícone por foto: no quiz-data, use `image: "img/x.png"`
+      na opção — o render prioriza a foto quando existe. ◄◄
    ═══════════════════════════════════════════════════════════════════════ */
 
-(function () {
+QuizApp.define("assets", function () {
   "use strict";
 
   // Monograma "Truque do Café" (T + xícara + vapor + pires gold)
   const LOGO =
     '<svg viewBox="0 0 120 120" role="img" aria-label="Truque do Café" fill="none">' +
-      // vapor
       '<path class="lg" d="M64 26c4-3 4-8 0-11M72 28c4-3 4-9 0-12" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity="0.9"/>' +
-      // T
       '<path d="M34 40h40M54 40v46" stroke="currentColor" stroke-width="9" stroke-linecap="round"/>' +
-      // corpo da xícara
       '<path d="M44 52h34v14c0 12-8 20-17 20s-17-8-17-20V52z" stroke="currentColor" stroke-width="5" stroke-linejoin="round"/>' +
-      // alça
       '<path d="M78 56c9 0 13 5 13 11s-4 11-13 11" stroke="currentColor" stroke-width="5" stroke-linecap="round"/>' +
-      // pires (gold)
       '<path class="lg" d="M34 96c8 6 44 6 52 0" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>' +
     '</svg>';
 
@@ -54,18 +51,18 @@
     star:     ic('<path d="M12 3l2.5 6L21 9.6l-4.7 4.3L17.5 21 12 17.4 6.5 21l1.2-7.1L3 9.6 9.5 9 12 3z"/>'),
   };
 
-  // Silhuetas de corpo (para "tipo de barriga/silhueta") — trocáveis por foto
+  // Silhuetas de corpo (pergunta "silhueta") — trocáveis por foto via option.image
   function sil(body) {
     return '<svg viewBox="0 0 80 120" fill="currentColor" aria-hidden="true">' + body + '</svg>';
   }
   const BODY = {
     oval:      sil('<circle cx="40" cy="16" r="9"/><path d="M28 30h24c4 0 6 3 6 7 0 12 6 14 6 30 0 18-8 24-8 40H28c0-16-8-22-8-40 0-16 6-18 6-30 0-4 2-7 6-7z"/>'),
-    pera:      sil('<circle cx="40" cy="16" r="9"/><path d="M30 30h20c3 0 5 2 5 6 0 8 3 10 3 20 0 22 6 24 6 44H27c0-20 6-22 6-44 0-10 3-12 3-20 0-4 2-6 5-6z" transform="scale(1,1)"/>'),
+    pera:      sil('<circle cx="40" cy="16" r="9"/><path d="M30 30h20c3 0 5 2 5 6 0 8 3 10 3 20 0 22 6 24 6 44H27c0-20 6-22 6-44 0-10 3-12 3-20 0-4 2-6 5-6z"/>'),
     reto:      sil('<circle cx="40" cy="16" r="9"/><path d="M28 30h24c3 0 5 2 5 6v58c0 4-2 6-5 6H28c-3 0-5-2-5-6V36c0-4 2-6 5-6z"/>'),
     ampulheta: sil('<circle cx="40" cy="16" r="9"/><path d="M27 30h26c3 0 4 3 3 6l-5 20c-1 4-1 6 0 10l5 22c1 3 0 6-3 6H27c-3 0-4-3-3-6l5-22c1-4 1-6 0-10l-5-20c-1-3 0-6 3-6z"/>'),
   };
 
-  // Ilustração de xícara para o loading (anel gira via CSS)
+  // Xícara para hero/loading (anel de progresso gira via CSS)
   const CUP =
     '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
       '<path d="M14 26h28v10a12 12 0 0 1-12 12H26a12 12 0 0 1-12-12V26z"/>' +
@@ -73,5 +70,5 @@
       '<path class="lg" d="M24 12c2 2 2 4 0 6M32 12c2 2 2 4 0 6"/>' +
     '</svg>';
 
-  window.ASSETS = { logo: LOGO, icons: ICONS, body: BODY, cup: CUP };
-})();
+  return { logo: LOGO, icons: ICONS, body: BODY, cup: CUP };
+});

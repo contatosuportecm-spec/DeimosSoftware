@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#F3E6DA" />
+  <meta name="theme-color" content="#FBF3EB" />
   <title>Truque do Café — Descubra o seu ritual ideal</title>
   <meta name="description" content="Um ritual de cuidado que transforma de dentro para fora. Descubra o que trava o seu corpo." />
 
@@ -16,32 +16,29 @@
   <link rel="stylesheet" href="css/quiz.css" />
 </head>
 <body>
-  <main class="quiz-shell">
-    <header class="topbar">
-      <!-- Logo da marca (SVG injetado por assets.js) -->
-      <div class="logo" id="logo" aria-label="Truque do Café"></div>
-
-      <div class="progress-row" id="progress-row">
-        <button id="back-btn" class="back-btn" type="button" aria-label="Voltar">&larr;</button>
-        <div class="progress-wrap" role="progressbar" aria-label="Progresso" aria-valuemin="0" aria-valuemax="100">
-          <div id="progress-bar" class="progress-bar"></div>
-        </div>
-        <span id="progress-pct" class="progress-pct">0%</span>
+  <div class="shell">
+    <!-- Header 55px: voltar · barra segmentada + capítulo · (interstitials: logo) -->
+    <header class="header">
+      <button id="btn-back" class="back is-hidden" type="button">&larr;</button>
+      <div id="header-center" class="header-center" hidden>
+        <p id="chapter-label" class="chapter"></p>
+        <div id="progress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
+      <div id="header-logo" class="header-logo" hidden></div>
+      <span aria-hidden="true"></span>
     </header>
 
-    <!-- Cada tela é montada aqui -->
-    <section id="stage" class="stage" aria-live="polite"></section>
-  </main>
+    <!-- Cada tela é montada aqui pelo render -->
+    <main id="stage" class="stage" aria-live="polite"></main>
+  </div>
 
+  <script src="js/core.js"></script>
   <script src="js/quiz-data.js"></script>
   <script src="js/assets.js"></script>
+  <script src="js/dom.js"></script>
   <script src="js/engine.js"></script>
   <script src="js/result.js"></script>
   <script src="js/render.js"></script>
-  <script>
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { window.QuizRender.boot(); });
-    else window.QuizRender.boot();
-  </script>
+  <script>QuizApp.use("render").boot();</script>
 </body>
 </html>

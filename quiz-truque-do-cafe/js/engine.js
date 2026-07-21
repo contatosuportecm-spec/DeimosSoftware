@@ -1,47 +1,52 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   engine.js — Máquina de estados do quiz.
-   Responsabilidades: navegação, ramificação, validação, progresso (por caminho),
-   persistência (sessionStorage), tracking. NÃO desenha DOM (isso é render.js).
-   Estado vive em UM objeto único: state = { current, answers, history, score, profile }.
+   engine.js — Máquina de estados do quiz. Não toca no DOM.
+   Responsabilidades: estado único, navegação/ramificação, validação,
+   progresso segmentado por capítulo, persistência (sessionStorage,
+   degradando em silêncio) e tracking plugável.
    ═══════════════════════════════════════════════════════════════════════ */
 
-(function () {
+QuizApp.define("engine", function (use) {
   "use strict";
 
-  const QUIZ = window.QUIZ;
-  const CFG = QUIZ.config;
-  const STEPS = QUIZ.steps;
+  const data = use("data");
+  const CFG = data.config;
+  const ERR = data.ui.errors;
+  const STEPS = data.steps;
+  const CHAPTERS = data.chapters;
 
-  /* index por id */
-  const byId = {};
-  STEPS.forEach((s, i) => { byId[s.id] = { step: s, index: i }; });
+  const indexById = {};
+  STEPS.forEach(function (step, i) { indexById[step.id] = i; });
+
+  const QUESTION_KINDS = { single: 1, multi: 1, scale: 1, open: 1, email: 1 };
 
   /* ── Estado único ── */
   const state = {
     current: STEPS[0].id,
-    answers: {},         // { stepId: value }  (value: string | string[] | number)
-    history: [],         // pilha de ids visitados (para voltar + progresso)
-    score: {},           // acumulador de segmentação
-    profile: null,       // definido no resultado
+    answers: {},    // { stepId: string | string[] | number } (+ email_optin)
+    history: [],    // pilha de ids visitados (voltar + progresso)
+    profile: null,  // definido no resultado
   };
 
-  /* ── Persistência (sessionStorage) ── */
+  function stepOf(id) { return id in indexById ? STEPS[indexById[id]] : null; }
+  function answerOf(id) { return state.answers[id]; }
+
+  /* ── Persistência (sessionStorage pode estar bloqueado — degrada) ── */
   function save() {
     try {
       sessionStorage.setItem(CFG.persistKey, JSON.stringify({
         current: state.current, answers: state.answers, history: state.history,
       }));
-    } catch (e) { /* modo privado / file:// pode bloquear — degrada em silêncio */ }
+    } catch (e) { /* modo privado / file:// — segue sem persistir */ }
   }
   function restore() {
     try {
       const raw = sessionStorage.getItem(CFG.persistKey);
       if (!raw) return false;
-      const data = JSON.parse(raw);
-      if (!data || !byId[data.current]) return false;
-      state.current = data.current;
-      state.answers = data.answers || {};
-      state.history = Array.isArray(data.history) ? data.history : [];
+      const saved = JSON.parse(raw);
+      if (!saved || !stepOf(saved.current)) return false;
+      state.current = saved.current;
+      state.answers = saved.answers && typeof saved.answers === "object" ? saved.answers : {};
+      state.history = Array.isArray(saved.history) ? saved.history.filter(stepOf) : [];
       return true;
     } catch (e) { return false; }
   }
@@ -49,103 +54,131 @@
     state.current = STEPS[0].id;
     state.answers = {};
     state.history = [];
-    state.score = {};
     state.profile = null;
-    try { sessionStorage.removeItem(CFG.persistKey); } catch (e) {}
+    try { sessionStorage.removeItem(CFG.persistKey); } catch (e) { /* idem */ }
   }
 
-  /* ── Tracking isolado (plugável em Pixel/GA/webhook) ── */
+  /* ── Tracking (dataLayer + CustomEvent + webhook opcional de lead) ── */
   function track(event, payload) {
-    const data = Object.assign({ event: event, quiz: QUIZ.meta.slug, ts: Date.now() }, payload || {});
-    (window.dataLayer = window.dataLayer || []).push(data);
-    window.dispatchEvent(new CustomEvent("quiz:track", { detail: data }));
-    if (window.console && console.debug) console.debug("[track]", event, data);
+    const detail = Object.assign({ event: event, quiz: data.meta.slug, ts: Date.now() }, payload || {});
+    (window.dataLayer = window.dataLayer || []).push(detail);
+    window.dispatchEvent(new CustomEvent("quiz:track", { detail: detail }));
+    if (event === "lead_submit" && CFG.leadWebhook) sendLead(detail);
+    if (CFG.debug && window.console) console.debug("[quiz]", event, detail);
+  }
+  function sendLead(detail) {
+    try {
+      const body = JSON.stringify(detail);
+      if (navigator.sendBeacon) navigator.sendBeacon(CFG.leadWebhook, body);
+      else fetch(CFG.leadWebhook, { method: "POST", body: body, keepalive: true }).catch(function () {});
+    } catch (e) { /* rede/CSP indisponível — o quiz segue */ }
   }
 
   /* ── Navegação / ramificação ── */
-  function stepOf(id) { return byId[id] ? byId[id].step : null; }
-
   function nextId(id) {
     const step = stepOf(id);
     if (!step) return null;
     if (step.branch) {
-      const ans = state.answers[id];
-      const key = Array.isArray(ans) ? ans[0] : ans;
+      const answer = answerOf(id);
+      const key = Array.isArray(answer) ? answer[0] : answer;
       const target = (step.branch.on && step.branch.on[key]) || step.branch.default;
-      return target && byId[target] ? target : null;
+      return stepOf(target) ? target : null;
     }
-    if (step.next) return byId[step.next] ? step.next : null;
-    /* fall-through linear: próximo step que não seja alvo-exclusivo de branch */
-    for (let i = byId[id].index + 1; i < STEPS.length; i++) {
+    if (step.next) return stepOf(step.next) ? step.next : null;
+    // fall-through linear: pula alvos exclusivos de branch
+    for (let i = indexById[id] + 1; i < STEPS.length; i++) {
       if (!STEPS[i].skipInLinear) return STEPS[i].id;
     }
     return null;
   }
 
-  function isLast(id) { return nextId(id) === null; }
-
-  /* ── Progresso REAL baseado no caminho (não no total bruto) ── */
-  function remainingFrom(id) {
-    let count = 0, cur = id, guard = 0;
-    while (cur && guard++ < STEPS.length + 5) {
-      const nxt = nextId(cur);
-      if (!nxt) break;
-      count++; cur = nxt;
+  /* Caminho projetado do step atual até o fim (respeitando o branch) */
+  function pathAhead(fromId) {
+    const ids = [];
+    let cursor = fromId, guard = 0;
+    while (cursor && guard++ <= STEPS.length) {
+      ids.push(cursor);
+      cursor = nextId(cursor);
     }
-    return count;
+    return ids;
   }
-  function progress() {
-    const done = state.history.length;               // telas já concluídas
-    const left = remainingFrom(state.current) + 1;   // atual + o que falta
-    const total = done + left;
-    return total > 0 ? Math.min(1, done / total) : 0;
+
+  /* ── Progresso segmentado por capítulo (spec: sem número, nunca 0/100%) ── */
+  function progressInfo() {
+    const step = stepOf(state.current);
+    if (!step || !step.chapter) {
+      return { visible: false, label: "", segments: CHAPTERS.map(function () { return 0; }), percent: 0 };
+    }
+
+    const doneByChapter = {};
+    const totalByChapter = {};
+    function count(map, chapter) { if (chapter) map[chapter] = (map[chapter] || 0) + 1; }
+
+    state.history.forEach(function (id) {
+      const s = stepOf(id);
+      count(doneByChapter, s.chapter);
+      count(totalByChapter, s.chapter);
+    });
+    pathAhead(state.current).forEach(function (id) {
+      count(totalByChapter, stepOf(id).chapter);
+    });
+
+    const currentIdx = CHAPTERS.findIndex(function (c) { return c.id === step.chapter; });
+    const segments = CHAPTERS.map(function (chapter, i) {
+      if (i < currentIdx) return 1;
+      if (i > currentIdx) return 0;
+      const total = totalByChapter[chapter.id] || 1;
+      const done = doneByChapter[chapter.id] || 0;
+      // capítulo ativo: nunca vazio (progresso "começa em ~7%") nem cheio
+      return Math.min(0.95, Math.max(0.12, (done + 0.4) / total));
+    });
+
+    const percent = Math.round((segments.reduce(function (sum, f) { return sum + f; }, 0) / CHAPTERS.length) * 100);
+    return {
+      visible: true,
+      label: CHAPTERS[currentIdx].label,
+      segments: segments,
+      percent: Math.max(7, Math.min(99, percent)),
+    };
   }
 
   /* ── Validação ── */
+  function fmt(msg, vars) {
+    return msg.replace(/\{(\w+)\}/g, function (_, key) { return vars[key] != null ? vars[key] : ""; });
+  }
+
   function validate(id, value) {
     const step = stepOf(id);
-    if (!step) return { ok: false, msg: "Etapa inválida." };
-    const required = step.required !== false; // perguntas são obrigatórias por padrão
+    if (!step) return { ok: false, msg: "" };
 
     switch (step.kind) {
       case "single":
-        if (required && !value) return { ok: false, msg: "Selecione uma opção para continuar." };
-        return { ok: true };
+        return value ? { ok: true } : { ok: false, msg: ERR.selectOne };
       case "multi":
-        if (required && (!Array.isArray(value) || value.length === 0))
-          return { ok: false, msg: "Selecione ao menos uma opção." };
-        return { ok: true };
-      case "scale":
-        if (required && !(Number(value) >= step.scale.min && Number(value) <= step.scale.max))
-          return { ok: false, msg: "Escolha um ponto na escala." };
-        return { ok: true };
+        return Array.isArray(value) && value.length > 0 ? { ok: true } : { ok: false, msg: ERR.selectAtLeastOne };
+      case "scale": {
+        const n = Number(value);
+        return n >= step.scale.min && n <= step.scale.max ? { ok: true } : { ok: false, msg: ERR.scale };
+      }
       case "open": {
-        const inp = step.input || {};
-        if (required && (value === undefined || value === null || String(value).trim() === ""))
-          return { ok: false, msg: "Preencha o campo para continuar." };
-        if (inp.type === "number") {
-          const n = Number(String(value).replace(",", "."));
-          if (Number.isNaN(n)) return { ok: false, msg: "Digite um número válido." };
-          if (inp.min != null && n < inp.min) return { ok: false, msg: "Valor abaixo do mínimo (" + inp.min + inp.unit + ")." };
-          if (inp.max != null && n > inp.max) return { ok: false, msg: "Valor acima do máximo (" + inp.max + inp.unit + ")." };
-        }
+        const input = step.input || {};
+        const text = String(value == null ? "" : value).trim();
+        if (!text) return { ok: false, msg: ERR.required };
+        const n = Number(text.replace(",", "."));
+        if (Number.isNaN(n)) return { ok: false, msg: ERR.invalidNumber };
+        if (input.min != null && n < input.min) return { ok: false, msg: fmt(ERR.numberMin, input) };
+        if (input.max != null && n > input.max) return { ok: false, msg: fmt(ERR.numberMax, input) };
         return { ok: true };
       }
-      case "email": {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!re.test(String(value || "").trim()))
-          return { ok: false, msg: "Digite um e-mail válido." };
-        return { ok: true };
-      }
+      case "email":
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value || "").trim())
+          ? { ok: true } : { ok: false, msg: ERR.invalidEmail };
       default:
         return { ok: true }; // statement / loading / result não exigem valor
     }
   }
 
-  function needsInput(id) {
-    const k = stepOf(id).kind;
-    return k === "single" || k === "multi" || k === "scale" || k === "open" || k === "email";
-  }
+  function needsInput(id) { return stepOf(id).kind in QUESTION_KINDS; }
 
   /* ── Transições ── */
   function setAnswer(id, value) { state.answers[id] = value; save(); }
@@ -155,22 +188,20 @@
     const step = stepOf(id);
 
     if (needsInput(id)) {
-      const v = state.answers[id];
-      const res = validate(id, v);
-      if (!res.ok) return { ok: false, msg: res.msg };
+      const check = validate(id, answerOf(id));
+      if (!check.ok) return { ok: false, msg: check.msg };
     }
-
     if (step.kind === "email") {
-      track("lead_submit", { email: state.answers[id], answers: exportAnswers() });
+      track("lead_submit", { email: answerOf(id), optin: !!state.answers.email_optin, answers: exportAnswers() });
     }
 
-    const nxt = nextId(id);
-    if (!nxt) return { ok: true, done: true };
+    const next = nextId(id);
+    if (!next) return { ok: true, done: true };
 
     state.history.push(id);
-    state.current = nxt;
+    state.current = next;
     save();
-    track("quiz_step", { step: nxt, index: state.history.length });
+    track("quiz_step", { step: next, index: state.history.length });
     return { ok: true, done: false };
   }
 
@@ -181,31 +212,25 @@
     return true;
   }
 
-  /* ── Export das respostas (payload de tracking / lead) ── */
-  function exportAnswers() {
-    const out = {};
-    Object.keys(state.answers).forEach((k) => { out[k] = state.answers[k]; });
-    return out;
-  }
+  function exportAnswers() { return Object.assign({}, state.answers); }
 
   /* ── API pública ── */
-  window.QuizEngine = {
-    state,
-    steps: STEPS,
-    stepOf,
-    current: () => stepOf(state.current),
-    isLast: () => isLast(state.current),
-    progress,
-    validate,
-    needsInput,
-    setAnswer,
-    goNext,
-    goBack,
-    canBack: () => state.history.length > 0,
-    reset,
-    restore,
-    save,
-    track,
-    exportAnswers,
+  return {
+    state: state,
+    stepOf: stepOf,
+    current: function () { return stepOf(state.current); },
+    answerOf: answerOf,
+    setAnswer: setAnswer,
+    validate: validate,
+    needsInput: needsInput,
+    goNext: goNext,
+    goBack: goBack,
+    canBack: function () { return state.history.length > 0; },
+    progressInfo: progressInfo,
+    exportAnswers: exportAnswers,
+    save: save,
+    restore: restore,
+    reset: reset,
+    track: track,
   };
-})();
+});
