@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#FBF3EB" />
+  <title>Truque do Café — Descubra o seu ritual ideal</title>
+  <meta name="description" content="Um ritual de cuidado que transforma de dentro para fora. Descubra o que trava o seu corpo." />
+
+  <!-- Poppins (identidade oficial da marca) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/quiz.css" />
+</head>
+<body>
+  <div class="shell">
+    <!-- Header 55px: voltar · barra segmentada + capítulo · (interstitials: logo) -->
+    <header class="header">
+      <button id="btn-back" class="back is-hidden" type="button">&larr;</button>
+      <div id="header-center" class="header-center" hidden>
+        <p id="chapter-label" class="chapter"></p>
+        <div id="progress" class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+      <div id="header-logo" class="header-logo" hidden></div>
+      <span aria-hidden="true"></span>
+    </header>
+
+    <!-- Cada tela é montada aqui pelo render -->
+    <main id="stage" class="stage" aria-live="polite"></main>
+  </div>
+
+  <script src="js/core.js"></script>
+  <script src="js/quiz-data.js"></script>
+  <script src="js/assets.js"></script>
+  <script src="js/dom.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/result.js"></script>
+  <script src="js/render.js"></script>
+  <script>QuizApp.use("render").boot();</script>
+</body>
+</html>
