@@ -802,16 +802,14 @@ function GenerateModal({ setShowModal, studyText, setStudyText, generating, genE
   return (
     <>
       <motion.div
-        className="fixed inset-0 z-50 backdrop-blur-2xl bg-black/40"
-        style={{ WebkitBackdropFilter: "blur(40px)" }}
+        className="fixed inset-0 z-50 bg-black/70"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         onClick={close}
       />
       <div className="fixed inset-0 z-50 flex items-center justify-center p-6 pointer-events-none">
         <motion.div
-          className="bg-[#0B0B0C]/90 backdrop-blur-md border border-white/[0.04] rounded-2xl w-full max-w-lg shadow-[0_32px_80px_rgba(0,0,0,0.6)] pointer-events-auto"
-          style={{ WebkitBackdropFilter: "blur(20px)" }}
+          className="bg-[#0B0B0C] border border-white/[0.04] rounded-2xl w-full max-w-lg shadow-[0_32px_80px_rgba(0,0,0,0.6)] pointer-events-auto"
           initial={{ opacity: 0, y: 40, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ type: "spring", damping: 28, stiffness: 380, mass: 0.8 }}

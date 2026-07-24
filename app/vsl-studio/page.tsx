@@ -56,16 +56,14 @@ export default function VslStudioPage() {
             transition={{ duration: 0.2 }}
           >
             <motion.div
-              className="fixed inset-0 backdrop-blur-2xl bg-black/40"
-              style={{ WebkitBackdropFilter: "blur(40px)" }}
+              className="fixed inset-0 bg-black/70"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowModal(false)}
             />
             <motion.div
-              className="relative w-full max-w-lg mx-4 bg-[#0B0B0C]/90 backdrop-blur-md border border-white/[0.04] rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
-              style={{ WebkitBackdropFilter: "blur(20px)" }}
+              className="relative w-full max-w-lg mx-4 bg-[#0B0B0C] border border-white/[0.04] rounded-2xl overflow-hidden shadow-[0_32px_80px_rgba(0,0,0,0.6)]"
               initial={{ opacity: 0, y: 40, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.97 }}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -62,17 +62,15 @@ function EclipseMark() {
   );
 }
 
-export default function Sidebar() {
+function SidebarInner() {
   const pathname = usePathname();
   const [expanded, setExpanded] = useState(true);
+  const textClass = expanded ? "sidebar-text-open" : "sidebar-text-closed";
 
   return (
     <aside
-      className="hidden md:flex flex-shrink-0 h-[100dvh] flex-col border-r border-white/[0.07] bg-black/40 backdrop-blur-xl overflow-hidden"
-      style={{
-        width: expanded ? W_OPEN : W_CLOSED,
-        transition: "width 0.4s cubic-bezier(0.22, 1, 0.36, 1)",
-      }}
+      className="hidden md:flex flex-shrink-0 h-[100dvh] flex-col border-r border-white/[0.07] bg-[#050508]/95 overflow-hidden sidebar-animate"
+      style={{ width: expanded ? W_OPEN : W_CLOSED }}
     >
       {/* Header: logo + toggle button */}
       <div
@@ -116,9 +114,7 @@ export default function Sidebar() {
 
       {/* Nav */}
       <nav className="flex-1 overflow-y-auto px-2 pt-3 pb-2 space-y-px">
-        <div className="overflow-hidden whitespace-nowrap mb-1.5"
-          style={{ opacity: expanded ? 1 : 0, transition: "opacity 0.3s ease" }}
-        >
+        <div className={cn("overflow-hidden whitespace-nowrap mb-1.5 sidebar-text-transition", textClass)}>
           <p className="px-3 pb-1.5 text-[9px] uppercase tracking-[0.22em] text-text-muted/60">
             Principal
           </p>
@@ -146,11 +142,9 @@ export default function Sidebar() {
                 className={cn("flex-shrink-0", isActive && "text-nova")}
               />
               <span className={cn(
-                "font-medium overflow-hidden whitespace-nowrap",
-                expanded ? "opacity-100 w-auto" : "opacity-0 w-0"
-              )}
-                style={{ transition: "opacity 0.3s ease" }}
-              >
+                "font-medium overflow-hidden whitespace-nowrap sidebar-text-transition",
+                textClass
+              )}>
                 {item.label}
               </span>
               {item.badge && isActive && expanded && (
@@ -161,9 +155,7 @@ export default function Sidebar() {
         })}
 
         {/* Knowledge System section */}
-        <div className="overflow-hidden whitespace-nowrap pt-4 mb-1.5"
-          style={{ opacity: expanded ? 1 : 0, transition: "opacity 0.3s ease" }}
-        >
+        <div className={cn("overflow-hidden whitespace-nowrap pt-4 mb-1.5 sidebar-text-transition", textClass)}>
           <p className="px-3 pb-1.5 text-[9px] uppercase tracking-[0.22em] text-text-muted/60">
             Knowledge
           </p>
@@ -191,11 +183,9 @@ export default function Sidebar() {
                 className={cn("flex-shrink-0", isActive && "text-gold")}
               />
               <span className={cn(
-                "font-medium overflow-hidden whitespace-nowrap",
-                expanded ? "opacity-100 w-auto" : "opacity-0 w-0"
-              )}
-                style={{ transition: "opacity 0.3s ease" }}
-              >
+                "font-medium overflow-hidden whitespace-nowrap sidebar-text-transition",
+                textClass
+              )}>
                 {item.label}
               </span>
             </Link>
@@ -208,9 +198,7 @@ export default function Sidebar() {
         <div className="w-7 h-7 rounded-full bg-nova/15 border border-nova/30 flex items-center justify-center flex-shrink-0 shadow-[0_0_10px_rgba(255,138,31,0.25)]">
           <span className="text-[9px] font-semibold text-nova">CA</span>
         </div>
-        <div className={cn("min-w-0 overflow-hidden whitespace-nowrap", expanded ? "opacity-100 w-auto" : "opacity-0 w-0")}
-          style={{ transition: "opacity 0.3s ease" }}
-        >
+        <div className={cn("min-w-0 overflow-hidden whitespace-nowrap sidebar-text-transition", textClass)}>
           <p className="text-[11px] text-text-primary truncate font-semibold leading-tight">
             Caio Andrade
           </p>
@@ -222,3 +210,5 @@ export default function Sidebar() {
     </aside>
   );
 }
+
+export default memo(SidebarInner);

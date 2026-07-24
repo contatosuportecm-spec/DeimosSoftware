@@ -1,0 +1,52 @@
+{
+  "_comment": "Mapeamento de colunas Excel → campos do banco. Edite para adaptar ao seu Excel sem alterar código.",
+
+  "mappings": {
+    "canonical_name": [
+      "canonical_name", "nome da oferta espionada", "nome da oferta",
+      "nome", "oferta", "titulo", "produto", "offer name", "name"
+    ],
+    "primary_domain": [
+      "primary_domain", "link da oferta", "link", "url", "dominio",
+      "dominio principal", "domain", "site", "website", "landing url"
+    ],
+    "observed_at": [
+      "observed_at", "data", "data da observacao", "data da semana",
+      "semana", "data inicial", "inicio"
+    ],
+    "active_ads_day1": [
+      "active_ads_day1", "criativos ativos dia 1", "ativos dia 1", "dia 1"
+    ],
+    "active_ads_day2": [
+      "active_ads_day2", "criativos ativos dia 2", "ativos dia 2", "dia 2"
+    ],
+    "active_ads_day3": [
+      "active_ads_day3", "criativos ativos dia 3", "ativos dia 3", "dia 3"
+    ],
+    "active_ads_day4": [
+      "active_ads_day4", "criativos ativos dia 4", "ativos dia 4", "dia 4"
+    ],
+    "active_ads_day5": [
+      "active_ads_day5", "criativos ativos dia 5", "ativos dia 5", "dia 5"
+    ],
+    "active_ads_day6": [
+      "active_ads_day6", "criativos ativos dia 6", "ativos dia 6", "dia 6"
+    ],
+    "checkout_type": [
+      "checkout_type", "checkout", "tipo de checkout"
+    ],
+    "offer_tested": [
+      "offer_tested", "oferta testada (ok)", "oferta testada", "testada", "ok"
+    ],
+    "roi_result": [
+      "roi_result", "resultado inicial (roi / observacao)",
+      "resultado inicial", "roi", "resultado"
+    ],
+    "insights": [
+      "insights", "insights (bullets)", "insights e observacoes"
+    ],
+    "notes": [
+      "notes", "notas", "observacoes", "comentarios", "obs", "nota"
+    ]
+  }
+}
